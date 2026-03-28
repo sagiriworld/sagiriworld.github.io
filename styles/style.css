@@ -4,7 +4,7 @@
 ========================= */
 :root {
   --navbar-height: 90px;
-  --sidebar-width: 120px;
+  --sidebar-width: 110px;
   --sidebar-gap: 18px;
 
   --blur: blur(20px);
@@ -285,7 +285,6 @@ body {
   filter: brightness(0.9);
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
-  height: 30%;
 }
 
 
