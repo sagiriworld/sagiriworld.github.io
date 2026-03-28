@@ -285,6 +285,7 @@ body {
   filter: brightness(0.9);
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+  height: 300px;
 }
 
 
