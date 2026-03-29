@@ -70,13 +70,20 @@ async function loadPage(url) {
           currentLogo.classList.add('fade-in');
         }
 
-        // 清理 fade-in
-        setTimeout(() => {
-          currentContent.classList.remove('fade-in');
-          if (currentLogo) currentLogo.classList.remove('fade-in');
-          if (newHeader) newHeader.classList.remove('fade-in');
-          if (newArticleCard) newArticleCard.classList.remove('fade-in');
-        }, 400);
+  // 清理 fade-in
+  setTimeout(() => {
+    currentContent.classList.remove('fade-in');
+    if (currentLogo) currentLogo.classList.remove('fade-in');
+    if (newHeader) newHeader.classList.remove('fade-in');
+    if (newArticleCard) newArticleCard.classList.remove('fade-in');
+
+    // ⭐ 自动回到顶部（关键新增）
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }, 400);
 
         // 重新绑定事件和动画
         bindLinks();
