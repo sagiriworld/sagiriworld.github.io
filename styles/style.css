@@ -398,6 +398,33 @@ body {
   transition: var(--transition);
 }
 
+/* 标题行：让 h3 和时间在同一行 */
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* h3 不要撑满 */
+.card-title h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* 时间胶囊 */
+.time-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  background: var(--color-pink-soft);
+  color: var(--color-text);
+
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .card-list li{
 	  padding: 4px 10px;
   border-radius: 999px;
