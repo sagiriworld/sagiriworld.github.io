@@ -4,7 +4,7 @@
 ========================= */
 :root {
   --navbar-height: 90px;
-  --sidebar-width: 110px;
+  --sidebar-width: 120px;
   --sidebar-gap: 18px;
 
   --blur: blur(20px);
@@ -18,7 +18,7 @@
   --color-pink-soft: rgba(255, 159, 194, 0.3);
   --sidebar-bg: rgba(240, 240, 240, 0.6);
   --shadow: rgba(0, 0, 0, 0.2);
-  --sidebar-bg-mobile: rgba(255, 182, 193, 0.5);
+  --sidebar-bg-mobile: rgba(255, 182, 193, 0.3);
   --sidebar-shadow-mobile: 0 -2px 8px rgba(255,105,180,0.2);
 }
 
@@ -281,11 +281,12 @@ body {
   object-position: center;
   border-radius: 0;
   position: relative;
+  will-change: transform;
   z-index: 0;
   filter: brightness(0.9);
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
-  height:65vh;
+  height: 65vh;
 }
 
 
@@ -295,15 +296,20 @@ body {
 ========================= */
 .article-card {
   position: relative;
-  margin: -120px 140px 40px calc(var(--sidebar-width) + 140px);
-  width: 100%;
+
+  left: calc(var(--sidebar-width) + (100% - var(--sidebar-width)) / 2);
+  transform: translateX(-50%);
+
+  margin-top: -120px;
+  margin-bottom: 40px;
+
+  width: calc(100% - 40px);
   max-width: 600px;
+
   padding: 30px;
   border-radius: 20px;
   background: rgb(242,221,226);
-  color: var(--color-text);
   box-sizing: border-box;
-  transition: var(--transition);
 }
 
 /* 标题 */
@@ -476,14 +482,17 @@ img:not(.article-header):not(.profile-card img) {
   }
 
   .article-header {
+	height: 30%;
     width: 100%;
     margin: 46px 0 0 0px;
   }
 
    .article-card {
-    width: calc(100% - 20px); /* 左右各 10px */
-    margin: -80px 10px 20px;   /* 上与头图重叠，下 20px */
-left: 0;
+	transform: none;
+    width: calc(100% - 30px) !important; /* 左右各 10px */
+    margin-top: -80px 10px 20px !important;   /* 上与头图重叠，下 20px */
+    left: 15px !important;
+	max-width: none;
   }
 
   .profile-card {
