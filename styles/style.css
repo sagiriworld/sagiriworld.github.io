@@ -39,16 +39,19 @@ a {
 
 @font-face {
   font-family: 'MyFont';
-  src: url('font.TTF') format('truetype');
+  src: url('./font.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
+* {
+  font-family: 'MyFont', sans-serif !important;
+}
+
 html, body {
   overflow-x: hidden;
   touch-action: pan-y;
-  font-family: 'MyFont', sans-serif;
 }
 
 
