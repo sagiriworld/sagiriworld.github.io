@@ -1,5 +1,8 @@
 async function loadPage(url) {
   try {
+    window.scrollTo(0, 0);
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
     const res = await fetch(url);
     const text = await res.text();
     const parser = new DOMParser();
