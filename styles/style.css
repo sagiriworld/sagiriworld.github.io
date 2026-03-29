@@ -42,6 +42,12 @@ a {
   outline: none;
 }
 
+@font-face {
+  font-family: 'MyFont';
+  src: url('ZhuZiAWan-2.ttc') format('truetype');
+  font-display: swap;
+}
+
 
 
 /* =========================
