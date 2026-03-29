@@ -26,11 +26,6 @@ button, .sidebar a, .nav-link {
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
-  overflow-x: hidden;
-  touch-action: pan-y;
-}
-
 .content {
   overscroll-behavior: contain;
 }
@@ -46,6 +41,12 @@ a {
   font-family: 'MyFont';
   src: url('ZhuZiAWan-2.ttc') format('truetype');
   font-display: swap;
+}
+
+html, body {
+  overflow-x: hidden;
+  touch-action: pan-y;
+  font-family: 'MyFont', sans-serif;
 }
 
 
