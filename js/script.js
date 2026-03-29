@@ -76,10 +76,6 @@ setTimeout(() => {
   if (currentLogo) currentLogo.classList.remove('fade-in');
   if (newHeader) newHeader.classList.remove('fade-in');
   if (newArticleCard) newArticleCard.classList.remove('fade-in');
-
-  // ⭐瞬间回到顶部（无动画）
-  window.scrollTo(0, 0);
-
 }, 400);
         // 重新绑定事件和动画
         bindLinks();
