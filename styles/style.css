@@ -39,7 +39,7 @@ a {
 
 @font-face {
   font-family: 'MyFont';
-  src: url('font.ttf') format('truetype');
+  src: url('font.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
