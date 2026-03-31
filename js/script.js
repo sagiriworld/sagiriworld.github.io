@@ -86,7 +86,7 @@ async function loadPage(url) {
           if (newHeader) newHeader.classList.remove('fade-in');
           if (newArticleCard) newArticleCard.classList.remove('fade-in');
 
-          // ⭐ 自动回到顶部（关键）
+          // 自动回顶
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -162,7 +162,7 @@ function addRippleEffect() {
 }
 
 /* =========================
-   个人卡动画
+   profile-card 动画
 ========================= */
 function animateProfileCard() {
   const profileCard = document.querySelector('.profile-card');
@@ -175,7 +175,7 @@ function animateProfileCard() {
 }
 
 /* =========================
-   文章卡动画
+   article-card 动画
 ========================= */
 function animateArticleCard() {
   const articleCards = document.querySelectorAll('.article-card');
