@@ -13,10 +13,11 @@
         color: inherit;
       }
     </style>
+	<link rel="preload" as="font" href="./styles/font-subset.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles/style.css">
-    <!-- highlight.js 样式 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-  </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>  </head>
 
 
 
@@ -27,6 +28,10 @@
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20" transform="translate(0, -0.7)"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.479 7.57827L15.093 3.12502C13.2787 1.62499 10.7213 1.62499 8.90703 3.12502L3.52097 7.57827C2.55059 8.38059 2 9.59706 2 10.8663V18.8739C2 20.5419 3.28643 22 5 22H7C8.65685 22 10 20.6569 10 19V15.6848C10 15.0044 10.5044 14.5587 11 14.5587H13C13.4956 14.5587 14 15.0044 14 15.6848V19C14 20.6569 15.3431 22 17 22H19C20.7136 22 22 20.5419 22 18.8739V10.8663C22 9.59706 21.4494 8.38059 20.479 7.57827Z" fill="currentColor"></path></svg> &nbsp;主页
       </div>
+	    <div class="navhitokoto">
+          <a href="#" id="nav_hitokoto_text">一言获取中...</a>
+          <span id="nav_hitokoto_from" class="nav-hitokoto-from"></span>
+        </div>
     </div>
 
     <!-- sidebar -->
@@ -48,6 +53,12 @@
           <ul class="profile-list">
             <li>さぎり</li><li>00后</li><li>ACGN</li><li>ブルアカ</li>
           </ul>
+        </div>
+      </div>
+	        <div class="hitokoto">
+        <div class="hitokoto-content">
+          <a href="#" id="hitokoto_text">一言获取中...</a>
+          <span class="hitokoto-from" id="hitokoto_from"></span>
         </div>
       </div>
 	    <a href="article3.html" class="spa-link">
