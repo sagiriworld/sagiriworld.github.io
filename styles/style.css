@@ -39,7 +39,7 @@ a {
 
 @font-face {
   font-family: 'MyFont';
-  src: url('./font.woff2') format('woff2');
+  src: url('./font-subset.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -85,6 +85,10 @@ html, body {
   .article-card .meta {
     color: #f5f5f5;
   }
+
+.hitokoto {
+  background: rgb(65,42,52) !important;
+}
 
 .profile-card {
   background: rgb(65,42,52) !important;
@@ -174,7 +178,6 @@ body {
 /* =========================
    sidebar
 ========================= */
-/* sidebar CSS */
 .sidebar {
   position: fixed;
   top: 0;
@@ -288,8 +291,8 @@ body {
   .content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 两列布局 */
-    justify-items: center;          /* 子元素居中 */
-    gap: 40px 20px;                 /* 上下间距 40px，左右间距 20px */
+    justify-items: center;
+    gap: 40px 20px;
   }
 
   .card {
@@ -320,7 +323,7 @@ body {
 ========================= */
 .article-header {
   width: calc(100% - var(--sidebar-width) ); /* 左边留 sidebar */
-  margin: 0 0 0 var(--sidebar-width); /* 左侧留 sidebar 宽度 */
+  margin: 0 0 0 var(--sidebar-width); /* 左侧留 sidebar */
   display: block;
   object-fit: cover;
   object-position: center;
@@ -337,7 +340,7 @@ body {
 
 
 /* =========================
-   文章卡片 article-card
+   article-card
 ========================= */
 .article-card {
   position: relative;
@@ -357,29 +360,85 @@ body {
   box-sizing: border-box;
 }
 
-/* 标题 */
 .article-card h1 {
   margin-top: 0;
   font-size: 2rem;
 }
 
-/* 元信息 */
 .article-card .meta {
   font-size: 0.9rem;
   opacity: 0.7;
   margin-bottom: 20px;
 }
 
-/* 段落间距 */
 .article-card p {
   margin: 12px 0;
 }
 
-/* 小标题 */
 .article-card h2 {
   margin-top: 25px;
 }
 
+
+
+/* =========================
+   一言
+========================= */
+.hitokoto {
+  display: flex;
+  grid-column: 1 / -1;   /* 占满整行 */
+  align-items: center;
+  width: 90%;
+  margin: 20px 0;
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.hitokoto .hitokoto-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* 句子在上，来源在下 */
+  align-items: flex-start; /* 句子左对齐 */
+}
+
+.hitokoto .hitokoto-from {
+  align-self: flex-end;
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 769px) {
+  .navhitokoto {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .hitokoto {
+    display: none;
+  }
+}
+
+.navhitokoto {
+  margin-left: auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.navhitokoto::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.nav-hitokoto-from {
+  font-size: 0.75rem;
+  color: #666;
+}
 
 
 /* =========================
@@ -508,6 +567,82 @@ img:not(.article-header):not(.profile-card img) {
 
 
 /* =========================
+   codeblock 样式
+========================= */
+.article-card .codeblock {
+  position: relative;
+  border-radius: 13px;
+  background-color: #282C34;
+  color: #f8f8f2;
+  padding: 30px 12px 12px 12px; /* 上部给语言栏 30px，左右 12px，底部 12px */
+  overflow-x: auto;
+  margin: 16px 0;               /* 可调整上下间距 */
+  font-family: 'Fira Code', monospace;
+}
+
+/* 顶部条：语言 + 复制按钮 */
+.article-card .codeblock .code-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background-color: #201418;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  font-size: 12px;
+  color: #ccc;
+  line-height: 30px; /* 确保文字垂直居中 */
+  box-sizing: border-box;
+}
+
+.article-card .codeblock .code-header button {
+  background: #444;
+  border: none;
+  color: #eee;
+  padding: 3px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.article-card .codeblock pre {
+  display: block;
+  counter-reset: line;
+}
+
+.article-card .codeblock pre code {
+  font-family: monospace;
+  white-space: pre;
+}
+
+.article-card .codeblock .code-line {
+  display: flex;
+  height: 28px;
+  align-items: center;
+  font-family: monospace;
+}
+
+
+.article-card .codeblock .hljs {
+  margin: 10px 0 0 0;
+}
+
+.article-card .codeblock .line-number {
+  display: inline-block;
+  width: 2em;
+  text-align: right;
+  padding-right: 10px;
+  user-select: none;
+  opacity: 0.5;
+}
+
+
+
+/* =========================
    移动端
 ========================= */
 @media (max-width: 768px) {
@@ -548,6 +683,7 @@ img:not(.article-header):not(.profile-card img) {
     margin: 0 auto 30px;
 	max-width: 1200px;
     display: grid;
+    gap: 10px;
     grid-template-columns: 1fr;
     justify-items: center;   /* 子元素居中 */
   }
