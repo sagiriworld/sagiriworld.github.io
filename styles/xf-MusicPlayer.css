@@ -9,126 +9,35 @@
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-#xf-MusicPlayer .xf-original {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #5c00ff;
-  --playerColor-4: #b3c4ec;
-  --playerColor-5: #90a6da;
-  --playerColor-6: #8b52ec;
-  --playerColor-7: #ffc0cb;
-  --playerColor-8: #5880dc;
-  --playerColor-9: #efefef;
-  --playerColor-10: #a17eff;
-  --playerColor-11: #ffc5fe;
-  --playerColor-12: #84d6ff;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(139, 126, 192, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(85, 0, 255, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
-}
-#xf-MusicPlayer .xf-sky {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #0d6efd;
-  --playerColor-4: #b3c4ec;
-  --playerColor-5: #92bbee;
-  --playerColor-6: #52aeec;
-  --playerColor-7: #a8cbfa;
-  --playerColor-8: #5880dc;
-  --playerColor-9: #efefef;
-  --playerColor-10: #ff7e7e;
-  --playerColor-11: #c5f2ff;
-  --playerColor-12: #ff84e2;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(126, 170, 192, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(0, 225, 255, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
-}
-#xf-MusicPlayer .xf-orange {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #ff8c00;
-  --playerColor-4: #ffc28e;
-  --playerColor-5: #ffb87a;
-  --playerColor-6: #ffa500;
-  --playerColor-7: #ffdab9;
-  --playerColor-8: #ff8c00;
-  --playerColor-9: #efefef;
-  --playerColor-10: #ffe97e;
-  --playerColor-11: #cfffc5;
-  --playerColor-12: #84fffb;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(192, 160, 126, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(255, 165, 0, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
-}
-#xf-MusicPlayer .xf-darkGreen {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #0d870d;
-  --playerColor-4: #8bb88b;
-  --playerColor-5: #60a060;
-  --playerColor-6: #1a8a1a;
-  --playerColor-7: #adff2f;
-  --playerColor-8: #0e780e;
-  --playerColor-9: #efefef;
-  --playerColor-10: #9acd32;
-  --playerColor-11: #90ee90;
-  --playerColor-12: #00fa9a;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(126, 192, 139, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(0, 100, 0, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
-}
-#xf-MusicPlayer .xf-wineRed {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #a51212;
-  --playerColor-4: #c78b8b;
-  --playerColor-5: #cf6868;
-  --playerColor-6: #b52525;
-  --playerColor-7: #8b0000;
-  --playerColor-8: #ae0404;
-  --playerColor-9: #efefef;
-  --playerColor-10: #a20101;
-  --playerColor-11: #892828;
-  --playerColor-12: #a52a2a;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(139, 0, 0, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(80, 0, 0, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
-}
+
+/* ===== 定制粉红主题 (基于 #FFDFED) ===== */
 #xf-MusicPlayer .xf-girlPink {
-  --playerColor-1: #fff;
-  --playerColor-2: #000;
-  --playerColor-3: #FFDFED;
-  --playerColor-4: #ffccdd;
-  --playerColor-5: #FFDFED;
-  --playerColor-6: #ec5f97;
-  --playerColor-7: #ffc4d8;
-  --playerColor-8: #ff97b3;
-  --playerColor-9: #efefef;
-  --playerColor-10: #fca0ea;
-  --playerColor-11: #fcd0f3;
-  --playerColor-12: #fe7ee5;
-  --playerColor-rgab-1: rgba(0, 0, 0, 0.3);
+  /* Surface / Background */
+  --playerColor-1: #fffbff;      /* Surface */
+  --playerColor-2: #1f1a1c;      /* On Surface */
+  --playerColor-3: #fdd9e7;      /* Primary Container */
+  --playerColor-4: #504348;      /* On Surface Variant */
+  --playerColor-5: #1C1B1F;      /* 悬停文字色 */
+  --playerColor-6: #ae1d79;      /* Primary */
+  --playerColor-7: #fdd9e7;      /* 选中背景 */
+  --playerColor-8: #3d0027;      /* On Primary Container */
+  --playerColor-9: #f1dee4;      /* Surface Variant */
+  --playerColor-10: #7f553a;     /* Tertiary */
+  --playerColor-11: #C27E94;     /* Tertiary 变体 */
+  --playerColor-12: #301401;     /* On Tertiary Container */
+  
+  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
   --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 2px 2px 5px 0 rgba(255, 192, 203, 0.35);
-  --playerShadow-2: -3.5px 3.5px 5px 0px rgba(255, 255, 255, 0.25), inset -3.5px 3.5px 7px 0px rgba(0, 0, 0, .25);
-  --playerTextShadow-1: 0 0 1.5px rgba(255, 76, 240, 0.3);
-  --playerTextShadow-2: 0 0 1.5px rgba(255, 255, 255, 0.8);
+  
+  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05),
+                    0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08),
+                    inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
+  
+  --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
+  --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
 }
+
 #xf-MusicPlayer .xf-MusicPlayer-Main {
   --parentWidth: 350;
   --numParentHeight: 135;
@@ -183,6 +92,7 @@
   font-size: 1.5em;
   font-weight: bold;
   transition: transform 0.5s;
+  color: var(--playerColor-8);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
   transform: rotate(180deg);
@@ -209,19 +119,8 @@
   width: var(--songPictureWidth);
   height: var(--songPictureWidth);
   border: 1px solid var(--playerColor-4);
-  border-radius: 100%;
-  animation: musicPicture 10s infinite linear;
-}
-@keyframes musicPicture {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture .xf-pauseRotation {
-  animation-play-state: paused;
+  border-radius: 16px;
+  object-fit: cover;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl {
   --topControlHeight: calc(135px * (105 / var(--numParentHeight)));
@@ -330,10 +229,6 @@
   position: relative;
   background-color: var(--playerColor-6);
   transition: width 0.35s;
-  -webkit-transition: width 0.35s;
-  -moz-transition: width 0.35s;
-  -ms-transition: width 0.35s;
-  -o-transition: width 0.35s;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress::after {
   content: '';
@@ -348,7 +243,6 @@
   box-shadow: var(--playerShadow-1);
 }
 
-
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   --distance10px: 10px;
   width: var(--SingingSheetWidth);
@@ -361,11 +255,10 @@
   transition: max-height 0.5s cubic-bezier(0.2, 0.9, 0.1, 1);
   transform: translateZ(0);
   will-change: max-height, transform;
-  contain: layout style;        /* 限制重排/重绘范围 */
+  contain: layout style;
   backface-visibility: hidden;
 }
 
-/* 展开状态 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongListShow {
   max-height: 350px;
 }
@@ -387,15 +280,13 @@
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem {
   --songsItemHeight: calc((350px - 20px) / 4);
-  --imgBoxSize: 50px;
+  --imgBoxSize: 45px;
   --songInformationWidth: calc(var(--SingingSheetWidth) - var(--imgBoxSize) - 20px - var(--distance10px));
   height: var(--songsItemHeight);
   width: 100%;
   list-style: none;
   display: flex;
   align-items: center;
-  
-  /* 独立合成层，减少重绘范围 */
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
@@ -411,40 +302,39 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .icon-shijian {
   color: var(--playerColor-6);
 }
+
+/* 封面容器：固定尺寸，防止被文字挤压 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   margin-left: var(--distance10px);
+  overflow: hidden;
+  border-radius: 10px;
+  flex-shrink: 0;               /* 关键：禁止收缩 */
 }
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-songIcon {
-  position: absolute;
-  left: 0;
-  top: -1.5px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--playerColor-rgab-1);
-  font-size: 1.5em;
-  color: var(--playerColor-rgab-2);
-  text-align: center;
-  line-height: var(--imgBoxSize);
-  z-index: 100;
-  display: none;
-}
+
+/* 封面图片：填满容器，放大裁切 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-playlistImg {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: 10px;
   overflow: hidden;
   transition: transform 0.5s;
+  box-sizing: border-box;
+  border: none;
+  transform: scale(1.08);
 }
+
+/* 文字信息区域：允许收缩，内部文字省略 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation {
   width: var(--songInformationWidth);
   margin-left: var(--distance10px);
+  min-width: 0;                  /* 允许 flex 子项收缩到小于内容宽度 */
 }
+
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle {
   --songTitleNameTransition: color 0.35s;
 }
@@ -477,28 +367,30 @@
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution {
   border-radius: var(--playerRadius-1);
-  background-color: var(--playerColor-5);
+  background-color: var(--playerColor-3);
   border: none;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-songListSongPictures .xf-playlistImg {
+  border-radius: 10px;
+  box-sizing: border-box;
   border: 2px solid var(--playerColor-1);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-playlistSongInformation .xf-songTitle .xf-songName {
-  color: var(--playerColor-1);
+  color: var(--playerColor-2);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songAuthor {
-  color: var(--playerColor-1);
+  color: var(--playerColor-2);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songLength,
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .icon-shijian {
-  color: var(--playerColor-1);
+  color: var(--playerColor-2);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-playlistSongInformation .xf-songTitle .xf-songName {
-  color: var(--playerColor-1);
+  color: var(--playerColor-2);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songAuthor,
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songLength {
-  color: var(--playerColor-9);
+  color: var(--playerColor-2);
 }
 
 #xf-MusicPlayer .xf-playerShow {
@@ -604,13 +496,13 @@
   padding: 10px 10px;
   background: rgba(0, 0, 0, 0.75);
   color: #ffffff;
-  font-size: 10px;
+  font-size: 7px;
   font-weight: 500;
   text-align: center;
   border-radius: 40px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: fixed;
-  bottom: 10%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   z-index: var(--z-index-100);
@@ -640,7 +532,7 @@
 /* 字体图标定义 */
 @font-face {
   font-family: "iconfont";
-  src: local('iconfont'), url('data:font/ttf;charset=utf-8;base64,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') format('truetype');
+  src: local('iconfont'), url('data:font/ttf;charset=utf-8;base64,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') format('truetype');
 }
 
 .iconfont {
@@ -651,33 +543,40 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-yinle:before {
-  content: "\f0036";
-}
-.icon-shijian:before {
-  content: "\e854";
-}
-.icon-bofang:before {
-  content: "\e63a";
-}
-.icon-shangyishou:before {
-  content: "\e63c";
-}
-.icon-xiayishou:before {
-  content: "\e63e";
-}
-.icon-jiantou2:before {
-  content: "\e501";
-}
-.icon-shengyin-guan:before {
-  content: "\e6bf";
-}
-.icon-shengyin-kai:before {
-  content: "\e6c0";
-}
-.icon-gedan:before {
-  content: "\e6c1";
-}
-.icon-zantingtingzhi:before {
-  content: "\e65a";
+.icon-yinle:before { content: "\f0036"; }
+.icon-shijian:before { content: "\e854"; }
+.icon-bofang:before { content: "\e63a"; }
+.icon-shangyishou:before { content: "\e63c"; }
+.icon-xiayishou:before { content: "\e63e"; }
+.icon-jiantou2:before { content: "\e501"; }
+.icon-shengyin-guan:before { content: "\e6bf"; }
+.icon-shengyin-kai:before { content: "\e6c0"; }
+.icon-gedan:before { content: "\e6c1"; }
+.icon-zantingtingzhi:before { content: "\e65a"; }
+
+/* ===== 深色模式 ===== */
+@media (prefers-color-scheme: dark) {
+  #xf-MusicPlayer .xf-girlPink {
+    --playerColor-1: #1f1a1c;
+    --playerColor-2: #ebe0e2;
+    --playerColor-3: #59404b;
+    --playerColor-4: #d4c2c8;
+    --playerColor-5: #FFB3C6;
+    --playerColor-6: #ffafd5;
+    --playerColor-7: #5C3A47;
+    --playerColor-8: #ffd8e8;
+    --playerColor-9: #504348;
+    --playerColor-10: #D27B94;
+    --playerColor-11: #F5C2D2;
+    --playerColor-12: #FFDFED;
+    --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
+    --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
+    --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
+    --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
+    --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+  #xf-lyric { background-color: rgba(65, 42, 52, 0.9) !important; }
+  .xf-music-pop { background-color: rgba(65, 42, 52, 0.95) !important; }
+  .xf-throughDisplay { background-color: rgba(65, 42, 52, 0.9) !important; }
 }
