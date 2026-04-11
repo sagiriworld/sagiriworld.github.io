@@ -190,6 +190,10 @@ window.addEventListener('DOMContentLoaded', function () {
                     xfLyric.classList.add('xf-lyricHidden')
                     xfLyric.classList.remove('xf-lyricShow')
                 }
+                // 同步更新媒体会话播放状态
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = 'paused';
+                }
             }
 
             const addPlaying = () => {
@@ -200,6 +204,10 @@ window.addEventListener('DOMContentLoaded', function () {
                 if (interfaceAndLocal === null && xfLyric) {
                     xfLyric.classList.remove('xf-lyricHidden')
                     xfLyric.classList.add('xf-lyricShow')
+                }
+                // 同步更新媒体会话播放状态
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = 'playing';
                 }
             }
 
@@ -308,6 +316,66 @@ window.addEventListener('DOMContentLoaded', function () {
                 const seconds = addLeadingZero(Math.floor((milliseconds % 60000) / 1000))
                 return `${minutes}:${seconds} `
             }
+
+            // ---------- 系统媒体中心适配 ----------
+            function initMediaSession() {
+                if (!('mediaSession' in navigator)) return;
+
+                const actionHandlers = {
+                    play: () => {
+                        if (xfMusicAudio.paused) {
+                            playbackControl.click();
+                        }
+                    },
+                    pause: () => {
+                        if (!xfMusicAudio.paused) {
+                            playbackControl.click();
+                        }
+                    },
+                    previoustrack: () => {
+                        previousSong.click();
+                    },
+                    nexttrack: () => {
+                        nextSong.click();
+                    },
+                    seekbackward: null,
+                    seekforward: null,
+                    stop: null
+                };
+
+                for (const [action, handler] of Object.entries(actionHandlers)) {
+                    try {
+                        navigator.mediaSession.setActionHandler(action, handler);
+                    } catch (error) {
+                        console.warn(`MediaSession action "${action}" not supported`);
+                    }
+                }
+            }
+
+            function updateMediaMetadata(title, artist, artwork) {
+                if (!('mediaSession' in navigator)) return;
+
+                // 移除图片URL参数以获取原图
+                const cleanArtwork = artwork.split('?')[0];
+
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: title,
+                    artist: artist,
+                    album: '',
+                    artwork: [
+                        { src: cleanArtwork, sizes: '96x96', type: 'image/jpeg' },
+                        { src: cleanArtwork, sizes: '128x128', type: 'image/jpeg' },
+                        { src: cleanArtwork, sizes: '192x192', type: 'image/jpeg' },
+                        { src: cleanArtwork, sizes: '256x256', type: 'image/jpeg' },
+                        { src: cleanArtwork, sizes: '384x384', type: 'image/jpeg' },
+                        { src: cleanArtwork, sizes: '512x512', type: 'image/jpeg' }
+                    ]
+                });
+            }
+
+            // 初始化媒体会话
+            initMediaSession();
+            // ---------- 媒体中心适配结束 ----------
 
             const clickControl = () => {
                 let isFunctionTriggered = false
@@ -515,7 +583,8 @@ window.addEventListener('DOMContentLoaded', function () {
                             songName.textContent = itemName
                             singer.textContent = itemAuto
 
-                            // 4. 移除对 .xf-songIcon 的添加图标操作
+                            // 4. 更新系统媒体信息
+                            updateMediaMetadata(itemName, itemAuto, itemPic);
 
                             // 5. 取消之前的音频加载任务，防止堆积
                             if (pendingAudioLoadTimer) {
