@@ -203,9 +203,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // 固定为 girlPink 主题的背景色
-            const popupBackgroundColor = 'rgba(255, 192, 203, .35)'
-
             let xfMusicPop
             let isAnimationInProgress = 0
             const displayPopup = async musicName => {
@@ -220,7 +217,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
                 xfMusicPop.textContent = musicName;
 
-                xfMusicPop.style.backgroundColor = popupBackgroundColor;
 
                 isAnimationInProgress = 1;
 
@@ -568,7 +564,6 @@ window.addEventListener('DOMContentLoaded', function () {
                                 }
 
                                 if (interfaceAndLocal === null && lyricsShowOrHide !== '0' && lyricsShowOrHide !== 'false' && xfLyric) {
-                                    xfLyric.style.backgroundColor = popupBackgroundColor
                                     let xfAllLyri = xfLyric.querySelector('.xf-AllLyric-box')
                                     const musicLyric = eleInExecution[0].dataset.index
                                     const wyLyric = `${musicApi}/musicAll/?lyric=${musicLyric}`
