@@ -153,8 +153,9 @@ window.addEventListener('DOMContentLoaded', function () {
                 , listOfSongs = getEle('.xf-listOfSongs')
                 , xfLyric = playerBody.querySelector('#xf-lyric')
 
+            // 默认使用 xf-girlPink 主题
             const themeStyle = MusicPlayer.getAttribute('data-themeColor')
-            themeStyle === null ? MusicPlayerMain.classList.add('xf-original') : MusicPlayerMain.classList.add(themeStyle)
+            themeStyle === null ? MusicPlayerMain.classList.add('xf-girlPink') : MusicPlayerMain.classList.add(themeStyle)
 
             const bottomHeight = MusicPlayer.getAttribute('data-bottomHeight')
             if (bottomHeight) {
@@ -202,47 +203,36 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            const backgroundColors = ['rgba(85, 0, 255, .35)', 'rgba(0, 225, 255, .35)', 'rgba(255, 165, 0, .35)', 'rgba(0, 100, 0, .35)', 'rgba(80, 0, 0, .35)', 'rgba(255, 192, 203, .35)']
-            const themeIndex = {
-                'xf-original': 0,
-                'xf-sky': 1,
-                'xf-orange': 2,
-                'xf-darkGreen': 3,
-                'xf-wineRed': 4,
-                'xf-girlPink': 5
-            }
-            const bgIndex = themeIndex[themeStyle] ?? 0
+            // 固定为 girlPink 主题的背景色
+            const popupBackgroundColor = 'rgba(255, 192, 203, .35)'
 
             let xfMusicPop
             let isAnimationInProgress = 0
-const displayPopup = async musicName => {
-    if (isAnimationInProgress) {
-        return;
-    }
+            const displayPopup = async musicName => {
+                if (isAnimationInProgress) {
+                    return;
+                }
 
-    if (!xfMusicPop) {
-        xfMusicPop = document.createElement('div');
-        xfMusicPop.classList.add('xf-music-pop');
-        playerBody.appendChild(xfMusicPop);
-    }
-    xfMusicPop.textContent = musicName;
+                if (!xfMusicPop) {
+                    xfMusicPop = document.createElement('div');
+                    xfMusicPop.classList.add('xf-music-pop');
+                    playerBody.appendChild(xfMusicPop);
+                }
+                xfMusicPop.textContent = musicName;
 
-    const randomColor = backgroundColors[bgIndex];
+                xfMusicPop.style.backgroundColor = popupBackgroundColor;
 
-    isAnimationInProgress = 1;
+                isAnimationInProgress = 1;
 
-    // 显示 Toast
-    xfMusicPop.classList.add('show');
+                xfMusicPop.classList.add('show');
 
-    // 保持 0.6 秒后隐藏
-    await setTimeoutPromise(600);
+                await setTimeoutPromise(800);
 
-    xfMusicPop.classList.remove('show');
+                xfMusicPop.classList.remove('show');
 
-    // 等动画结束后再解锁状态（过渡时间 0.25s）
-    await setTimeoutPromise(300);
-    isAnimationInProgress = 0;
-};
+                await setTimeoutPromise(300);
+                isAnimationInProgress = 0;
+            };
 
             const detectionPlay = async () => {
                 await setTimeoutPromise(2000)
@@ -250,7 +240,7 @@ const displayPopup = async musicName => {
                     console.warn('您的浏览器不支持自动播放音乐，请手动点击播放器继续欣赏歌曲吧~')
                     removebePlaying()
                 } else {
-                    displayPopup(`正在播放：${songName.textContent}`)
+                    displayPopup(`正在播放\n${songName.textContent}`)
                     addPlaying()
                 }
             }
@@ -270,7 +260,8 @@ const displayPopup = async musicName => {
             fadeOutPlayer()
 
             const playerMusicItem = (index, music, picture, Title, Author, loadingTime) => {
-                let lis = `<li class="xf-songsItem" data-index="${index}" data-mp3url="${music}"><div class="xf-songListSongPictures"><i class="xf-songIcon iconfont icon-bofang"></i><img data-musicLjz-src="${picture + '?param=200x200'}" src="https://player.xfyun.club/img/playerLoad.gif" alt="songPicture" class="xf-playlistImg"></div><div class="xf-playlistSongInformation"><div class="xf-songTitle"><h5 class="xf-songName">${Title}</h5><p class="xf-authorAndDuration"><span class="xf-songAuthor">${Author}</span><span class="xf-songLength iconfont icon-shijian">\t${loadingTime}</span></p></div></div></li>`
+                // 移除了 .xf-songIcon 的 <i> 元素
+                let lis = `<li class="xf-songsItem" data-index="${index}" data-mp3url="${music}"><div class="xf-songListSongPictures"><img data-musicLjz-src="${picture + '?param=200x200'}" src="https://player.xfyun.club/img/playerLoad.gif" alt="songPicture" class="xf-playlistImg"></div><div class="xf-playlistSongInformation"><div class="xf-songTitle"><h5 class="xf-songName">${Title}</h5><p class="xf-authorAndDuration"><span class="xf-songAuthor">${Author}</span><span class="xf-songLength iconfont icon-shijian">\t${loadingTime}</span></p></div></div></li>`
                 characterToElement(lis, listOfSongs)
             }
 
@@ -297,31 +288,16 @@ const displayPopup = async musicName => {
                 }
             }
 
-            let songChart = MusicPlayer.getAttribute('data-songChart') || '热歌榜'
-
-            const randomSongList = MusicPlayer.getAttribute('data-randomSongList')
-            if (randomSongList === '' || randomSongList === '1' || randomSongList === 'true') {
-                let SongListArr = ['热歌榜', '新歌榜', '原创榜', '飙升榜']
-                songChart = SongListArr[Math.floor(Math.random() * SongListArr.length)]
-            }
-
-            if (interfaceAndLocal) {
-                songChart = '本地'
-            }
-
-            console.log(`%c 正在播放${songChart}歌单~`, 'color: #b3c4ec;')
-
+            // 仅根据 data-localMusic 或 data-songList 生成请求 URL
             const musicUrl = (() => {
-                if (interfaceAndLocal === null && xfSongList === null) {
-                    return `${musicApi}/musicAll/?sortAll=${songChart.trim()}`
+                if (interfaceAndLocal !== null) {
+                    return interfaceAndLocal.trim();
+                } else if (xfSongList !== null) {
+                    return `${musicApi}/musicAll/?playlistId=${xfSongList.trim()}`;
+                } else {
+                    return null;
                 }
-                else if (interfaceAndLocal === null && xfSongList !== null) {
-                    return `${musicApi}/musicAll/?playlistId=${xfSongList.trim()}`
-                } 
-                else {
-                    return interfaceAndLocal.trim()
-                }
-            })()
+            })();
 
             const addLeadingZero = num => num < 10 ? `0${num}` : num
 
@@ -347,7 +323,7 @@ const displayPopup = async musicName => {
                         pauseMusic()
                         removebePlaying()
                     } else {
-                        displayPopup(`正在播放：${songName.textContent}`)
+                        displayPopup(`正在播放\n${songName.textContent}`)
                         playMusic()
                         addPlaying()
                         isFunctionTriggered = true
@@ -387,6 +363,11 @@ const displayPopup = async musicName => {
                 let pendingAudioLoadTimer = null
 
                 const playBackAndForth = async () => {
+                    if (!musicUrl) {
+                        songName.textContent = '未配置歌单'
+                        singer.textContent = '请设置 data-localMusic 或 data-songList'
+                        return
+                    }
                     if (isLoading) return
                     isLoading = true
                     clearTimeout(retryTimer)
@@ -513,14 +494,14 @@ const displayPopup = async musicName => {
                             }
                         })
 
-                        // ---------- 彻底优化后的 updateSong（解决切歌卡顿）----------
+                        // ---------- 彻底优化后的 updateSong（移除 .xf-songIcon 操作）----------
                         const updateSong = index => {
                             MusicPlayerMain.style.opacity = 1
                             
                             // 1. 更新高亮状态（仅遍历，不重复过滤）
                             songsItem.forEach((ele, i) => {
                                 ele.classList.toggle('xf-inExecution', i === index)
-                                ele.querySelector('.xf-songListSongPictures .xf-songIcon').classList.remove('icon-zantingtingzhi')
+                                // 已移除对 .xf-songIcon 的 classList 操作
                             })
                             
                             // 2. 仅一次过滤，获取当前播放的项
@@ -538,11 +519,7 @@ const displayPopup = async musicName => {
                             songName.textContent = itemName
                             singer.textContent = itemAuto
 
-                            // 4. 更新播放图标
-                            if (eleInExecution.length > 0) {
-                                const xfSongIcon = eleInExecution[0].querySelector('.xf-songListSongPictures .xf-songIcon')
-                                xfSongIcon.classList.add('icon-zantingtingzhi')
-                            }
+                            // 4. 移除对 .xf-songIcon 的添加图标操作
 
                             // 5. 取消之前的音频加载任务，防止堆积
                             if (pendingAudioLoadTimer) {
@@ -557,7 +534,7 @@ const displayPopup = async musicName => {
                                 if (isFunctionTriggered || MusicPlayer.getAttribute('data-fadeOutAutoplay') !== null) {
                                     playMusic()
                                     addPlaying()
-                                    displayPopup(`正在播放：${itemName}`)
+                                    displayPopup(`正在播放\n${itemName}`)
                                 }
 
                                 // 歌词处理
@@ -591,7 +568,7 @@ const displayPopup = async musicName => {
                                 }
 
                                 if (interfaceAndLocal === null && lyricsShowOrHide !== '0' && lyricsShowOrHide !== 'false' && xfLyric) {
-                                    xfLyric.style.backgroundColor = backgroundColors[bgIndex]
+                                    xfLyric.style.backgroundColor = popupBackgroundColor
                                     let xfAllLyri = xfLyric.querySelector('.xf-AllLyric-box')
                                     const musicLyric = eleInExecution[0].dataset.index
                                     const wyLyric = `${musicApi}/musicAll/?lyric=${musicLyric}`
