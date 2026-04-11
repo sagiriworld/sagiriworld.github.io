@@ -10,7 +10,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== 定制粉红主题 (基于 #FFDFED) ===== */
 #xf-MusicPlayer .xf-girlPink {
   /* Surface / Background */
   --playerColor-1: #fffbff;      /* Surface */
@@ -41,7 +40,7 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main {
   --parentWidth: 350;
   --numParentHeight: 135;
-  --playerRadius-1: 8px;
+  --playerRadius-1: 10px;
   --parentWidthRemoveParty24: calc(350px - 24px);
   --songPictureWidth: calc(135px - 135px / 2.5 - 5px);
   --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
@@ -118,7 +117,6 @@
   display: block;
   width: var(--songPictureWidth);
   height: var(--songPictureWidth);
-  border: 1px solid var(--playerColor-4);
   border-radius: 16px;
   object-fit: cover;
 }
@@ -410,7 +408,7 @@
 .xf-lyricHidden {
   font-size: 16px !important;
   --color-1: #fff;
-  --color-2: #000;
+  --color-2: rgba(0,0,0,0.7);
   --color-3: #ffc0cb;
   --color-4: rgba(0, 0, 0, 0.75);
   --text-shadow-1: 1px 1px 1px var(--color-2);
@@ -447,10 +445,17 @@
   left: 0;
   width: var(--width-100B);
   height: var(--height-1);
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-index-100);
+  background-color: rgba(253,217,231,0.7);
+  z-index: 900;
   overflow: hidden;
   transition: all 0.5s;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+  #xf-lyric.xf-lyricShow {
+    bottom: 70px !important;
+    z-index: 900;
+  }
 }
 #xf-lyric:hover {
   height: 2.5em;
@@ -494,12 +499,12 @@
   max-width: 90vw;
   min-width: 60px;
   padding: 10px 10px;
-  background: rgba(0, 0, 0, 0.75);
-  color: #ffffff;
+  background: rgba(253,217,231,0.7);
+  color: var(--playerColor-4);
   font-size: 7px;
   font-weight: 500;
   text-align: center;
-  border-radius: 40px;
+  border-radius: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 10%;
@@ -576,7 +581,7 @@
     --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
     --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
   }
-  #xf-lyric { background-color: rgba(65, 42, 52, 0.9) !important; }
-  .xf-music-pop { background-color: rgba(65, 42, 52, 0.95) !important; }
+  #xf-lyric { background-color: rgba(65, 42, 52, 0.9) !important; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);}
+  .xf-music-pop { background-color: rgba(89,64,75,0.6) !important; }
   .xf-throughDisplay { background-color: rgba(65, 42, 52, 0.9) !important; }
 }
