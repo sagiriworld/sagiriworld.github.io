@@ -24,6 +24,18 @@
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.2);
 }
 
+@font-face {
+  font-family: 'MyFont';
+  src: url('./font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  font-family: 'MyFont', sans-serif !important;
+}
+
 button, .sidebar a, .nav-link {
   -webkit-tap-highlight-color: transparent;
 }
@@ -64,22 +76,37 @@ a::after {
   transition: transform 0.1s ease-out;
 }
 
-@font-face {
-  font-family: 'MyFont';
-  src: url('./font.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-* {
-  font-family: 'MyFont', sans-serif !important;
-
-}
-
 html, body {
   overflow-x: hidden;
   touch-action: pan-y;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+  margin: 20px 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(0,0,0,0.2);
+}
+
+.divider span {
+  padding: 0 10px;
+  font-size: 12px;
+  opacity: 0.6;
 }
 
 
@@ -101,8 +128,12 @@ html, body {
     --sidebar-a: rgba(106, 106, 106, 0.6);
   }
 
+  .about-card .li-a:hover {
+    background: rgba(255, 179, 207, 0.35);
+  }
+
  .article-card {
-    background: rgb(66,41,50) !important;
+    background: #2A2125 !important;
     color: #f5f5f5 !important;
 
   }
@@ -126,11 +157,30 @@ html, body {
   background: rgb(90,63,72) !important;
 }
 
+.about-card {
+  background: rgb(65,42,52) !important;
+}
+
+.about-list li {
+  background: rgb(90,63,72) !important;
+}
+
 .time-badge {
   background: rgba(255, 179, 207, 0.2);
   color: #f5f5f5;
 }
-	
+
+.divider::before,
+.divider::after {
+  background: var(--color-pink-soft);
+}
+
+.divider span {
+  color: var(--color-text);
+ opacity: 0.8;
+}
+
+
 }
 
 
@@ -250,7 +300,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 60px;
-  height: 30px;
+  height: 33px;
   min-height: 30px;
   border-radius: 22px;
   color: var(--color-svg);
@@ -297,6 +347,7 @@ body {
 
 
 
+
 /* =========================
    ripple
 ========================= */
@@ -305,7 +356,7 @@ body {
   border-radius: 50%;
   transform: scale(0);
   animation: ripple-animation 0.5s linear;
-  background: rgba(255,255,255,0.5);
+  background: var(--sidebar-a);
   pointer-events: none;
 }
 
@@ -391,6 +442,10 @@ body {
 
 
 
+
+
+
+
 /* =========================
    article-card
 ========================= */
@@ -404,7 +459,7 @@ body {
   max-width: 600px;
   padding: 30px;
   border-radius: 20px;
-  background: rgb(242,221,226);
+  background: #F7ECF4;
   box-sizing: border-box;
 }
 
@@ -497,7 +552,7 @@ body {
   grid-column: 1 / -1;   /* 占满整行 */
   align-items: center;
   gap: 20px;
-  background: rgb(243,229,238);
+  background: rgb(250, 242, 248);
   border-radius: 16px;
   padding: 20px;
   margin: 0 auto 30px auto;  /* 上 0，下 30px，左右 auto */
@@ -526,14 +581,115 @@ body {
   margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 7px;
 }
 
 .profile-list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  height: 15px;
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 216, 231, 0.3);
 }
+
+
+
+/* =========================
+   关于卡片
+========================= */
+.about-card {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  grid-column: 1 / -1;
+  background: rgb(250, 242, 248);
+  border-radius: 16px;
+
+  padding: 24px;
+  margin: 0 auto 30px auto;
+  max-width: 800px;
+
+  gap: 10px;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.4s;
+}
+
+.about-card.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-card img {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+}
+
+.about-list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  height: 15px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 216, 231, 0.3);
+}
+
+/* 底部按钮区 */
+.about-a {
+  margin-top: auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  list-style: none;
+  padding: 0;
+}
+
+.li-a {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--color-pink-soft);
+  transition: background 0.2s ease;
+}
+
+.li-a:hover {
+  background: rgba(253, 176, 210, 0.626);
+}
+
+.li-a svg {
+  width: 20px;
+  height: 20px;
+}
+
 
 
 
@@ -842,8 +998,16 @@ code-box {
 
   .profile-card {
     width: 100%;
-    max-width: 600px;   /* 防止太宽 */
-    margin: 0 auto 0 auto; /* 上 0，下 0px，左右居中 */
-    box-sizing: border-box;   /* 让 padding 不增加宽度 */
+    max-width: 600px;
+    margin: 0 auto 0 auto;
+    box-sizing: border-box;
+  }
+
+  .about-card {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 0 auto;
+    box-sizing: border-box;
+	padding: 12px 12px;
   }
 }
