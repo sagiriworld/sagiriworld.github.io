@@ -49,7 +49,7 @@ async function loadPage(url) {
           setTimeout(() => {
             newArticleCard.classList.remove('fade-out');
             newArticleCard.classList.add('fade-in');
-			initCodeBoxes();
+            initCodeBoxes();
           }, 50);
         } else if (currentArticleCard) currentArticleCard.remove();
 
@@ -70,6 +70,7 @@ async function loadPage(url) {
 
         bindLinks();
         addRippleEffect();
+        animateAboutCard();    // 新增：让 about-card 也有淡入动画
         animateProfileCard();
         animateArticleCard();
       }, 200);
@@ -156,7 +157,7 @@ function initCodeBoxes() {
     // 5. 绑定复制功能
     const copyBtn = box.querySelector('.copy-btn');
     copyBtn.addEventListener('click', () => {
-      // 获取代码元素的纯文本内容（hljs 渲染后依然能通过 textContent 获取原文）
+      // 获取代码元素的纯文本内容
       const textToCopy = codeElement.textContent;
 
       if (navigator.clipboard && window.isSecureContext) {
@@ -236,10 +237,16 @@ window.addEventListener('popstate', () => {
    ripple
 ========================= */
 function addRippleEffect() {
-  document.querySelectorAll('.sidebar a').forEach(button => {
+  document.querySelectorAll('.sidebar a, .li-a').forEach(button => {
+
+    // ❗防止重复绑定（SPA关键）
+    if (button.dataset.rippleBound === "true") return;
+    button.dataset.rippleBound = "true";
+
     button.addEventListener('click', function (e) {
       const rect = button.getBoundingClientRect();
       const circle = document.createElement('span');
+
       const diameter = Math.max(rect.width, rect.height);
       const radius = diameter / 2;
 
@@ -248,9 +255,14 @@ function addRippleEffect() {
       circle.style.left = `${e.clientX - rect.left - radius}px`;
       circle.style.top = `${e.clientY - rect.top - radius}px`;
 
+      // 删除旧 ripple
       const old = button.querySelector('.ripple');
       if (old) old.remove();
+
       button.appendChild(circle);
+
+      // 自动清理（避免 DOM 堆积）
+      setTimeout(() => circle.remove(), 600);
     });
   });
 }
@@ -259,6 +271,13 @@ function addRippleEffect() {
 /* =========================
    animations
 ========================= */
+function animateAboutCard() {
+  const el = document.querySelector('.about-card');
+  if (!el) return;
+  el.classList.remove('fade-in');
+  setTimeout(() => el.classList.add('fade-in'), 50);
+}
+
 function animateProfileCard() {
   const el = document.querySelector('.profile-card');
   if (!el) return;
@@ -317,6 +336,7 @@ async function initHitokoto() {
 ========================= */
 bindLinks();
 addRippleEffect();
+animateAboutCard();
 animateProfileCard();
 animateArticleCard();
 initHitokoto();
