@@ -18,7 +18,7 @@
   --color-pink-soft: rgba(255,216,231,0.8);
   --color-svg: #352f31;
   --sidebar-bg: rgba(240, 240, 240, 0.8);
-  --sidebar-a: rgba(106, 106, 106, 0.5);
+  --sidebar-a: rgba(106, 106, 106, 0.2);
   --shadow: rgba(0, 0, 0, 0.2);
   --sidebar-bg-mobile: rgba(247, 236, 244, 0.8);
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.2);
@@ -98,7 +98,7 @@ html, body {
     --color-svg: #fed9e6;
     --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
     --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-    --sidebar-a: rgba(106, 106, 106, 0.3);
+    --sidebar-a: rgba(106, 106, 106, 0.6);
   }
 
  .article-card {
