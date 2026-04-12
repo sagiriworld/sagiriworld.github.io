@@ -257,7 +257,7 @@ body {
   isolation: isolate;
 }
 
-.a:hover {
+.sidebar a:hover {
   color: rgba(106, 106, 106, 0.5);
 }
 
