@@ -257,6 +257,10 @@ body {
   isolation: isolate;
 }
 
+.a:hover {
+  color: rgba(106, 106, 106, 0.5);
+}
+
 .sidebar-text {
   font-size: 0.75rem;
   text-align: center;
