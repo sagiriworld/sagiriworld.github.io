@@ -241,6 +241,11 @@ body {
   gap: 4px;               /* 图标和文字间距 */
 }
 
+.sidebar ul li:hover {
+  color: rgba(106, 106, 106, 0.5);
+}
+
+
 .sidebar a {
   position: relative;
   overflow: hidden;
@@ -255,10 +260,6 @@ body {
   text-decoration: none;
   transition: var(--transition);
   isolation: isolate;
-}
-
-.sidebar a:hover {
-  color: rgba(106, 106, 106, 0.5);
 }
 
 .sidebar-text {
