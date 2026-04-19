@@ -216,7 +216,7 @@ hr {
   color: #f5f5f5;
 }
 [data-theme="dark"] .hitokoto {
-  background: rgb(65,42,52) !important;
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 [data-theme="dark"] .profile-card {
   background: rgb(65,42,52) !important;
