@@ -873,30 +873,21 @@ window.addEventListener('DOMContentLoaded', function () {
             }
             clickControl()
 
-            // ========== 右侧弹出适配：修改 switchPlayerFun ==========
-            const switchPlayerFun = () => {
-                const playerToggleClasses = () => {
-                    switchArrow.classList.toggle('xf-jiantou1');
-                    // 手动控制右侧弹出偏移量，不使用原类名逻辑，避免冲突
-                    const isShow = MusicPlayerMain.classList.contains('xf-playerShow');
-                    if (isShow) {
-                        MusicPlayerMain.style.transform = 'translateX(calc(100% - 24px))';
-                    } else {
-                        MusicPlayerMain.style.transform = 'translateX(0)';
-                    }
-                    MusicPlayerMain.classList.toggle('xf-playerShow');
-                };
+const switchPlayerFun = () => {
+  const playerToggleClasses = () => {
+    switchArrow.classList.toggle('xf-jiantou1');
+    MusicPlayerMain.classList.toggle('xf-playerShow');
+  };
 
-                switchPlayer.addEventListener('click', playerToggleClasses);
+  switchPlayer.addEventListener('click', playerToggleClasses);
 
-                document.addEventListener('click', function (event) {
-                    if (!MusicPlayer.contains(event.target)) {
-                        switchArrow.classList.remove('xf-jiantou1');
-                        MusicPlayerMain.classList.remove('xf-playerShow');
-                        MusicPlayerMain.style.transform = 'translateX(calc(100% - 24px))';
-                    }
-                });
-            };
+  document.addEventListener('click', function (event) {
+    if (!MusicPlayer.contains(event.target)) {
+      switchArrow.classList.remove('xf-jiantou1');
+      MusicPlayerMain.classList.remove('xf-playerShow');
+    }
+  });
+};
 
             switchPlayerFun()
             xfMusicAudio.remove()
