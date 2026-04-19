@@ -411,11 +411,6 @@
   color: var(--playerColor-2);
 }
 
-/* 展开状态 */
-#xf-MusicPlayer .xf-playerShow {
-  transform: translateX(0) !important;
-}
-
 /* 其他组件保持不变 */
 .xf-singleLineEllipsis {
   text-overflow: ellipsis;
