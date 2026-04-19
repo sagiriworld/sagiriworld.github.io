@@ -602,18 +602,16 @@
   .xf-throughDisplay { background-color: rgba(65, 42, 52, 0.9) !important; }
 }
 
-/* 强制右侧弹出修正 */
+/* =========================
+   右侧弹出修正（配合 JS 内联样式）
+========================= */
 #xf-MusicPlayer .xf-MusicPlayer-Main {
   right: 0 !important;
   left: auto !important;
-  transform: translateX(calc(100% - 24px)) !important;
+  /* 基础折叠状态，不加 !important，让 JS 内联样式覆盖 */
+  transform: translateX(calc(100% - 24px));
 }
 
-#xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
-  transform: translateX(0) !important;
-}
-
-/* 确保箭头在折叠时可见，展开时正常 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   left: 0 !important;
   right: auto !important;
@@ -624,7 +622,6 @@
   width: calc(100% - 24px) !important;
 }
 
-/* 歌单宽度自适应 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   width: 100% !important;
 }
