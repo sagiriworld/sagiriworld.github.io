@@ -11,22 +11,28 @@
 }
 
 #xf-MusicPlayer .xf-girlPink {
-  --playerColor-1: #fffbff;
-  --playerColor-2: #1f1a1c;
-  --playerColor-3: #fdd9e7;
-  --playerColor-4: #504348;
-  --playerColor-5: #1C1B1F;
-  --playerColor-6: #ae1d79;
-  --playerColor-7: #fdd9e7;
-  --playerColor-8: #3d0027;
-  --playerColor-9: #f1dee4;
-  --playerColor-10: #7f553a;
-  --playerColor-11: #C27E94;
-  --playerColor-12: #301401;
+  /* Surface / Background */
+  --playerColor-1: #fffbff;      /* Surface */
+  --playerColor-2: #1f1a1c;      /* On Surface */
+  --playerColor-3: #fdd9e7;      /* Primary Container */
+  --playerColor-4: #504348;      /* On Surface Variant */
+  --playerColor-5: #1C1B1F;      /* 悬停文字色 */
+  --playerColor-6: #ae1d79;      /* Primary */
+  --playerColor-7: #fdd9e7;      /* 选中背景 */
+  --playerColor-8: #3d0027;      /* On Primary Container */
+  --playerColor-9: #f1dee4;      /* Surface Variant */
+  --playerColor-10: #7f553a;     /* Tertiary */
+  --playerColor-11: #C27E94;     /* Tertiary 变体 */
+  --playerColor-12: #301401;     /* On Tertiary Container */
+  
   --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
   --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
-  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08), inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
+  
+  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05),
+                    0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08),
+                    inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
+  
   --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
   --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
 }
@@ -38,33 +44,19 @@
   --parentWidthRemoveParty24: calc(350px - 24px);
   --songPictureWidth: calc(135px - 135px / 2.5 - 5px);
   --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
-  --SingingSheetWidth: calc(100%);
-  
+  --SingingSheetWidth: calc(301.9px);
   position: fixed;
-  left: auto !important;
-  right: 0 !important;
+  left: 0;
   bottom: 2em;
   width: var(--parentWidth);
-  height: auto;
-  min-height: var(--numParentHeight);
-  border-top-left-radius: var(--playerRadius-1) !important;
-  border-bottom-left-radius: var(--playerRadius-1) !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  height: var(--numParentHeight);
+  border-top-right-radius: var(--playerRadius-1);
+  border-bottom-right-radius: var(--playerRadius-1);
   text-shadow: var(--playerTextShadow-1);
   z-index: 99;
-  transform: translateX(calc(100% - 24px)) !important;
+  transform: translateX(calc(-100% + 24px));
   will-change: transform;
   transition: transform 0.5s;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1) !important;
-  overflow: visible !important;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;  /* 内容区靠右，消除右侧透明空白 */
-}
-
-#xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
-  transform: translateX(0) !important;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
@@ -81,59 +73,41 @@
   background-color: var(--playerColor-7);
   color: var(--playerColor-1);
 }
-
-/* 切换箭头：绝对定位在左侧 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   position: absolute;
   top: 0;
-  left: 0 !important;
-  right: auto !important;
-  height: 135px;
-  width: 24px;
+  right: 0;
+  height: calc(135px);
+  width: calc(24px);
   display: flex;
   align-items: center;
-  justify-content: center;
   background-color: var(--playerColor-3);
   color: var(--playerColor-1);
-  border-top-left-radius: var(--playerRadius-1) !important;
-  border-bottom-left-radius: var(--playerRadius-1) !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  cursor: pointer;
-  z-index: 10;
+  border-top-right-radius: var(--playerRadius-1);
+  border-bottom-right-radius: var(--playerRadius-1);
 }
-
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
   font-size: 1.5em;
   font-weight: bold;
   transition: transform 0.5s;
   color: var(--playerColor-8);
-  transform: scaleX(-1) !important;
 }
-
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
-  transform: rotate(180deg) scaleX(-1) !important;
+  transform: rotate(180deg);
 }
-
-/* 内部歌曲区域：宽度326px，靠右自然对齐 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   width: var(--parentWidthRemoveParty24);
-  height: 135px;
-  border-top-left-radius: var(--playerRadius-1) !important;
-  border-bottom-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  height: calc(135px);
+  border-top-right-radius: var(--playerRadius-1);
+  border-bottom-right-radius: var(--playerRadius-1);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
-
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture {
   width: var(--songPictureWidth);
-  height: 135px;
+  height: calc(135px);
   position: relative;
   display: flex;
   align-items: center;
@@ -153,7 +127,7 @@
   --BoxLeftAndRightMargin: 0 0.8em;
   --iconControlSize: 32px;
   width: var(--rightSideWidth);
-  height: 135px;
+  height: calc(135px);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl,
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
@@ -267,14 +241,12 @@
   box-shadow: var(--playerShadow-1);
 }
 
-/* 歌单面板 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   --distance10px: 10px;
-  width: 100%;
+  width: var(--SingingSheetWidth);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
-  border-bottom-left-radius: var(--playerRadius-1) !important;
-  border-bottom-right-radius: 0 !important;
+  border-bottom-right-radius: var(--playerRadius-1);
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 0;
@@ -283,7 +255,6 @@
   will-change: max-height, transform;
   contain: layout style;
   backface-visibility: hidden;
-  margin-left: 0;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongListShow {
@@ -308,7 +279,7 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem {
   --songsItemHeight: calc((350px - 20px) / 4);
   --imgBoxSize: 45px;
-  --songInformationWidth: calc(100% - var(--imgBoxSize) - 40px);
+  --songInformationWidth: calc(var(--SingingSheetWidth) - var(--imgBoxSize) - 20px - var(--distance10px));
   height: var(--songsItemHeight);
   width: 100%;
   list-style: none;
@@ -330,6 +301,7 @@
   color: var(--playerColor-6);
 }
 
+/* 封面容器：固定尺寸，防止被文字挤压 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures {
   position: relative;
   width: 45px;
@@ -337,9 +309,10 @@
   margin-left: var(--distance10px);
   overflow: hidden;
   border-radius: 10px;
-  flex-shrink: 0;
+  flex-shrink: 0;               /* 关键：禁止收缩 */
 }
 
+/* 封面图片：填满容器，放大裁切 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-playlistImg {
   display: block;
   width: 100%;
@@ -353,10 +326,11 @@
   transform: scale(1.08);
 }
 
+/* 文字信息区域：允许收缩，内部文字省略 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation {
   width: var(--songInformationWidth);
   margin-left: var(--distance10px);
-  min-width: 0;
+  min-width: 0;                  /* 允许 flex 子项收缩到小于内容宽度 */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle {
@@ -417,7 +391,11 @@
   color: var(--playerColor-2);
 }
 
-/* 其他组件 */
+#xf-MusicPlayer .xf-playerShow {
+  transform: translateX(0);
+}
+
+/* 其他组件样式 */
 .xf-singleLineEllipsis {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -556,7 +534,7 @@
   display: none;
 }
 
-/* 字体图标 */
+/* 字体图标定义 */
 @font-face {
   font-family: "iconfont";
   src: local('iconfont'), url('data:font/ttf;charset=utf-8;base64,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') format('truetype');
@@ -581,7 +559,7 @@
 .icon-gedan:before { content: "\e6c1"; }
 .icon-zantingtingzhi:before { content: "\e65a"; }
 
-/* ===== 深色模式（系统） ===== */
+/* ===== 深色模式 ===== */
 @media (prefers-color-scheme: dark) {
   #xf-MusicPlayer .xf-girlPink {
     --playerColor-1: #1f1a1c;
