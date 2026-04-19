@@ -12,18 +12,18 @@
 
 #xf-MusicPlayer .xf-girlPink {
   /* Surface / Background */
-  --playerColor-1: #fffbff;      /* Surface */
-  --playerColor-2: #1f1a1c;      /* On Surface */
-  --playerColor-3: #fdd9e7;      /* Primary Container */
-  --playerColor-4: #504348;      /* On Surface Variant */
-  --playerColor-5: #1C1B1F;      /* 悬停文字色 */
-  --playerColor-6: #ae1d79;      /* Primary */
-  --playerColor-7: #fdd9e7;      /* 选中背景 */
-  --playerColor-8: #3d0027;      /* On Primary Container */
-  --playerColor-9: #f1dee4;      /* Surface Variant */
-  --playerColor-10: #7f553a;     /* Tertiary */
-  --playerColor-11: #C27E94;     /* Tertiary 变体 */
-  --playerColor-12: #301401;     /* On Tertiary Container */
+  --playerColor-1: #fffbff;
+  --playerColor-2: #1f1a1c;
+  --playerColor-3: #fdd9e7;
+  --playerColor-4: #504348;
+  --playerColor-5: #1C1B1F;
+  --playerColor-6: #ae1d79;
+  --playerColor-7: #fdd9e7;
+  --playerColor-8: #3d0027;
+  --playerColor-9: #f1dee4;
+  --playerColor-10: #7f553a;
+  --playerColor-11: #C27E94;
+  --playerColor-12: #301401;
   
   --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
   --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
@@ -45,26 +45,24 @@
   --songPictureWidth: calc(135px - 135px / 2.5 - 5px);
   --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
   --SingingSheetWidth: calc(301.9px);
+  
   position: fixed;
-  /* 改为右侧定位 */
   left: auto !important;
   right: 0 !important;
   bottom: 2em;
   width: var(--parentWidth);
   height: var(--numParentHeight);
-  /* 圆角改为左侧 */
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
   border-top-left-radius: var(--playerRadius-1) !important;
   border-bottom-left-radius: var(--playerRadius-1) !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   text-shadow: var(--playerTextShadow-1);
   z-index: 99;
-  /* 初始偏移：向右隐藏，仅露出 24px 的箭头区域 */
   transform: translateX(calc(100% - 24px)) !important;
   will-change: transform;
   transition: transform 0.5s;
-  /* 阴影调整方向（可选） */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1) !important;
+  overflow: visible !important;  /* 确保箭头不被裁剪 */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
@@ -81,49 +79,57 @@
   background-color: var(--playerColor-7);
   color: var(--playerColor-1);
 }
+
+/* 切换箭头：放在主面板左侧边缘 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   position: absolute;
   top: 0;
-  /* 箭头移至左侧 */
   left: 0 !important;
   right: auto !important;
   height: calc(135px);
-  width: calc(24px);
+  width: 24px;
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: var(--playerColor-3);
   color: var(--playerColor-1);
-  /* 圆角改为左侧 */
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
   border-top-left-radius: var(--playerRadius-1) !important;
   border-bottom-left-radius: var(--playerRadius-1) !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  cursor: pointer;
+  z-index: 5;
 }
+
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
   font-size: 1.5em;
   font-weight: bold;
   transition: transform 0.5s;
   color: var(--playerColor-8);
-  /* 默认箭头方向镜像（折叠时指向左/外） */
-  transform: scaleX(-1) !important;
+  transform: scaleX(-1) !important;  /* 折叠时箭头指向外（左） */
 }
+
+/* 展开时箭头旋转180°并保持镜像，指向内（右） */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
-  /* 展开时箭头旋转180度，配合镜像后指向右/内 */
   transform: rotate(180deg) scaleX(-1) !important;
 }
+
+/* 内部歌曲区域 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   width: var(--parentWidthRemoveParty24);
   height: calc(135px);
-  /* 圆角改为左侧 */
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
   border-top-left-radius: var(--playerRadius-1) !important;
   border-bottom-left-radius: var(--playerRadius-1) !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
+  position: relative;
+  margin-left: 0;  /* 确保紧贴左侧箭头 */
 }
+
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture {
   width: var(--songPictureWidth);
   height: calc(135px);
@@ -260,14 +266,14 @@
   box-shadow: var(--playerShadow-1);
 }
 
+/* 歌单面板 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   --distance10px: 10px;
   width: var(--SingingSheetWidth);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
-  /* 歌单面板圆角跟随主面板 */
-  border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: var(--playerRadius-1) !important;
+  border-bottom-right-radius: 0 !important;
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 0;
@@ -322,7 +328,6 @@
   color: var(--playerColor-6);
 }
 
-/* 封面容器：固定尺寸，防止被文字挤压 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures {
   position: relative;
   width: 45px;
@@ -330,10 +335,9 @@
   margin-left: var(--distance10px);
   overflow: hidden;
   border-radius: 10px;
-  flex-shrink: 0;               /* 关键：禁止收缩 */
+  flex-shrink: 0;
 }
 
-/* 封面图片：填满容器，放大裁切 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-playlistImg {
   display: block;
   width: 100%;
@@ -347,11 +351,10 @@
   transform: scale(1.08);
 }
 
-/* 文字信息区域：允许收缩，内部文字省略 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation {
   width: var(--songInformationWidth);
   margin-left: var(--distance10px);
-  min-width: 0;                  /* 允许 flex 子项收缩到小于内容宽度 */
+  min-width: 0;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle {
@@ -412,12 +415,12 @@
   color: var(--playerColor-2);
 }
 
-/* 展开状态：归零偏移 */
+/* 展开状态 */
 #xf-MusicPlayer .xf-playerShow {
   transform: translateX(0) !important;
 }
 
-/* 其他组件样式 */
+/* 其他组件样式保持不变 */
 .xf-singleLineEllipsis {
   text-overflow: ellipsis;
   overflow: hidden;
