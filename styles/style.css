@@ -14,7 +14,7 @@
   --color-bg: #FFFBFF;
   --color-text: #3d3d3d;
   --color-white: #ffffff;
-  --color-pink: #ff9fc2;
+  --color-pink: #ffb3cf;
   --color-pink-soft: rgba(255,216,231,0.8);
   --color-svg: #352f31;
   --sidebar-bg: rgba(240, 240, 240, 0.8);
@@ -36,7 +36,7 @@
   font-family: 'MyFont', sans-serif !important;
 }
 
-button, .sidebar a, .nav-link {
+button, .sidebar a, .nav-link, .md3-list-item {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -53,7 +53,7 @@ a {
 }
 
 .a {
-  color: #66ccff;
+  color: var(--color-pink);
 }
 
 a::after {
@@ -71,7 +71,7 @@ a::after {
 }
 
 .a:hover::after {
-  color: #97dcfe;
+  filter: brightness(1.1);
   transform: scaleX(1);
   transition: transform 0.1s ease-out;
 }
@@ -128,10 +128,6 @@ hr {
     --sidebar-a: rgba(106, 106, 106, 0.6);
   }
 
-hr {
-  background: rgba(255,255,255,0.1);
-}
-	
   .about-card .li-a:hover {
     background: rgba(255, 179, 207, 0.35);
   }
@@ -183,6 +179,7 @@ hr {
   color: var(--color-text);
  opacity: 0.8;
 }
+
 
 }
 
@@ -395,12 +392,13 @@ body {
   top: 0;
   left: 0;
   width: var(--sidebar-width);
-  height: 100vh;
+  height: 80vh;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;  /* 改为从顶部开始 */
+  padding-top: 20vh;            /* 可根据需要调整顶部留白 */
   gap: var(--sidebar-gap);
 
   background: var(--sidebar-bg);
@@ -409,6 +407,8 @@ body {
 
 .sidebar ul {
   display: flex;
+  flex: 1;
+  justify-content: center; 
   flex-direction: column;
   gap: var(--sidebar-gap);
   width: 100%;
@@ -477,6 +477,14 @@ body {
   transform: scaleX(1);
 }
 
+/* 底部区域 - 利用 margin-top: auto 推到底部 */
+.sidebar-footer {
+  margin-top: 0;
+  padding-bottom: 18px;         /* 与底部保持间距 */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 
 
@@ -1210,7 +1218,7 @@ body {
 }
 
 /* 普通图片 */
-img:not(.article-header):not(.profile-card img):not(.player img) {
+img:not(.article-header):not(.profile-card img):not(.about-card img):not(.player img) {
   width: 300px;
   height: 180px;
   object-fit: cover;
@@ -1233,68 +1241,6 @@ img:not(.article-header):not(.profile-card img):not(.player img) {
   position: absolute;
   width: 100%;
   height: 100%;
-}
-
-
-
-/* =========================
-   音乐播放器
-========================= */
-/* 卡片 */
-.player {
-  width: 280px;
-  padding: 16px;
-  border-radius: 28px;
-  background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  overflow: hidden;
-}
-
-/* 封面 */
-.cover {
-  width: 100%;
-  aspect-ratio: 1/1;
-  border-radius: 20px;
-  object-fit: cover;
-  display: block；
-}
-
-/* 歌名 */
-.title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1d1b20;
-}
-
-/* 控制区 */
-.controls {
-  display: flex;
-  justify-content: center;
-}
-
-/* 按钮（MD3风格） */
-.play-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: #6750a4;
-  color: white;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: 0.2s;
-}
-
-.play-btn:active {
-  transform: scale(0.95);
 }
 
 
@@ -1420,7 +1366,7 @@ code-box {
     bottom: 0;
     width: 100%;
     height: 70px;
-
+    padding-top: 0;
     flex-direction: row;
     justify-content: center;
 
@@ -1477,6 +1423,10 @@ code-box {
     margin: 0 auto 0 auto;
     box-sizing: border-box;
 	padding: 12px 12px;
+  }
+
+  .sidebar-footer {
+    display: none;   /* 移动端隐藏底部设置按钮 */
   }
 }
 
