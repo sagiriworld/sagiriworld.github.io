@@ -1,4 +1,46 @@
 /* =========================
+   全局变量与初始化
+========================= */
+// 主题管理器
+const ThemeManager = {
+  STORAGE_KEY: 'site-theme',
+  getTheme() {
+    return document.documentElement.getAttribute('data-theme') || 'auto';
+  },
+  setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(this.STORAGE_KEY, theme);
+    this.updateMetaThemeColor();
+  },
+  updateMetaThemeColor() {
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = this.getTheme();
+    if (theme === 'dark' || (theme === 'auto' && isDark)) {
+      meta.content = '#201418';
+    } else {
+      meta.content = '#FFFBFF';
+    }
+  },
+  init() {
+    const saved = localStorage.getItem(this.STORAGE_KEY) || 'auto';
+    this.setTheme(saved);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (this.getTheme() === 'auto') {
+        this.updateMetaThemeColor();
+      }
+    });
+  }
+};
+
+ThemeManager.init();
+
+/* =========================
    SPA 页面加载
 ========================= */
 async function loadPage(url) {
@@ -34,7 +76,6 @@ async function loadPage(url) {
           newHeader.classList.add('fade-out');
           if (currentHeader) currentHeader.replaceWith(newHeader);
           else document.body.insertBefore(newHeader, currentContent);
-
           setTimeout(() => {
             newHeader.classList.remove('fade-out');
             newHeader.classList.add('fade-in');
@@ -45,7 +86,6 @@ async function loadPage(url) {
           newArticleCard.classList.add('fade-out');
           if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
           else document.body.insertBefore(newArticleCard, currentContent);
-
           setTimeout(() => {
             newArticleCard.classList.remove('fade-out');
             newArticleCard.classList.add('fade-in');
@@ -70,9 +110,11 @@ async function loadPage(url) {
 
         bindLinks();
         addRippleEffect();
-        animateAboutCard();    // 新增：让 about-card 也有淡入动画
+        animateAboutCard();
         animateProfileCard();
         animateArticleCard();
+        // 重新绑定设置触发器（确保新页面中的设置按钮有效）
+        bindSettingsTrigger();
       }, 200);
     }
 
@@ -87,55 +129,33 @@ async function loadPage(url) {
   }
 }
 
-
 /* =========================
    代码框组件
 ========================= */
-// 改进版：转义HTML特殊字符并修复浏览器对代码的“自动修补”
 function smartEscapeHTML(str, lang) {
-    // 1. 如果是 HTML 语言，我们希望完整显示源码，直接转义所有字符即可
-    if (lang === 'html') {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    // 2. 对于其他语言（如 C++, Java），处理浏览器误判产生的“假标签”
-    // 核心逻辑：
-    // a) 移除所有闭合标签（如 </iostream>），因为它们通常是浏览器为了修补结构自动加上的
-    let processed = str.replace(/<\/([a-zA-Z0-9]+)>/gi, '');
-
-    // b) 将被误认为是“开始标签”的部分（如 <iostream>）还原为纯文本转义形式
-    // 我们限制标签名必须以字母开头，避免误伤 i < 10 这样的逻辑判断
-    processed = processed.replace(/<([a-zA-Z][a-zA-Z0-9_:.+/ -]*)([^>]*)>/gi, (match, tagName, attrs) => {
-        // 如果浏览器把后面的代码当成了属性 (attrs)，也一并还原
-        return `&lt;${tagName}${attrs}&gt;`;
-    });
-
-    // c) 最后处理可能漏掉的孤立尖括号（例如 i < 10 中的 <）
-    // 注意：由于 & 符号在 innerHTML 中已经是 &amp;，这里不需要重复处理
-    return processed;
+  if (lang === 'html') {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  let processed = str.replace(/<\/([a-zA-Z0-9]+)>/gi, '');
+  processed = processed.replace(/<([a-zA-Z][a-zA-Z0-9_:.+/ -]*)([^>]*)>/gi, (match, tagName, attrs) => {
+    return `&lt;${tagName}${attrs}&gt;`;
+  });
+  return processed;
 }
 
-        
-// 初始化代码框组件
 function initCodeBoxes() {
   const codeBoxes = document.querySelectorAll('code-box');
   if (codeBoxes.length === 0) return;
 
   codeBoxes.forEach((box) => {
-    // 检查是否已初始化，防止 SPA 切换时重复渲染
     if (box.getAttribute('data-initialized') === 'true') return;
 
-    // 1. 获取原始代码和语言
-    // 注意：这里用 innerHTML 获取源码，以便处理其中的 HTML 标签
     const originalCode = box.innerHTML.trim();
     const lang = box.getAttribute('data-lang') || 'plaintext';
-
-    // 2. 转义 HTML（防止代码里的 <script> 等标签直接运行）
     const escapedCode = smartEscapeHTML(originalCode, lang);
 
-    // 3. 构建包含复制按钮和标题的 UI 结构
     box.innerHTML = `
       <div class="code-box-header">
         <span class="code-lang">${lang}</span>
@@ -146,74 +166,50 @@ function initCodeBoxes() {
       </div>
     `;
 
-    // 4. 调用 Highlight.js 进行渲染
     const codeElement = box.querySelector('code');
     if (typeof hljs !== 'undefined') {
       hljs.highlightElement(codeElement);
-    } else {
-      console.error('未检测到 Highlight.js，请确保已在 HTML 中引入脚本。');
     }
 
-    // 5. 绑定复制功能
     const copyBtn = box.querySelector('.copy-btn');
     copyBtn.addEventListener('click', () => {
-      // 获取代码元素的纯文本内容
       const textToCopy = codeElement.textContent;
-
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          const originalText = copyBtn.textContent;
           copyBtn.textContent = '已复制';
-          setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
+          setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
         });
       } else {
         fallbackCopyText(textToCopy, copyBtn);
       }
     });
 
-    // 标记为已初始化
     box.setAttribute('data-initialized', 'true');
   });
 }
 
-        
-// 传统复制方法
 function fallbackCopyText(text, copyBtn) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.opacity = '0';
-    document.body.appendChild(textArea);
-    textArea.select();    
-    try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-            // 复制成功提示
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = '已复制';
-            setTimeout(() => {
-                copyBtn.textContent = originalText;
-            }, 2000);
-        }
-    } catch (err) {
-        console.error('复制失败: ', err);
-        copyBtn.textContent = '复制失败';
-        setTimeout(() => {
-            copyBtn.textContent = '复制';
-        }, 2000);
-    }    
-    document.body.removeChild(textArea);
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.opacity = '0';
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      copyBtn.textContent = '已复制';
+      setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
+    }
+  } catch (err) {
+    copyBtn.textContent = '复制失败';
+    setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
+  }
+  document.body.removeChild(textArea);
 }
-// 页面加载完成后初始化代码框
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCodeBoxes);
-} else {
-    initCodeBoxes();
-}
-
 
 /* =========================
-   SPA 链接
+   链接绑定
 ========================= */
 function bindLinks() {
   document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
@@ -224,29 +220,31 @@ function bindLinks() {
   });
 }
 
-
 /* =========================
-   popstate
-========================= */
-window.addEventListener('popstate', () => {
-  loadPage(location.pathname);
-});
-
-
-/* =========================
-   ripple
+   涟漪效果
 ========================= */
 function addRippleEffect() {
-  document.querySelectorAll('.sidebar a, .li-a').forEach(button => {
+  const rippleElements = document.querySelectorAll(`
+    .sidebar a, 
+    .li-a, 
+    .settings-button, 
+    .settings-button-m,
+    .close-button, 
+    .md3-button, 
+    .md3-list-item
+  `);
 
-    // ❗防止重复绑定（SPA关键）
-    if (button.dataset.rippleBound === "true") return;
-    button.dataset.rippleBound = "true";
+  rippleElements.forEach(element => {
+    if (element.dataset.rippleBound === "true") return;
+    element.dataset.rippleBound = "true";
 
-    button.addEventListener('click', function (e) {
-      const rect = button.getBoundingClientRect();
+    const position = window.getComputedStyle(element).position;
+    if (position === 'static') element.style.position = 'relative';
+    if (window.getComputedStyle(element).overflow !== 'hidden') element.style.overflow = 'hidden';
+
+    element.addEventListener('click', function (e) {
+      const rect = element.getBoundingClientRect();
       const circle = document.createElement('span');
-
       const diameter = Math.max(rect.width, rect.height);
       const radius = diameter / 2;
 
@@ -255,21 +253,17 @@ function addRippleEffect() {
       circle.style.left = `${e.clientX - rect.left - radius}px`;
       circle.style.top = `${e.clientY - rect.top - radius}px`;
 
-      // 删除旧 ripple
-      const old = button.querySelector('.ripple');
+      const old = element.querySelector('.ripple');
       if (old) old.remove();
 
-      button.appendChild(circle);
-
-      // 自动清理（避免 DOM 堆积）
+      element.appendChild(circle);
       setTimeout(() => circle.remove(), 600);
     });
   });
 }
 
-
 /* =========================
-   animations
+   入场动画
 ========================= */
 function animateAboutCard() {
   const el = document.querySelector('.about-card');
@@ -292,51 +286,231 @@ function animateArticleCard() {
   });
 }
 
-
 /* =========================
-   一言
+   一言 API
 ========================= */
-async function initHitokoto() {
+let hitokotoCache = null;
+let hitokotoCacheTime = 0;
+const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000;
+
+function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
   const mainFrom = document.getElementById('hitokoto_from');
   const navText = document.getElementById('nav_hitokoto_text');
   const navFrom = document.getElementById('nav_hitokoto_from');
 
+  const sentence = data.hitokoto;
+  const source = data.from ? `—— ${data.from}` : '';
+
+  if (mainText) {
+    mainText.innerText = sentence;
+    mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
+  }
+  if (mainFrom) mainFrom.innerText = source;
+
+  if (navText) {
+    navText.innerText = sentence;
+    navText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
+  }
+  if (navFrom) navFrom.innerText = source;
+}
+
+function applyFallback() {
+  const mainText = document.getElementById('hitokoto_text');
+  const navText = document.getElementById('nav_hitokoto_text');
+  const fallback = '愿你的每一天都独特而美好';
+  if (mainText) mainText.innerText = fallback;
+  if (navText) navText.innerText = fallback;
+}
+
+async function initHitokoto() {
+  const mainText = document.getElementById('hitokoto_text');
+  const navText = document.getElementById('nav_hitokoto_text');
   if (!mainText && !navText) return;
 
+  if (hitokotoCache && (Date.now() - hitokotoCacheTime) < HITOKOTO_CACHE_DURATION) {
+    applyHitokoto(hitokotoCache);
+    return;
+  }
+
   try {
-    const res = await fetch('https://v1.hitokoto.cn/?c=a&c=c&c=b');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const res = await fetch('https://v1.hitokoto.cn/?c=a&c=c&c=b', { signal: controller.signal });
+    clearTimeout(timeoutId);
     const data = await res.json();
-
-    const sentence = data.hitokoto;
-    const source = data.from ? `—— ${data.from}` : '';
-
-    if (mainText) {
-      mainText.innerText = sentence;
-      mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
-    }
-    if (mainFrom) mainFrom.innerText = source;
-
-    if (navText) {
-      navText.innerText = sentence;
-      navText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
-    }
-    if (navFrom) navFrom.innerText = source;
-
+    hitokotoCache = data;
+    hitokotoCacheTime = Date.now();
+    applyHitokoto(data);
   } catch (e) {
-    const fallback = '愿你的每一天都独特而美好';
-    if (mainText) mainText.innerText = fallback;
-    if (navText) navText.innerText = fallback;
+    console.warn('一言获取失败', e);
+    if (hitokotoCache) applyHitokoto(hitokotoCache);
+    else applyFallback();
   }
 }
 
+/* =========================
+   设置弹窗
+========================= */
+function createSettingsDialog() {
+  if (document.querySelector('.settings-dialog')) return;
+
+  const dialogHTML = `
+    <div class="settings-dialog" id="settingsDialog" aria-hidden="true">
+      <div class="dialog-overlay"></div>
+      <div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <div class="settings-header">
+          <h2 id="settings-title">设置</h2>
+          <button class="close-button" aria-label="关闭设置" id="closeSettingsBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="settings-content">
+          <div class="md3-list-item" style="cursor: default;">
+            <span>
+              <div class="item-label">主题模式</div>
+              <div class="item-supporting">切换浅色/深色外观</div>
+            </span>
+            <select id="themeSelect" class="theme-select" style="padding: 8px 12px; border-radius: 20px; border: 1px solid var(--color-pink-soft); background: var(--color-bg); color: var(--color-text);">
+              <option value="auto">跟随系统</option>
+              <option value="light">浅色模式</option>
+              <option value="dark">深色模式</option>
+            </select>
+          </div>
+          <label class="md3-list-item">
+            <span>
+              <div class="item-label">动画效果</div>
+              <div class="item-supporting">启用页面切换动画</div>
+            </span>
+            <span class="md3-switch">
+              <input type="checkbox" id="animationToggle" checked>
+              <span class="slider"></span>
+            </span>
+          </label>
+          <div class="md3-list-item" id="clearCacheBtn">
+            <span class="item-label">清除缓存</span>
+          </div>
+        </div>
+        <div class="settings-footer-actions">
+          <button class="md3-button" id="resetSettingsBtn">重置</button>
+          <button class="md3-button filled" id="saveSettingsBtn">完成</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', dialogHTML);
+
+  const dialog = document.getElementById('settingsDialog');
+  const overlay = dialog.querySelector('.dialog-overlay');
+  const closeBtn = document.getElementById('closeSettingsBtn');
+  const saveBtn = document.getElementById('saveSettingsBtn');
+  const themeSelect = document.getElementById('themeSelect');
+  const animationToggle = document.getElementById('animationToggle');
+  const resetBtn = document.getElementById('resetSettingsBtn');
+
+  themeSelect.value = ThemeManager.getTheme();
+  const animEnabled = localStorage.getItem('animations-enabled') !== 'false';
+  animationToggle.checked = animEnabled;
+
+  const closeDialog = () => {
+    dialog.classList.remove('open');
+    dialog.setAttribute('aria-hidden', 'true');
+  };
+
+  overlay.addEventListener('click', closeDialog);
+  closeBtn.addEventListener('click', closeDialog);
+
+  saveBtn.addEventListener('click', () => {
+    ThemeManager.setTheme(themeSelect.value);
+    localStorage.setItem('animations-enabled', animationToggle.checked);
+    closeDialog();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    themeSelect.value = 'auto';
+    animationToggle.checked = true;
+  });
+
+  dialog.querySelector('.settings-panel').addEventListener('click', (e) => e.stopPropagation());
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dialog.classList.contains('open')) {
+      closeDialog();
+    }
+  });
+
+  document.getElementById('clearCacheBtn').addEventListener('click', () => {
+    if (confirm('确定清除所有缓存数据吗？')) {
+      localStorage.clear();
+      ThemeManager.setTheme('auto');
+      themeSelect.value = 'auto';
+      animationToggle.checked = true;
+      alert('缓存已清除');
+    }
+  });
+
+  themeSelect.addEventListener('change', () => {
+    ThemeManager.setTheme(themeSelect.value);
+  });
+
+  window.addEventListener('popstate', closeDialog);
+  const originalLoadPage = window.loadPage;
+  if (originalLoadPage) {
+    window.loadPage = async function(url) {
+      closeDialog();
+      return originalLoadPage.call(this, url);
+    };
+  }
+
+  addRippleEffect();
+}
+
+function openSettingsDialog() {
+  createSettingsDialog();
+  const dialog = document.getElementById('settingsDialog');
+  dialog.classList.add('open');
+  dialog.setAttribute('aria-hidden', 'false');
+  const themeSelect = document.getElementById('themeSelect');
+  if (themeSelect) themeSelect.value = ThemeManager.getTheme();
+}
+
+function bindSettingsTrigger() {
+  const trigger = document.getElementById('settings-trigger');
+  const nav = document.getElementById('settings-nav');
+  if (trigger) {
+    trigger.removeEventListener('click', openSettingsDialog);
+    trigger.addEventListener('click', openSettingsDialog);
+  }
+  if (nav) {
+    nav.removeEventListener('click', openSettingsDialog);
+    nav.addEventListener('click', openSettingsDialog);
+  }
+}
 
 /* =========================
-   init
+   初始化执行
 ========================= */
-bindLinks();
-addRippleEffect();
-animateAboutCard();
-animateProfileCard();
-animateArticleCard();
-initHitokoto();
+function initAll() {
+  bindLinks();
+  addRippleEffect();
+  animateAboutCard();
+  animateProfileCard();
+  animateArticleCard();
+  initHitokoto();
+  bindSettingsTrigger(); // 关键：绑定设置按钮
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCodeBoxes);
+  } else {
+    initCodeBoxes();
+  }
+}
+
+initAll();
+
+// 监听 popstate
+window.addEventListener('popstate', () => {
+  loadPage(location.pathname);
+});
