@@ -122,7 +122,7 @@
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
-  margin-left: 24px;  /* 留出箭头宽度 */
+  margin-left: 24px !important;  /* 留出箭头宽度 */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture {
