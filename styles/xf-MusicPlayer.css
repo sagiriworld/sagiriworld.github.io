@@ -606,3 +606,30 @@
   .xf-music-pop { background-color: rgba(89,64,75,0.6) !important; }
   .xf-throughDisplay { background-color: rgba(65, 42, 52, 0.9) !important; }
 }
+
+/* 强制右侧弹出修正 */
+#xf-MusicPlayer .xf-MusicPlayer-Main {
+  right: 0 !important;
+  left: auto !important;
+  transform: translateX(calc(100% - 24px)) !important;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
+  transform: translateX(0) !important;
+}
+
+/* 确保箭头在折叠时可见，展开时正常 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
+  left: 0 !important;
+  right: auto !important;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
+  margin-left: 24px !important;
+  width: calc(100% - 24px) !important;
+}
+
+/* 歌单宽度自适应 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
+  width: 100% !important;
+}
