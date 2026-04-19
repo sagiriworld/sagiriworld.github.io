@@ -256,8 +256,6 @@ window.addEventListener('DOMContentLoaded', function () {
                     detectionPlay()
                     switchArrow.classList.add('xf-jiantou1')
                     MusicPlayerMain.classList.add('xf-playerShow')
-                    // 右侧弹出时展开状态 transform: translateX(0)
-                    MusicPlayerMain.style.transform = 'translateX(0)'
                     playMusic()
                 } else {
                     removebePlaying()
@@ -873,21 +871,21 @@ window.addEventListener('DOMContentLoaded', function () {
             }
             clickControl()
 
-const switchPlayerFun = () => {
-  const playerToggleClasses = () => {
-    switchArrow.classList.toggle('xf-jiantou1');
-    MusicPlayerMain.classList.toggle('xf-playerShow');
-  };
+            const switchPlayerFun = () => {
+                const playerToggleClasses = () => {
+                    switchArrow.classList.toggle('xf-jiantou1')
+                    MusicPlayerMain.classList.toggle('xf-playerShow')
+                }
 
-  switchPlayer.addEventListener('click', playerToggleClasses);
+                switchPlayer.addEventListener('click', playerToggleClasses)
 
-  document.addEventListener('click', function (event) {
-    if (!MusicPlayer.contains(event.target)) {
-      switchArrow.classList.remove('xf-jiantou1');
-      MusicPlayerMain.classList.remove('xf-playerShow');
-    }
-  });
-};
+                document.addEventListener('click', function (event) {
+                    if (!MusicPlayer.contains(event.target)) {
+                        switchArrow.classList.remove('xf-jiantou1')
+                        MusicPlayerMain.classList.remove('xf-playerShow')
+                    }
+                })
+            }
 
             switchPlayerFun()
             xfMusicAudio.remove()
