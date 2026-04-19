@@ -603,14 +603,17 @@
 }
 
 /* =========================
-   右侧弹出修正（纯 CSS 控制，宽度变量保持原始）
+   右侧弹出终极修正（覆盖所有 left 干扰）
 ========================= */
-#xf-MusicPlayer .xf-MusicPlayer-Main {
+#xf-MusicPlayer .xf-MusicPlayer-Main,
+#xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
   right: 0 !important;
   left: auto !important;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main {
   transform: translateX(calc(100% - 24px)) !important;
   transition: transform 0.5s;
-  /* 不覆盖 width，保持 --parentWidth 的 350px */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
@@ -624,7 +627,6 @@
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   margin-left: 24px !important;
-  /* 不覆盖 width，保持变量计算的值 (326px) */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
