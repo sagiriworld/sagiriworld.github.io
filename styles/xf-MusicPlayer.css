@@ -603,13 +603,14 @@
 }
 
 /* =========================
-   右侧弹出修正（纯 CSS 控制）
+   右侧弹出修正（纯 CSS 控制，宽度变量保持原始）
 ========================= */
 #xf-MusicPlayer .xf-MusicPlayer-Main {
   right: 0 !important;
   left: auto !important;
   transform: translateX(calc(100% - 24px)) !important;
   transition: transform 0.5s;
+  /* 不覆盖 width，保持 --parentWidth 的 350px */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
@@ -623,7 +624,7 @@
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   margin-left: 24px !important;
-  width: calc(100% - 24px) !important;
+  /* 不覆盖 width，保持变量计算的值 (326px) */
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
