@@ -46,17 +46,25 @@
   --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
   --SingingSheetWidth: calc(301.9px);
   position: fixed;
-  left: 0;
+  /* 改为右侧定位 */
+  left: auto !important;
+  right: 0 !important;
   bottom: 2em;
   width: var(--parentWidth);
   height: var(--numParentHeight);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  /* 圆角改为左侧 */
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: var(--playerRadius-1) !important;
+  border-bottom-left-radius: var(--playerRadius-1) !important;
   text-shadow: var(--playerTextShadow-1);
   z-index: 99;
-  transform: translateX(calc(-100% + 24px));
+  /* 初始偏移：向右隐藏，仅露出 24px 的箭头区域 */
+  transform: translateX(calc(100% - 24px)) !important;
   will-change: transform;
   transition: transform 0.5s;
+  /* 阴影调整方向（可选） */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1) !important;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
@@ -76,15 +84,20 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   position: absolute;
   top: 0;
-  right: 0;
+  /* 箭头移至左侧 */
+  left: 0 !important;
+  right: auto !important;
   height: calc(135px);
   width: calc(24px);
   display: flex;
   align-items: center;
   background-color: var(--playerColor-3);
   color: var(--playerColor-1);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  /* 圆角改为左侧 */
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: var(--playerRadius-1) !important;
+  border-bottom-left-radius: var(--playerRadius-1) !important;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
@@ -92,15 +105,21 @@
   font-weight: bold;
   transition: transform 0.5s;
   color: var(--playerColor-8);
+  /* 默认箭头方向镜像（折叠时指向左/外） */
+  transform: scaleX(-1) !important;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
-  transform: rotate(180deg);
+  /* 展开时箭头旋转180度，配合镜像后指向右/内 */
+  transform: rotate(180deg) scaleX(-1) !important;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   width: var(--parentWidthRemoveParty24);
   height: calc(135px);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  /* 圆角改为左侧 */
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: var(--playerRadius-1) !important;
+  border-bottom-left-radius: var(--playerRadius-1) !important;
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
@@ -246,7 +265,9 @@
   width: var(--SingingSheetWidth);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  /* 歌单面板圆角跟随主面板 */
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: var(--playerRadius-1) !important;
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 0;
@@ -391,8 +412,9 @@
   color: var(--playerColor-2);
 }
 
+/* 展开状态：归零偏移 */
 #xf-MusicPlayer .xf-playerShow {
-  transform: translateX(0);
+  transform: translateX(0) !important;
 }
 
 /* 其他组件样式 */
@@ -559,7 +581,7 @@
 .icon-gedan:before { content: "\e6c1"; }
 .icon-zantingtingzhi:before { content: "\e65a"; }
 
-/* ===== 深色模式 ===== */
+/* ===== 深色模式（系统） ===== */
 @media (prefers-color-scheme: dark) {
   #xf-MusicPlayer .xf-girlPink {
     --playerColor-1: #1f1a1c;
