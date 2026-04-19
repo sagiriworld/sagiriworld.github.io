@@ -603,13 +603,17 @@
 }
 
 /* =========================
-   右侧弹出修正（配合 JS 内联样式）
+   右侧弹出修正（纯 CSS 控制）
 ========================= */
 #xf-MusicPlayer .xf-MusicPlayer-Main {
   right: 0 !important;
   left: auto !important;
-  /* 基础折叠状态，不加 !important，让 JS 内联样式覆盖 */
-  transform: translateX(calc(100% - 24px));
+  transform: translateX(calc(100% - 24px)) !important;
+  transition: transform 0.5s;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main.xf-playerShow {
+  transform: translateX(0) !important;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
