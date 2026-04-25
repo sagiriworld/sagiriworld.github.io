@@ -395,7 +395,7 @@ function createSettingsDialog() {
         </div>
         <div class="settings-footer-actions">
           <button class="md3-button" id="resetSettingsBtn">重置</button>
-          <button class="md3-button filled" id="saveSettingsBtn">完成</button>
+          <button class="md3-button" id="saveSettingsBtn">完成</button>
         </div>
       </div>
     </div>
