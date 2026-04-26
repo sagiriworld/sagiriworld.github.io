@@ -623,17 +623,6 @@ body {
 	will-change: transform,opacity;
 }
 
-.content-inner.fade-out {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.content-inner.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.4s ease;
-}
-
 @media (min-width: 769px) {
   .home-content {
     display: grid;
@@ -1579,7 +1568,7 @@ code-box {
 }
 
 .home-link-card {
-  position: relative; /* ⭐ 必须加 */
+  position: relative;
   display: flex;
   flex: 1 1 0;
   flex-direction: row;
