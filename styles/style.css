@@ -872,28 +872,6 @@ body {
   filter: brightness(1.1);
 }
 
-.settings-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: transparent;
-  color: var(--color-pink-soft);
-  height: 55px;
-  width: 55px;
-  cursor: pointer;
-  border-radius: 100px;
-  padding: 6px 0;
-  transition: var(--transition);
-  -webkit-tap-highlight-color: transparent;
-  border: 0.6px solid ;
-}
-
-.settings-button:hover {
-  background: var(--sidebar-a);
-}
-
 .settings-button-m {
   display: flex;
   flex-direction: column;
@@ -914,12 +892,6 @@ body {
 
 .settings-button-m:hover {
   background: var(--sidebar-a);
-}
-
-@media (min-width: 768px) {
-  .settings-button-m {
-	display: none;
-  }
 }
 
 /* 主题色选择器 */
