@@ -1469,7 +1469,7 @@ code-box {
   z-index: 0;
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
-  height: 65vh;
+  height: 55vh;
 }
 
 /* 半透明遮罩层 */
@@ -1483,7 +1483,7 @@ code-box {
   bottom: 0;
   background: rgba(255, 255, 255, 0.5); /* 可调整透明度 */
   pointer-events: none;
-  height: 65vh;
+  height: 55vh;
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
 }
