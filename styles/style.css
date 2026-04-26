@@ -1532,8 +1532,9 @@ code-box {
 .home-link-card {
   display: flex;
   flex: 1 1 0;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   padding: 28px 24px;
   border-radius: 16px;
   background: var(--card-bg, rgba(255, 216, 231, 0.3));
@@ -1542,6 +1543,24 @@ code-box {
   color: var(--color-text);
   transition: var(--transition);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.home-link-card:hover .arrow-icon {
+  transform: translateX(4px);
+  opacity: 1;
 }
 
 .home-link-card:hover {
