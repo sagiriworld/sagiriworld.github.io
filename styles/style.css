@@ -203,7 +203,7 @@ hr {
 [data-theme="dark"] {
   --color-bg: #201418;
   --color-text: #f5f5f5;
-  --sidebar-bg: rgba(30,30,30,0.6);
+  --sidebar-bg: rgba(30,30,30);
   --shadow: rgba(0,0,0,0.5);
   --color-pink-soft: rgba(255,179,207,0.25);
   --color-pink: #ffb3cf;
@@ -301,7 +301,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   --color-pink: #ffb3cf;
   --color-pink-soft: rgba(255,216,231,0.8);
   --color-svg: #352f31;
-  --sidebar-bg: rgba(240, 240, 240, 0.8);
+  --sidebar-bg: rgba(240, 240, 240);
   --sidebar-a: rgba(106, 106, 106, 0.2);
   --shadow: rgba(0, 0, 0, 0.2);
   --sidebar-bg-mobile: rgba(247, 236, 244, 0.8);
