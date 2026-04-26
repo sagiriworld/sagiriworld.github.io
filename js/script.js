@@ -73,55 +73,55 @@ async function loadPage(url) {
     currentContent.classList.add('fade-out');
     if (currentHeader) currentHeader.classList.add('fade-out');
 
-    setTimeout(() => {
+setTimeout(() => {
 
-      // ===== 替换内容 =====
-      currentContent.innerHTML = newContent.innerHTML;
+  // ===== 内容（先隐藏再插入）=====
+  currentContent.style.opacity = 0;
+  currentContent.innerHTML = newContent.innerHTML;
 
-      // ===== header-container =====
-      if (newHeader) {
-        newHeader.classList.add('fade-out');
+  // 强制重排（关键）
+  currentContent.offsetHeight;
 
-        if (currentHeader) {
-          currentHeader.replaceWith(newHeader);
-        } else {
-          document.body.insertBefore(newHeader, currentContent);
-        }
+  // ===== header-container =====
+  if (newHeader) {
+    newHeader.style.opacity = 0;
 
-        setTimeout(() => {
-          newHeader.classList.remove('fade-out');
-          newHeader.classList.add('fade-in');
-        }, 50);
+    if (currentHeader) {
+      currentHeader.replaceWith(newHeader);
+    } else {
+      document.body.insertBefore(newHeader, currentContent);
+    }
 
-      } else if (currentHeader) {
-        currentHeader.remove();
-      }
+    // 强制重排
+    newHeader.offsetHeight;
 
-      // ===== logo =====
-      if (newLogo && currentLogo) {
-        currentLogo.innerHTML = newLogo.innerHTML;
-      }
+    newHeader.classList.add('fade-in');
+    newHeader.style.opacity = '';
+  } else if (currentHeader) {
+    currentHeader.remove();
+  }
 
-      // ===== 入场动画 =====
-      currentContent.classList.remove('fade-out');
-      currentContent.classList.add('fade-in');
+  // ===== content 入场 =====
+  currentContent.classList.remove('fade-out');
+  currentContent.classList.add('fade-in');
+  currentContent.style.opacity = '';
 
-      setTimeout(() => {
-        currentContent.classList.remove('fade-in');
-        if (newHeader) newHeader.classList.remove('fade-in');
-        window.scrollTo({ top: 0 });
-      }, 400);
+  setTimeout(() => {
+    currentContent.classList.remove('fade-in');
+    if (newHeader) newHeader.classList.remove('fade-in');
+    window.scrollTo({ top: 0 });
+  }, 400);
 
-      // ===== 重新初始化 =====
-      initHitokoto();
-      bindLinks();          // ⭐ 关键
-      addRippleEffect();
-      animateProfileCard();
-      animateArticleCard();
-      bindSettingsTrigger();
-      initCodeBoxes();
+  // ===== 重新初始化 =====
+  initHitokoto();
+  bindLinks();
+  addRippleEffect();
+  animateProfileCard();
+  animateArticleCard();
+  bindSettingsTrigger();
+  initCodeBoxes();
 
-    }, 200);
+}, 200);
 
     // ===== URL =====
     history.pushState(null, '', url);
