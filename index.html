@@ -26,10 +26,6 @@
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20" transform="translate(0, -0.7)"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.479 7.57827L15.093 3.12502C13.2787 1.62499 10.7213 1.62499 8.90703 3.12502L3.52097 7.57827C2.55059 8.38059 2 9.59706 2 10.8663V18.8739C2 20.5419 3.28643 22 5 22H7C8.65685 22 10 20.6569 10 19V15.6848C10 15.0044 10.5044 14.5587 11 14.5587H13C13.4956 14.5587 14 15.0044 14 15.6848V19C14 20.6569 15.3431 22 17 22H19C20.7136 22 22 20.5419 22 18.8739V10.8663C22 9.59706 21.4494 8.38059 20.479 7.57827Z" fill="currentColor"></path></svg> &nbsp;主页
       </div>
-      <div class="navhitokoto">
-        <a href="#" id="nav_hitokoto_text">一言获取中...</a>
-        <span id="nav_hitokoto_from" class="nav-hitokoto-from"></span>
-      </div>
 	  <button id="settings-nav" class="settings-button-m" aria-label="设置">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.33-.02-.64-.06-.94l2.02-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.45 3.5c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.3 2.52c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.02 1.58c-.04.3-.06.61-.06.94 0 .33.02.64.06.94l-2.02 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.3 2.52c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.3-2.52c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.02-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
       </button> 
@@ -50,63 +46,46 @@
       </div>
     </div>
 
-    <!-- 内容区域 -->
-    <div class="content">
-      <div class="profile-card">
+  <div class="header-container">
+   <img src="bg1.jpg" alt="头图" class="home-header">
+   <div class="header-overlay"></div>
+    <div class="hitokoto">
+      <a href="#" id="hitokoto_text">一言获取中...</a>
+      <span id="hitokoto_from" class="hitokoto-from"></span>
+    </div>
+  </div>
+
+  <!-- 内容区域 -->
+  <div class="home-content">
+
+
+    <!-- 新布局：左侧个人卡片 + 右侧两个链接 -->
+    <div class="home-flex">
+      <!-- 左侧：类似 about-card 的个人卡片 -->
+      <div class="profile-card home-profile">
         <img src="avatar.jpg" alt="SAGIRI">
         <div class="profile-info">
           <h2>holo-world</h2>
           <ul class="profile-list">
-            <li>さぎり</li><li>00后</li><li>ACGN</li><li>ブルアカ</li>
+            <li>さぎり</li>
+            <li>00后</li>
+            <li>ACGN</li>
+            <li>ブルアカ</li>
           </ul>
         </div>
       </div>
-      <div class="hitokoto">
-        <div class="hitokoto-content">
-          <a href="#" id="hitokoto_text">一言获取中...</a>
-          <span class="hitokoto-from" id="hitokoto_from"></span>
-        </div>
+
+      <!-- 右侧：两个长方形链接卡片 -->
+      <div class="home-right-cards">
+        <a href="PAGEarticle.html" class="spa-link home-link-card">
+          <h3>文章</h3>
+          <p>浏览所有文章</p>
+        </a>
+        <a href="PAGEvideo.html" class="spa-link home-link-card">
+          <h3>影音</h3>
+          <p>视频与音乐</p>
+        </a>
       </div>
-	  <a href="article5.html" class="spa-link">
- <div class="card">
-            <div class="card-title">
-                <h3>更新日志4</h3>
-                <span class="time-badge">2026-04-05</span>
-            </div>
-            <img src="bg5.jpg">
-            <p>音乐播放器！</p>
-        </div>
-</a>
-	  <a href="article4.html" class="spa-link">
-        <div class="card">
-          <div class="card-title">
-            <h3>更新日志3</h3>
-	        <span class="time-badge">2026-04-03</span>
-	      </div>
-          <img src="bg4.jpg">
-          <p>代码框高亮！</p>
-        </div>
-      </a>
-	  <a href="article3.html" class="spa-link">
-        <div class="card">
-          <div class="card-title">
-            <h3>更新日志2</h3>
-	        <span class="time-badge">2026-03-29</span>
-	      </div>
-          <img src="bg3.jpg">
-          <p>一点改动~</p>
-        </div>
-      </a>
-      <a href="article2.html" class="spa-link">
-        <div class="card">
-          <div class="card-title">
-            <h3>更新日志</h3>
-	        <span class="time-badge">2026-03-28</span>
-	      </div>
-          <img src="bg2.jpg">
-          <p>一些改动~</p>
-        </div>
-      </a>
     </div>
 
     <!-- SPA 脚本 -->
