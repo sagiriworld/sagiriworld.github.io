@@ -1757,7 +1757,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .home-header {
 	height: 40vh !important;
     width: 100%;
-    margin: 30px 0 0 0px;
+    margin: 0 0 0 0;
   }
 
   .header-overlay {
