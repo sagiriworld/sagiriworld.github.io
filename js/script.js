@@ -41,62 +41,60 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   SPA 页面加载（已适配 home）
+   SPA 页面加载（最终版）
 ========================= */
 async function loadPage(url) {
   try {
     const res = await fetch(url);
     const text = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
+    const doc = new DOMParser().parseFromString(text, 'text/html');
 
-    // ===== 新页面 =====
-    const newContent = doc.querySelector('.home-content');
-    const newHeaderContainer = doc.querySelector('.header-container');
-    const newLogo = doc.querySelector('.logo');
-    const newArticleHeader = doc.querySelector('.article-header');
-    const newArticleCard = doc.querySelector('.article-card');
+    // ✅ 兼容所有页面结构
+    const newContent =
+      doc.querySelector('.home-content') ||
+      doc.querySelector('.content');
 
-    // ===== 当前页面 =====
-    const currentContent = document.querySelector('.home-content');
-    const currentHeaderContainer = document.querySelector('.header-container');
-    const currentLogo = document.querySelector('.logo');
-    let currentArticleHeader = document.querySelector('.article-header');
-    let currentArticleCard = document.querySelector('.article-card');
+    const currentContent =
+      document.querySelector('.home-content') ||
+      document.querySelector('.content');
 
-    // 🚨 防止空节点导致 SPA 失效
     if (!newContent || !currentContent) {
       location.href = url;
       return;
     }
 
+    const newHeader = doc.querySelector('.header-container');
+    const currentHeader = document.querySelector('.header-container');
+
+    const newLogo = doc.querySelector('.logo');
+    const currentLogo = document.querySelector('.logo');
+
     // ===== 退场动画 =====
     currentContent.classList.add('fade-out');
-    if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
-    if (currentLogo) currentLogo.classList.add('fade-out');
-    if (currentArticleHeader) currentArticleHeader.classList.add('fade-out');
-    if (currentArticleCard) currentArticleCard.classList.add('fade-out');
+    if (currentHeader) currentHeader.classList.add('fade-out');
 
     setTimeout(() => {
 
-      // ===== 内容替换 =====
+      // ===== 替换内容 =====
       currentContent.innerHTML = newContent.innerHTML;
 
       // ===== header-container =====
-      if (newHeaderContainer) {
-        newHeaderContainer.classList.add('fade-out');
-        if (currentHeaderContainer) {
-          currentHeaderContainer.replaceWith(newHeaderContainer);
+      if (newHeader) {
+        newHeader.classList.add('fade-out');
+
+        if (currentHeader) {
+          currentHeader.replaceWith(newHeader);
         } else {
-          document.body.insertBefore(newHeaderContainer, currentContent);
+          document.body.insertBefore(newHeader, currentContent);
         }
 
         setTimeout(() => {
-          newHeaderContainer.classList.remove('fade-out');
-          newHeaderContainer.classList.add('fade-in');
+          newHeader.classList.remove('fade-out');
+          newHeader.classList.add('fade-in');
         }, 50);
-      } else if (currentHeaderContainer) {
-        currentHeaderContainer.remove();
+
+      } else if (currentHeader) {
+        currentHeader.remove();
       }
 
       // ===== logo =====
@@ -104,73 +102,28 @@ async function loadPage(url) {
         currentLogo.innerHTML = newLogo.innerHTML;
       }
 
-      // ===== article-header =====
-      if (newArticleHeader) {
-        newArticleHeader.classList.add('fade-out');
-
-        if (currentArticleHeader) {
-          currentArticleHeader.replaceWith(newArticleHeader);
-        } else {
-          document.body.insertBefore(newArticleHeader, currentContent);
-        }
-
-        setTimeout(() => {
-          newArticleHeader.classList.remove('fade-out');
-          newArticleHeader.classList.add('fade-in');
-        }, 50);
-      } else if (currentArticleHeader) {
-        currentArticleHeader.remove();
-      }
-
-      // ===== article-card =====
-      if (newArticleCard) {
-        newArticleCard.classList.add('fade-out');
-
-        if (currentArticleCard) {
-          currentArticleCard.replaceWith(newArticleCard);
-        } else {
-          document.body.insertBefore(newArticleCard, currentContent);
-        }
-
-        setTimeout(() => {
-          newArticleCard.classList.remove('fade-out');
-          newArticleCard.classList.add('fade-in');
-          initCodeBoxes();
-        }, 50);
-      } else if (currentArticleCard) {
-        currentArticleCard.remove();
-      }
-
       // ===== 入场动画 =====
       currentContent.classList.remove('fade-out');
       currentContent.classList.add('fade-in');
 
-      if (currentLogo) {
-        currentLogo.classList.remove('fade-out');
-        currentLogo.classList.add('fade-in');
-      }
-
       setTimeout(() => {
         currentContent.classList.remove('fade-in');
-        if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
-        if (newArticleHeader) newArticleHeader.classList.remove('fade-in');
-        if (newArticleCard) newArticleCard.classList.remove('fade-in');
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (newHeader) newHeader.classList.remove('fade-in');
+        window.scrollTo({ top: 0 });
       }, 400);
 
       // ===== 重新初始化 =====
       initHitokoto();
-      bindLinks();
+      bindLinks();          // ⭐ 关键
       addRippleEffect();
-      animateAboutCard();
       animateProfileCard();
       animateArticleCard();
       bindSettingsTrigger();
+      initCodeBoxes();
 
     }, 200);
 
-    // ===== 修改 URL =====
+    // ===== URL =====
     history.pushState(null, '', url);
 
     // ===== sidebar 高亮 =====
@@ -182,26 +135,31 @@ async function loadPage(url) {
     });
 
   } catch (err) {
-    console.error('加载失败:', err);
-    location.href = url; // 失败回退
+    console.error('SPA失败，回退:', err);
+    location.href = url;
   }
 }
 
+
 /* =========================
-   链接绑定（修复版）
+   链接绑定（最终稳定版）
 ========================= */
 function bindLinks() {
-  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
+  document.querySelectorAll('a').forEach(link => {
 
-    // 避免重复绑定
-    if (link.dataset.spaBound === "true") return;
+    if (link.dataset.spaBound) return;
     link.dataset.spaBound = "true";
 
-    link.addEventListener('click', e => {
+    link.addEventListener('click', (e) => {
       const url = link.getAttribute('href');
 
-      // 🚨 放行外链 / 空链接
-      if (!url || url.startsWith('http') || url.startsWith('#')) return;
+      // 放行情况
+      if (
+        !url ||
+        url.startsWith('#') ||
+        url.startsWith('http') ||
+        link.target === '_blank'
+      ) return;
 
       e.preventDefault();
       loadPage(url);
