@@ -179,7 +179,10 @@ hr {
   color: var(--color-text);
  opacity: 0.8;
 }
-
+	
+.header-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
 
 }
 
@@ -270,6 +273,9 @@ hr {
 [data-theme="dark"] .nav-time {
   background: rgba(255, 179, 207, 0.2);
   color: #f5f5f5;
+}
+[data-theme="dark"] .header-overlay {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* 强制浅色模式（覆盖系统深色） */
@@ -402,7 +408,6 @@ body {
   gap: var(--sidebar-gap);
 
   background: var(--sidebar-bg);
-  backdrop-filter: var(--blur);
 }
 
 .sidebar ul {
@@ -557,6 +562,38 @@ body {
   opacity: 1;
   transform: translateY(0);
   transition: all 0.4s ease;
+}
+
+
+
+/* =========================
+   home-content
+========================= */
+.home-content {
+  margin-left: calc(var(--sidebar-width) + 20px);
+  margin-right: 20px;
+
+  padding-top:20px;
+  padding-bottom: 40px;
+
+  max-width: calc(100% - var(--sidebar-width) - 40px);
+
+  display: grid;
+  grid-template-columns: 1fr; /* 默认单列 */
+  justify-items: center;      /* 水平居中所有卡片 */
+  gap: 40px 20px;
+
+  box-sizing: border-box;
+  transition: opacity 0.3s;
+}
+
+@media (min-width: 769px) {
+  .home-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 两列布局 */
+    justify-items: center;
+    gap: 40px 20px;
+  }
 }
 
 
@@ -965,58 +1002,36 @@ body {
 ========================= */
 .hitokoto {
   display: flex;
-  grid-column: 1 / -1;   /* 占满整行 */
-  align-items: center;
-  width: 90%;
-  margin: 20px 0;
-  background-color: rgba(0, 0, 0, 0) !important;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: auto;
+  min-width: 300px;
+  max-width: 700px;
+  text-align: center;
+  background: none !important;
+  margin: 0;
 }
 
-.hitokoto .hitokoto-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column; /* 句子在上，来源在下 */
-  align-items: flex-start; /* 句子左对齐 */
+/* 头图一言文字亮色 */
+.hitokoto .hitokoto-content .a {
+  color: var(--color-text);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
-
+.hitokoto #hitokoto_text{
+  font-size: 1.3rem;
+  align-self: flex-start;
+}
 .hitokoto .hitokoto-from {
   align-self: flex-end;
-  font-size: 0.85em;
+  margin-top: 6px;
   color: #666;
-  margin-top: 0.25rem;
-  white-space: nowrap;
-}
-
-@media (max-width: 769px) {
-  .navhitokoto {
-    display: none;
-  }
-}
-
-@media (min-width: 769px) {
-  .hitokoto {
-    display: none;
-  }
-}
-
-.navhitokoto {
-  margin-left: auto;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow: auto;
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.navhitokoto::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
-}
-
-.nav-hitokoto-from {
-  font-size: 0.75rem;
-  color: #666;
+  font-size: 1rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 
@@ -1218,7 +1233,7 @@ body {
 }
 
 /* 普通图片 */
-img:not(.article-header):not(.profile-card img):not(.about-card img):not(.player img) {
+img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
   width: 300px;
   height: 180px;
   object-fit: cover;
@@ -1351,6 +1366,211 @@ code-box {
 
 
 /* =========================
+   首页头图
+========================= */
+
+.header-container {
+  position: relative;
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.header-container.fade-in {
+  animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 1;
+  transform: none;
+}
+
+.header-container.fade-out {
+  animation: heroOut 0.4s ease forwards;
+  opacity: 0;
+  transform: none;
+}
+
+/* 头图入场：从 1.05 倍缩小到 1 倍并淡入 */
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 头图退场：缩小到 0.95 倍并淡出 */
+@keyframes heroOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* 入场时从偏上位置滑入并淡入 */
+.header-container.fade-in .hitokoto {
+  animation: heroTextIn 0.5s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* 退场时快速淡出并上移 */
+.header-container.fade-out .hitokoto {
+  animation: heroTextOut 0.3s ease forwards;
+}
+
+@keyframes heroTextIn {
+  from {
+    opacity: 0;
+    /* 保持水平居中，垂直方向从 -40% 滑到 -50% */
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes heroTextOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+}
+
+/* 同时移除 .hitokoto-hero 自身的 fade-in/fade-out 类绑定 */
+.home-header {
+  width: 100%;
+  margin: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  position: relative;
+  will-change: transform;
+  z-index: 0;
+  mask-image: linear-gradient(to bottom, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+  height: 65vh;
+}
+
+/* 半透明遮罩层 */
+.header-overlay {
+  position: absolute;
+  width: 100%;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5); /* 可调整透明度 */
+  pointer-events: none;
+  height: 65vh;
+  mask-image: linear-gradient(to bottom, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+}
+
+
+
+/* =========================
+   首页 Flex 容器（占满网格一行）
+========================= */
+.home-flex {
+  grid-column: 1 / -1;          /* 占满 content 的整行 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: auto;
+  max-width: 500px;
+  margin: 0 auto 30px;          /* 与下方卡片保持间距 */
+}
+
+/* =========================
+   左侧个人卡片
+========================= */
+.home-profile {
+  flex-direction: column !important;   /* 垂直排列 */
+  text-align: center;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  background: var(--profile-bg, rgb(250, 242, 248));
+  border-radius: 16px;
+  width: 260px;
+  box-sizing: border-box;
+}
+
+.home-profile img {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.home-profile .profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-profile .profile-list {
+  justify-content: center;
+}
+
+/* =========================
+   右侧链接卡片
+========================= */
+.home-right-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.home-link-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 24px;
+  border-radius: 16px;
+  background: var(--card-bg, rgba(255, 216, 231, 0.3));
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: var(--transition);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.home-link-card:hover {
+  background: var(--color-pink-soft);
+}
+
+.home-link-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.home-link-card p {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+
+
+/* =========================
    移动端
 ========================= */
 @media (max-width: 768px) {
@@ -1369,7 +1589,7 @@ code-box {
     padding-top: 0;
     flex-direction: row;
     justify-content: center;
-
+    backdrop-filter: var(--blur);
     background: var(--sidebar-bg-mobile);
     box-shadow: var(--sidebar-shadow-mobile);
     z-index: 1000;
@@ -1427,6 +1647,40 @@ code-box {
 
   .sidebar-footer {
     display: none;   /* 移动端隐藏底部设置按钮 */
+  }
+
+  .header-container {
+  position: relative;
+  width: 100%;
+  margin-left: 0;
+  overflow: hidden;
+}
+
+  .home-header {
+	height: 40vh !important;
+    width: 100%;
+    margin: 30px 0 0 0px;
+  }
+
+  .header-overlay {
+	height: 40vh;
+    width: 100%;
+    margin: 30px 0 0 0px;
+  }
+
+  .home-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-profile,
+  .home-right-cards {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .home-right-cards {
+    flex-direction: column;
   }
 }
 
