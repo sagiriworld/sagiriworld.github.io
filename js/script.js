@@ -41,7 +41,7 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   SPA 页面加载（已增强）
+   SPA 页面加载（已适配 home）
 ========================= */
 async function loadPage(url) {
   try {
@@ -50,115 +50,130 @@ async function loadPage(url) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
 
-    // 新页面元素
+    // ===== 新页面 =====
     const newContent = doc.querySelector('.home-content');
     const newHeaderContainer = doc.querySelector('.header-container');
     const newLogo = doc.querySelector('.logo');
-    const newHeader = doc.querySelector('.article-header');
+    const newArticleHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
 
-    // 当前页面元素
+    // ===== 当前页面 =====
     const currentContent = document.querySelector('.home-content');
     const currentHeaderContainer = document.querySelector('.header-container');
     const currentLogo = document.querySelector('.logo');
-    let currentHeader = document.querySelector('.article-header');
+    let currentArticleHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
 
-    if (newContent && currentContent) {
+    // 🚨 防止空节点导致 SPA 失效
+    if (!newContent || !currentContent) {
+      location.href = url;
+      return;
+    }
 
-      // ===== 退场动画 =====
-      currentContent.classList.add('fade-out');
-      if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
-      if (currentLogo) currentLogo.classList.add('fade-out');
-      if (currentHeader) currentHeader.classList.add('fade-out');
-      if (currentArticleCard) currentArticleCard.classList.add('fade-out');
+    // ===== 退场动画 =====
+    currentContent.classList.add('fade-out');
+    if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
+    if (currentLogo) currentLogo.classList.add('fade-out');
+    if (currentArticleHeader) currentArticleHeader.classList.add('fade-out');
+    if (currentArticleCard) currentArticleCard.classList.add('fade-out');
 
-      setTimeout(() => {
+    setTimeout(() => {
 
-        // ===== 内容替换 =====
-        currentContent.innerHTML = newContent.innerHTML;
+      // ===== 内容替换 =====
+      currentContent.innerHTML = newContent.innerHTML;
 
-        if (newHeaderContainer) {
-          newHeaderContainer.classList.add('fade-out');
-          if (currentHeaderContainer) {
-            currentHeaderContainer.replaceWith(newHeaderContainer);
-          } else {
-            document.body.insertBefore(newHeaderContainer, currentContent);
-          }
-          setTimeout(() => {
-            newHeaderContainer.classList.remove('fade-out');
-            newHeaderContainer.classList.add('fade-in');
-          }, 50);
-        } else if (currentHeaderContainer) {
-          currentHeaderContainer.remove();
-        }
-
-        if (newLogo && currentLogo) {
-          currentLogo.innerHTML = newLogo.innerHTML;
-        }
-
-        // ===== article-header =====
-        if (newHeader) {
-          newHeader.classList.add('fade-out');
-          if (currentHeader) currentHeader.replaceWith(newHeader);
-          else document.body.insertBefore(newHeader, currentContent);
-
-          setTimeout(() => {
-            newHeader.classList.remove('fade-out');
-            newHeader.classList.add('fade-in');
-          }, 50);
-        } else if (currentHeader) {
-          currentHeader.remove();
-        }
-
-        // ===== article-card =====
-        if (newArticleCard) {
-          newArticleCard.classList.add('fade-out');
-          if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
-          else document.body.insertBefore(newArticleCard, currentContent);
-
-          setTimeout(() => {
-            newArticleCard.classList.remove('fade-out');
-            newArticleCard.classList.add('fade-in');
-            initCodeBoxes();
-          }, 50);
-        } else if (currentArticleCard) {
-          currentArticleCard.remove();
-        }
-
-        // ===== 入场动画 =====
-        currentContent.classList.remove('fade-out');
-        currentContent.classList.add('fade-in');
-
-        if (currentLogo) {
-          currentLogo.classList.remove('fade-out');
-          currentLogo.classList.add('fade-in');
+      // ===== header-container =====
+      if (newHeaderContainer) {
+        newHeaderContainer.classList.add('fade-out');
+        if (currentHeaderContainer) {
+          currentHeaderContainer.replaceWith(newHeaderContainer);
+        } else {
+          document.body.insertBefore(newHeaderContainer, currentContent);
         }
 
         setTimeout(() => {
-          currentContent.classList.remove('fade-in');
-          if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
-          if (newHeader) newHeader.classList.remove('fade-in');
-          if (newArticleCard) newArticleCard.classList.remove('fade-in');
+          newHeaderContainer.classList.remove('fade-out');
+          newHeaderContainer.classList.add('fade-in');
+        }, 50);
+      } else if (currentHeaderContainer) {
+        currentHeaderContainer.remove();
+      }
 
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 400);
+      // ===== logo =====
+      if (newLogo && currentLogo) {
+        currentLogo.innerHTML = newLogo.innerHTML;
+      }
 
-        // ===== 重新初始化 =====
-        initHitokoto();
-        bindLinks();
-        addRippleEffect();
-        animateAboutCard();
-        animateProfileCard();
-        animateArticleCard();
-        bindSettingsTrigger();
+      // ===== article-header =====
+      if (newArticleHeader) {
+        newArticleHeader.classList.add('fade-out');
 
-      }, 200);
-    }
+        if (currentArticleHeader) {
+          currentArticleHeader.replaceWith(newArticleHeader);
+        } else {
+          document.body.insertBefore(newArticleHeader, currentContent);
+        }
 
+        setTimeout(() => {
+          newArticleHeader.classList.remove('fade-out');
+          newArticleHeader.classList.add('fade-in');
+        }, 50);
+      } else if (currentArticleHeader) {
+        currentArticleHeader.remove();
+      }
+
+      // ===== article-card =====
+      if (newArticleCard) {
+        newArticleCard.classList.add('fade-out');
+
+        if (currentArticleCard) {
+          currentArticleCard.replaceWith(newArticleCard);
+        } else {
+          document.body.insertBefore(newArticleCard, currentContent);
+        }
+
+        setTimeout(() => {
+          newArticleCard.classList.remove('fade-out');
+          newArticleCard.classList.add('fade-in');
+          initCodeBoxes();
+        }, 50);
+      } else if (currentArticleCard) {
+        currentArticleCard.remove();
+      }
+
+      // ===== 入场动画 =====
+      currentContent.classList.remove('fade-out');
+      currentContent.classList.add('fade-in');
+
+      if (currentLogo) {
+        currentLogo.classList.remove('fade-out');
+        currentLogo.classList.add('fade-in');
+      }
+
+      setTimeout(() => {
+        currentContent.classList.remove('fade-in');
+        if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
+        if (newArticleHeader) newArticleHeader.classList.remove('fade-in');
+        if (newArticleCard) newArticleCard.classList.remove('fade-in');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 400);
+
+      // ===== 重新初始化 =====
+      initHitokoto();
+      bindLinks();
+      addRippleEffect();
+      animateAboutCard();
+      animateProfileCard();
+      animateArticleCard();
+      bindSettingsTrigger();
+
+    }, 200);
+
+    // ===== 修改 URL =====
     history.pushState(null, '', url);
 
-    // sidebar active 状态
+    // ===== sidebar 高亮 =====
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
       if (a.getAttribute('href') === url) {
@@ -168,7 +183,30 @@ async function loadPage(url) {
 
   } catch (err) {
     console.error('加载失败:', err);
+    location.href = url; // 失败回退
   }
+}
+
+/* =========================
+   链接绑定（修复版）
+========================= */
+function bindLinks() {
+  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
+
+    // 避免重复绑定
+    if (link.dataset.spaBound === "true") return;
+    link.dataset.spaBound = "true";
+
+    link.addEventListener('click', e => {
+      const url = link.getAttribute('href');
+
+      // 🚨 放行外链 / 空链接
+      if (!url || url.startsWith('http') || url.startsWith('#')) return;
+
+      e.preventDefault();
+      loadPage(url);
+    });
+  });
 }
 
 /* =========================
@@ -250,17 +288,6 @@ function fallbackCopyText(text, copyBtn) {
   document.body.removeChild(textArea);
 }
 
-/* =========================
-   链接绑定
-========================= */
-function bindLinks() {
-  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
-    link.onclick = e => {
-      e.preventDefault();
-      loadPage(link.getAttribute('href'));
-    };
-  });
-}
 
 /* =========================
    涟漪效果
