@@ -1652,10 +1652,14 @@ code-box {
   .header-container {
   position: relative;
   width: 100%;
-  margin-left: 0 !important;
+  margin-left: 0;
   overflow: hidden;
 }
 
+.home-content {
+	margin-left: 0;
+}
+	
   .home-header {
 	height: 40vh !important;
     width: 100%;
