@@ -352,37 +352,45 @@ const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000;
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
   const mainFrom = document.getElementById('hitokoto_from');
-  const navText = document.getElementById('nav_hitokoto_text');
-  const navFrom = document.getElementById('nav_hitokoto_from');
+
+  if (!mainText) return;
 
   const sentence = data.hitokoto;
   const source = data.from ? `—— ${data.from}` : '';
 
-  if (mainText) {
-    mainText.innerText = sentence;
-    mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
-  }
-  if (mainFrom) mainFrom.innerText = source;
+  // ✅ 如果内容一样，不更新（关键）
+  if (mainText.dataset.current === sentence) return;
 
-  if (navText) {
-    navText.innerText = sentence;
-    navText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
-  }
-  if (navFrom) navFrom.innerText = source;
+  mainText.dataset.current = sentence;
+
+  // ✅ 用 textContent 避免额外 layout
+  mainText.textContent = sentence;
+  mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
+
+  if (mainFrom) mainFrom.textContent = source;
 }
 
 function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
-  const navText = document.getElementById('nav_hitokoto_text');
+  if (!mainText) return;
+
   const fallback = '愿你的每一天都独特而美好';
-  if (mainText) mainText.innerText = fallback;
-  if (navText) navText.innerText = fallback;
+
+  if (mainText.dataset.current === fallback) return;
+
+  mainText.dataset.current = fallback;
+  mainText.textContent = fallback;
 }
 
-async function initHitokoto() {
+async function initHitokoto(delay = false) {
   const mainText = document.getElementById('hitokoto_text');
-  const navText = document.getElementById('nav_hitokoto_text');
-  if (!mainText && !navText) return;
+  if (!mainText) return;
+
+  // ✅ 延迟执行（等动画结束）
+  if (delay) {
+    setTimeout(() => initHitokoto(false), 350);
+    return;
+  }
 
   if (hitokotoCache && (Date.now() - hitokotoCacheTime) < HITOKOTO_CACHE_DURATION) {
     applyHitokoto(hitokotoCache);
@@ -392,11 +400,17 @@ async function initHitokoto() {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
-    const res = await fetch('https://v1.hitokoto.cn/?c=a&c=c&c=b', { signal: controller.signal });
+
+    const res = await fetch('https://v1.hitokoto.cn/?c=a&c=c&c=b', {
+      signal: controller.signal
+    });
+
     clearTimeout(timeoutId);
+
     const data = await res.json();
     hitokotoCache = data;
     hitokotoCacheTime = Date.now();
+
     applyHitokoto(data);
   } catch (e) {
     console.warn('一言获取失败', e);
