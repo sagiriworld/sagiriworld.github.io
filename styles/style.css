@@ -1581,6 +1581,7 @@ code-box {
   content: '';
   position: absolute;
   right: 20px;
+  left: auto;
   top: 50%;
   transform: translateY(-50%);
   
