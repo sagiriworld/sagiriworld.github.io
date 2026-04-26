@@ -1505,7 +1505,7 @@ code-box {
   grid-column: 1 / -1;          /* 占满 content 的整行 */
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 20px;
   flex-wrap: wrap;
   width: auto;
@@ -1518,6 +1518,7 @@ code-box {
 ========================= */
 .home-profile {
   flex-direction: column !important;   /* 垂直排列 */
+  flex-shrink: 0;
   text-align: center;
   align-items: center;
   gap: 10px;
@@ -1550,15 +1551,17 @@ code-box {
 ========================= */
 .home-right-cards {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 20px;
-  flex: 1;
+  height: 100%;
   min-width: 200px;
   max-width: 300px;
 }
 
 .home-link-card {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   justify-content: center;
   padding: 28px 24px;
