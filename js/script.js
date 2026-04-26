@@ -105,22 +105,28 @@ async function loadPage(url) {
           if (currentHeader) currentHeader.remove();
         }
 
-        // 3. 主内容区：替换内容并触发上浮 + 渐显动画
+        // ============ 3. 主内容区（修复核心：先隐藏、替换、再动画） ============
+        // 瞬间隐藏，防止类名变更导致布局跳动被用户看到
+        currentContent.style.opacity = '0';
+        // 替换内容并切换类名
         currentContent.innerHTML = newContent.innerHTML;
         currentContent.className = newContentClasses;   // 干净的 .content 或 .home-content
 
-        // 强制应用 fade-out 起始状态
-        currentContent.classList.add('fade-out');
-        // 强制重排，让浏览器记录 fade-out 的样式
+        // 强制重排，让新布局立即生效（用户看不见）
         void currentContent.offsetWidth;
 
-        // 使用双重 requestAnimationFrame 确保过渡被正确触发
+        // 设置动画起始状态
+        currentContent.classList.add('fade-out');
+
+        // 下一帧移除隐藏样式并启动动画
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            currentContent.style.opacity = '';          // 移除内联隐藏
             currentContent.classList.remove('fade-out');
             currentContent.classList.add('fade-in');
           });
         });
+        // ================================================================
 
         // 4. Logo
         if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
@@ -358,12 +364,9 @@ function applyHitokoto(data) {
   const sentence = data.hitokoto;
   const source = data.from ? `—— ${data.from}` : '';
 
-  // ✅ 如果内容一样，不更新（关键）
   if (mainText.dataset.current === sentence) return;
 
   mainText.dataset.current = sentence;
-
-  // ✅ 用 textContent 避免额外 layout
   mainText.textContent = sentence;
   mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
 
@@ -386,7 +389,6 @@ async function initHitokoto(delay = false) {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
 
-  // ✅ 延迟执行（等动画结束）
   if (delay) {
     setTimeout(() => initHitokoto(false), 350);
     return;
@@ -570,7 +572,7 @@ function initAll() {
   animateProfileCard();
   animateArticleCard();
   initHitokoto();
-  bindSettingsTrigger(); // 关键：绑定设置按钮
+  bindSettingsTrigger();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCodeBoxes);
   } else {
