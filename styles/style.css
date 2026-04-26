@@ -1399,27 +1399,25 @@ code-box {
   transform: none;
 }
 
-/* 头图入场：从 1.05 倍缩小到 1 倍并淡入 */
 @keyframes heroIn {
   from {
     opacity: 0;
-    transform: scale(1.5);
+    transform: scale(1.7);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1.2);
   }
 }
 
-/* 头图退场：缩小到 0.95 倍并淡出 */
 @keyframes heroOut {
   from {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1.2);
   }
   to {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.75);
   }
 }
 
