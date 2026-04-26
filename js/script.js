@@ -41,129 +41,158 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   SPA 页面加载（最终版）
+   SPA 页面加载（修复 content 上浮动画）
 ========================= */
 async function loadPage(url) {
   try {
     const res = await fetch(url);
     const text = await res.text();
-    const doc = new DOMParser().parseFromString(text, 'text/html');
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
 
-    // ✅ 兼容所有页面结构
-    const newContent =
-      doc.querySelector('.home-content') ||
-      doc.querySelector('.content');
-
-    const currentContent =
-      document.querySelector('.home-content') ||
-      document.querySelector('.content');
-
-    if (!newContent || !currentContent) {
-      location.href = url;
-      return;
-    }
-
-    const newHeader = doc.querySelector('.header-container');
-    const currentHeader = document.querySelector('.header-container');
-
+    const newContent = doc.querySelector('.home-content') || doc.querySelector('.content');
     const newLogo = doc.querySelector('.logo');
+    const newHeaderContainer = doc.querySelector('.header-container');
+    const newHeader = doc.querySelector('.article-header');
+    const newArticleCard = doc.querySelector('.article-card');
+
+    const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
+    let currentHeaderContainer = document.querySelector('.header-container');
+    let currentHeader = document.querySelector('.article-header');
+    let currentArticleCard = document.querySelector('.article-card');
 
-    // ===== 退场动画 =====
-    currentContent.classList.add('fade-out');
-    if (currentHeader) currentHeader.classList.add('fade-out');
+    if (newContent && currentContent) {
+      const newContentClasses = newContent.className;
 
-setTimeout(() => {
+      // 退场
+      currentContent.classList.add('fade-out');
+      if (currentLogo) currentLogo.classList.add('fade-out');
+      if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
+      if (currentHeader) currentHeader.classList.add('fade-out');
+      if (currentArticleCard) currentArticleCard.classList.add('fade-out');
 
-  // ===== 内容（先隐藏再插入）=====
-  currentContent.style.opacity = 0;
-  currentContent.innerHTML = newContent.innerHTML;
+      setTimeout(() => {
+        // 1. 头图容器
+        if (newHeaderContainer) {
+          if (currentHeaderContainer) {
+            currentHeaderContainer.replaceWith(newHeaderContainer);
+          } else {
+            document.body.insertBefore(newHeaderContainer, currentContent);
+          }
+          newHeaderContainer.classList.add('fade-out');
+          requestAnimationFrame(() => {
+            newHeaderContainer.classList.remove('fade-out');
+            newHeaderContainer.classList.add('fade-in');
+          });
+        } else {
+          if (currentHeaderContainer) currentHeaderContainer.remove();
+        }
 
-  // 强制重排（关键）
-  currentContent.offsetHeight;
+        // 2. 文章头图
+        if (newHeader) {
+          newHeader.classList.add('fade-out');
+          if (currentHeader) {
+            currentHeader.replaceWith(newHeader);
+          } else {
+            document.body.insertBefore(newHeader, currentContent);
+          }
+          requestAnimationFrame(() => {
+            newHeader.classList.remove('fade-out');
+            newHeader.classList.add('fade-in');
+          });
+        } else {
+          if (currentHeader) currentHeader.remove();
+        }
 
-  // ===== header-container =====
-  if (newHeader) {
-    newHeader.style.opacity = 0;
+        // 3. 主内容区：替换内容并触发上浮 + 渐显动画
+        currentContent.innerHTML = newContent.innerHTML;
+        currentContent.className = newContentClasses;   // 干净的 .content 或 .home-content
 
-    if (currentHeader) {
-      currentHeader.replaceWith(newHeader);
-    } else {
-      document.body.insertBefore(newHeader, currentContent);
+        // 强制应用 fade-out 起始状态
+        currentContent.classList.add('fade-out');
+        // 强制重排，让浏览器记录 fade-out 的样式
+        void currentContent.offsetWidth;
+
+        // 使用双重 requestAnimationFrame 确保过渡被正确触发
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            currentContent.classList.remove('fade-out');
+            currentContent.classList.add('fade-in');
+          });
+        });
+
+        // 4. Logo
+        if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
+
+        // 5. 文章卡片
+        if (newArticleCard) {
+          newArticleCard.classList.add('fade-out');
+          if (currentArticleCard) {
+            currentArticleCard.replaceWith(newArticleCard);
+          } else {
+            document.body.insertBefore(newArticleCard, currentContent);
+          }
+          requestAnimationFrame(() => {
+            newArticleCard.classList.remove('fade-out');
+            newArticleCard.classList.add('fade-in');
+            initCodeBoxes();
+          });
+        } else {
+          if (currentArticleCard) currentArticleCard.remove();
+        }
+
+        // 6. Logo 淡入
+        if (currentLogo) {
+          currentLogo.classList.remove('fade-out');
+          currentLogo.classList.add('fade-in');
+        }
+
+        // 7. 清理动画
+        setTimeout(() => {
+          currentContent.classList.remove('fade-in');
+          currentContent.className = newContentClasses;   // 确保最终类名正确
+          if (currentLogo) currentLogo.classList.remove('fade-in');
+          if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
+          if (newHeader) newHeader.classList.remove('fade-in');
+          if (newArticleCard) newArticleCard.classList.remove('fade-in');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 400);
+
+        // 8. 一言
+        initHitokoto(true);
+
+        // 9. 重新绑定
+        bindLinks();
+        addRippleEffect();
+        animateAboutCard();
+        animateProfileCard();
+        animateArticleCard();
+        bindSettingsTrigger();
+      }, 200);
     }
 
-    // 强制重排
-    newHeader.offsetHeight;
-
-    newHeader.classList.add('fade-in');
-    newHeader.style.opacity = '';
-  } else if (currentHeader) {
-    currentHeader.remove();
-  }
-
-  // ===== content 入场 =====
-  currentContent.classList.remove('fade-out');
-  currentContent.classList.add('fade-in');
-  currentContent.style.opacity = '';
-
-  setTimeout(() => {
-    currentContent.classList.remove('fade-in');
-    if (newHeader) newHeader.classList.remove('fade-in');
-    window.scrollTo({ top: 0 });
-  }, 400);
-
-  // ===== 重新初始化 =====
-  initHitokoto();
-  bindLinks();
-  addRippleEffect();
-  animateProfileCard();
-  animateArticleCard();
-  bindSettingsTrigger();
-  initCodeBoxes();
-
-}, 200);
-
-    // ===== URL =====
     history.pushState(null, '', url);
 
-    // ===== sidebar 高亮 =====
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
-      if (a.getAttribute('href') === url) {
-        a.classList.add('active');
-      }
+      if (a.getAttribute('href') === url) a.classList.add('active');
     });
-
   } catch (err) {
-    console.error('SPA失败，回退:', err);
-    location.href = url;
+    console.error('加载失败:', err);
   }
 }
 
 
 /* =========================
-   链接绑定（最终稳定版）
+   链接绑定
 ========================= */
 function bindLinks() {
-  document.querySelectorAll('a').forEach(link => {
-
-    if (link.dataset.spaBound) return;
-    link.dataset.spaBound = "true";
-
-    link.addEventListener('click', (e) => {
-      const url = link.getAttribute('href');
-
-      // 放行情况
-      if (
-        !url ||
-        url.startsWith('#') ||
-        url.startsWith('http') ||
-        link.target === '_blank'
-      ) return;
-
+  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
+    link.onclick = e => {
       e.preventDefault();
-      loadPage(url);
-    });
+      loadPage(link.getAttribute('href'));
+    };
   });
 }
 
