@@ -1656,8 +1656,12 @@ code-box {
   overflow: hidden;
 }
 
-.home-content {
-	margin-left: 0;
+  .home-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 100% !important;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 	
   .home-header {
