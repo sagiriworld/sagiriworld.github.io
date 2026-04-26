@@ -51,26 +51,23 @@ async function loadPage(url) {
     const doc = parser.parseFromString(text, 'text/html');
 
     // 新页面元素
-    const newContent = doc.querySelector('.content');
-    const newHomeContent = doc.querySelector('.home-content');
+    const newContent = doc.querySelector('.home-content');
     const newHeaderContainer = doc.querySelector('.header-container');
     const newLogo = doc.querySelector('.logo');
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
 
     // 当前页面元素
-    const currentContent = document.querySelector('.content');
-    const currentHomeContent = document.querySelector('.home-content');
-    let currentHeaderContainer = document.querySelector('.header-container');
+    const currentContent = document.querySelector('.home-content');
+    const currentHeaderContainer = document.querySelector('.header-container');
     const currentLogo = document.querySelector('.logo');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
 
     if (newContent && currentContent) {
 
-      /* ===== fade-out ===== */
+      // ===== 退场动画 =====
       currentContent.classList.add('fade-out');
-      if (currentHomeContent) currentHomeContent.classList.add('fade-out');
       if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
       if (currentLogo) currentLogo.classList.add('fade-out');
       if (currentHeader) currentHeader.classList.add('fade-out');
@@ -78,57 +75,31 @@ async function loadPage(url) {
 
       setTimeout(() => {
 
-        /* ===== 替换 content ===== */
+        // ===== 内容替换 =====
         currentContent.innerHTML = newContent.innerHTML;
-        initHitokoto();
 
-        /* ===== logo ===== */
-        if (newLogo && currentLogo) {
-          currentLogo.innerHTML = newLogo.innerHTML;
-        }
-
-        /* ===== header-container（首页头图） ===== */
         if (newHeaderContainer) {
           newHeaderContainer.classList.add('fade-out');
-
           if (currentHeaderContainer) {
             currentHeaderContainer.replaceWith(newHeaderContainer);
           } else {
             document.body.insertBefore(newHeaderContainer, currentContent);
           }
-
           setTimeout(() => {
             newHeaderContainer.classList.remove('fade-out');
             newHeaderContainer.classList.add('fade-in');
           }, 50);
-
         } else if (currentHeaderContainer) {
           currentHeaderContainer.remove();
         }
 
-        /* ===== home-content ===== */
-        if (newHomeContent) {
-          newHomeContent.classList.add('fade-out');
-
-          if (currentHomeContent) {
-            currentHomeContent.replaceWith(newHomeContent);
-          } else {
-            currentContent.insertAdjacentElement('beforebegin', newHomeContent);
-          }
-
-          setTimeout(() => {
-            newHomeContent.classList.remove('fade-out');
-            newHomeContent.classList.add('fade-in');
-          }, 50);
-
-        } else if (currentHomeContent) {
-          currentHomeContent.remove();
+        if (newLogo && currentLogo) {
+          currentLogo.innerHTML = newLogo.innerHTML;
         }
 
-        /* ===== article-header ===== */
+        // ===== article-header =====
         if (newHeader) {
           newHeader.classList.add('fade-out');
-
           if (currentHeader) currentHeader.replaceWith(newHeader);
           else document.body.insertBefore(newHeader, currentContent);
 
@@ -136,32 +107,26 @@ async function loadPage(url) {
             newHeader.classList.remove('fade-out');
             newHeader.classList.add('fade-in');
           }, 50);
-
         } else if (currentHeader) {
           currentHeader.remove();
         }
 
-        /* ===== article-card ===== */
+        // ===== article-card =====
         if (newArticleCard) {
           newArticleCard.classList.add('fade-out');
-
-          if (currentArticleCard) {
-            currentArticleCard.replaceWith(newArticleCard);
-          } else {
-            document.body.insertBefore(newArticleCard, currentContent);
-          }
+          if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
+          else document.body.insertBefore(newArticleCard, currentContent);
 
           setTimeout(() => {
             newArticleCard.classList.remove('fade-out');
             newArticleCard.classList.add('fade-in');
             initCodeBoxes();
           }, 50);
-
         } else if (currentArticleCard) {
           currentArticleCard.remove();
         }
 
-        /* ===== 主内容 fade-in ===== */
+        // ===== 入场动画 =====
         currentContent.classList.remove('fade-out');
         currentContent.classList.add('fade-in');
 
@@ -170,19 +135,17 @@ async function loadPage(url) {
           currentLogo.classList.add('fade-in');
         }
 
-        /* ===== 清理动画 ===== */
         setTimeout(() => {
           currentContent.classList.remove('fade-in');
-          if (currentLogo) currentLogo.classList.remove('fade-in');
+          if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
           if (newHeader) newHeader.classList.remove('fade-in');
           if (newArticleCard) newArticleCard.classList.remove('fade-in');
-          if (newHomeContent) newHomeContent.classList.remove('fade-in');
-          if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
 
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 400);
 
-        /* ===== 重新绑定 ===== */
+        // ===== 重新初始化 =====
+        initHitokoto();
         bindLinks();
         addRippleEffect();
         animateAboutCard();
@@ -195,9 +158,12 @@ async function loadPage(url) {
 
     history.pushState(null, '', url);
 
+    // sidebar active 状态
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
-      if (a.getAttribute('href') === url) a.classList.add('active');
+      if (a.getAttribute('href') === url) {
+        a.classList.add('active');
+      }
     });
 
   } catch (err) {
