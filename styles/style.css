@@ -317,6 +317,9 @@ hr {
 [data-theme="light"] .about-list li {
   background: rgba(255, 216, 231, 0.3);
 }
+[data-theme="light"] .header-overlay {
+  background: rgba(255, 255, 255, 0.5);
+}
 
 
 
