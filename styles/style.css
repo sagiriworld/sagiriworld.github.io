@@ -572,8 +572,8 @@ body {
 .home-content {
   margin-left: calc(var(--sidebar-width) + 20px);
   margin-right: 20px;
-
-  padding-top:20px;
+  margin-top: 20px;
+  padding-top: 20px;
   padding-bottom: 40px;
 
   max-width: calc(100% - var(--sidebar-width) - 40px);
@@ -585,6 +585,21 @@ body {
 
   box-sizing: border-box;
   transition: opacity 0.3s;
+}
+
+.content-inner {
+	will-change: transform,opacity;
+}
+
+.content-inner.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.content-inner.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s ease;
 }
 
 @media (min-width: 769px) {
