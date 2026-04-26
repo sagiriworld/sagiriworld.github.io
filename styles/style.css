@@ -1498,7 +1498,7 @@ code-box {
     transform: scale(1.2); /* 离场时从 1.2 倍基准开始 */
   }
   to {
-    transform: scale(0.75); /* 快速缩小 */
+    transform: scale(1.0); /* 快速缩小 */
   }
 }
 
