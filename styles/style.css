@@ -1411,22 +1411,18 @@ code-box {
 @keyframes heroIn {
   from {
     opacity: 0;
-    transform: scale(1.7);
   }
   to {
     opacity: 1;
-    transform: scale(1.2);
   }
 }
 
 @keyframes heroOut {
   from {
     opacity: 1;
-    transform: scale(1.2);
   }
   to {
     opacity: 0;
-    transform: scale(0.75);
   }
 }
 
@@ -1463,7 +1459,6 @@ code-box {
   }
 }
 
-/* 同时移除 .hitokoto-hero 自身的 fade-in/fade-out 类绑定 */
 .home-header {
   width: 100%;
   margin: auto;
@@ -1477,7 +1472,36 @@ code-box {
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
   height: 55vh;
+  transform: scale(1.2); 
 }
+
+/* 当父容器触发 fade-in / fade-out 时，联动图片播放缩放动画 */
+.header-container.fade-in .home-header {
+  animation: homeHeaderIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.header-container.fade-out .home-header {
+  animation: homeHeaderOut 0.4s ease forwards;
+}
+
+@keyframes homeHeaderIn {
+  from {
+    transform: scale(1.7); /* 进场时从 1.7 倍开始收缩 */
+  }
+  to {
+    transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
+  }
+}
+
+@keyframes homeHeaderOut {
+  from {
+    transform: scale(1.2); /* 离场时从 1.2 倍基准开始 */
+  }
+  to {
+    transform: scale(0.75); /* 快速缩小 */
+  }
+}
+
 
 /* 半透明遮罩层 */
 .header-overlay {
