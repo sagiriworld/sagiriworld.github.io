@@ -1652,7 +1652,7 @@ code-box {
   .header-container {
   position: relative;
   width: 100%;
-  margin-left: 0;
+  margin-left: 0 !important;
   overflow: hidden;
 }
 
