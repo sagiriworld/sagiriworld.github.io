@@ -1763,7 +1763,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .header-overlay {
 	height: 40vh;
     width: 100%;
-    margin: 30px 0 0 0px;
+    margin: 0 0 0 0;
   }
 
   .home-flex {
