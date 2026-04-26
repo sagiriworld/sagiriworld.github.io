@@ -1502,15 +1502,14 @@ code-box {
    首页 Flex 容器（占满网格一行）
 ========================= */
 .home-flex {
-  grid-column: 1 / -1;          /* 占满 content 的整行 */
+  grid-column: 1 / -1;
   display: flex;
   justify-content: center;
   align-items: stretch;
   gap: 20px;
   flex-wrap: wrap;
-  width: auto;
   max-width: 500px;
-  margin: 0 auto 30px;          /* 与下方卡片保持间距 */
+  margin: 0 auto 30px;
 }
 
 /* =========================
@@ -1551,7 +1550,6 @@ code-box {
 ========================= */
 .home-right-cards {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 20px;
   height: 100%;
