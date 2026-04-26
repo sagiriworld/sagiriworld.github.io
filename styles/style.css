@@ -184,6 +184,14 @@ hr {
   background: rgba(0, 0, 0, 0.5) !important;
 }
 
+  .home-link-card::after {
+    background: no-repeat center / contain url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<path d='M5 12h14'/>\
+<path d='M13 5l7 7-7 7'/>\
+</svg>");
+  }
+	
 }
 
 
@@ -278,6 +286,14 @@ hr {
   background: rgba(0, 0, 0, 0.5);
 }
 
+[data-theme="dark"] .home-link-card::after {
+    background: no-repeat center / contain url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<path d='M5 12h14'/>\
+<path d='M13 5l7 7-7 7'/>\
+</svg>");
+  }
+
 /* 强制浅色模式（覆盖系统深色） */
 [data-theme="light"] {
   --color-bg: #FFFBFF;
@@ -320,7 +336,13 @@ hr {
 [data-theme="light"] .header-overlay {
   background: rgba(255, 255, 255, 0.5) !important;
 }
-
+[data-theme="light"]  .home-link-card::after {
+  background: no-repeat center / contain url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23352f31' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<path d='M5 12h14'/>\
+<path d='M13 5l7 7-7 7'/>\
+</svg>");
+  }
 
 
 /* =========================
@@ -1530,6 +1552,7 @@ code-box {
 }
 
 .home-link-card {
+  position: relative;
   display: flex;
   flex: 1 1 0;
   flex-direction: row;
@@ -1545,21 +1568,29 @@ code-box {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.arrow-icon {
+.home-link-card::after {
+  content: '';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  
   width: 20px;
   height: 20px;
-  flex-shrink: 0;
+
+  background: no-repeat center / contain url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23352f31' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<path d='M5 12h14'/>\
+<path d='M13 5l7 7-7 7'/>\
+</svg>");
+
   opacity: 0.6;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.home-link-card:hover .arrow-icon {
-  transform: translateX(4px);
+/* hover 动效 */
+.home-link-card:hover::after {
+  transform: translateY(-50%) translateX(4px);
   opacity: 1;
 }
 
