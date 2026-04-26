@@ -1552,13 +1552,13 @@ code-box {
 }
 
 .home-link-card {
-  position: relative;
+  position: relative; /* ⭐ 必须加 */
   display: flex;
   flex: 1 1 0;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 24px;
+  padding: 28px 48px 28px 24px;
   border-radius: 16px;
   background: var(--card-bg, rgba(255, 216, 231, 0.3));
   backdrop-filter: blur(10px);
@@ -1568,6 +1568,15 @@ code-box {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+/* 内容区域 */
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   右侧箭头 SVG（核心）
+========================= */
 .home-link-card::after {
   content: '';
   position: absolute;
@@ -1590,23 +1599,37 @@ code-box {
 
 /* hover 动效 */
 .home-link-card:hover::after {
-  transform: translateY(-50%) translateX(4px);
+  transform: translateY(-50%) translateX(6px);
   opacity: 1;
 }
 
+/* 卡片 hover */
 .home-link-card:hover {
   background: var(--color-pink-soft);
 }
 
+/* 标题 */
 .home-link-card h3 {
   margin: 0 0 8px;
   font-size: 1.3rem;
 }
 
+/* 描述 */
 .home-link-card p {
   margin: 0;
   opacity: 0.7;
   font-size: 0.95rem;
+}
+
+/*  深色模式箭头适配 */
+@media (prefers-color-scheme: dark) {
+  .home-link-card::after {
+    background: no-repeat center / contain url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<path d='M5 12h14'/>\
+<path d='M13 5l7 7-7 7'/>\
+</svg>");
+  }
 }
 
 
