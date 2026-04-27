@@ -1057,7 +1057,7 @@ body {
   margin: 0 auto 30px auto;  /* 上 0，下 30px，左右 auto */
   max-width: 800px;
 
-  opacity: 0;
+  opacity: 1;
   transform: translateY(10px);
   transition: 0.4s;
 }
@@ -1116,7 +1116,7 @@ body {
 
   gap: 10px;
 
-  opacity: 0;
+  opacity: 1;
   transform: translateY(10px);
   transition: 0.4s;
 }
