@@ -84,7 +84,7 @@ html, body {
 hr {
   border: none;
   height: 1px;
-  background: rgba(0,0,0,0.1);
+  background: var(--color-text);
   margin: 20px 0;
 }
 
