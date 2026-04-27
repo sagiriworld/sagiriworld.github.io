@@ -564,7 +564,7 @@ body {
   gap: 40px 20px;
 
   box-sizing: border-box;
-  transition: opacity 0.3s;
+  transition: all 0.3s ease;
 }
 
 @media (min-width: 769px) {
@@ -616,7 +616,7 @@ body {
   gap: 40px 20px;
 
   box-sizing: border-box;
-  transition: opacity 0.3s;
+  transition: all 0.3s ease;
 }
 
 .content-inner {
