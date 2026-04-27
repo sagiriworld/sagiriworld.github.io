@@ -1,7 +1,6 @@
 /* =========================
-   全局变量与初始化
+   全局变量与初始化 (主题管理)
 ========================= */
-// 主题管理器
 const ThemeManager = {
   STORAGE_KEY: 'site-theme',
   getTheme() {
@@ -41,7 +40,39 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   SPA 页面加载（修复 content 上浮动画）
+   统一动画执行器 (核心修复：解决上浮动画失效)
+========================= */
+function playEnterAnimation(selectors) {
+  const elements = document.querySelectorAll(selectors);
+  if (!elements.length) return;
+
+  elements.forEach(el => {
+    // 1. 禁用过渡，瞬间将元素下沉并隐藏（设置动画起始点）
+    el.style.transition = 'none';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(15px)';
+    el.classList.remove('fade-out', 'fade-in');
+  });
+
+  // 2. 强制触发浏览器重排，让刚才的瞬间改变立刻生效
+  void document.body.offsetWidth;
+
+  elements.forEach(el => {
+    // 3. 清理内联样式，交回给 CSS 控制，并添加入场类名
+    el.style.transition = '';
+    el.style.opacity = '';
+    el.style.transform = '';
+    el.classList.add('fade-in');
+  });
+
+  // 4. 动画结束后清理多余类名，防止影响后续交互
+  setTimeout(() => {
+    elements.forEach(el => el.classList.remove('fade-in'));
+  }, 400); 
+}
+
+/* =========================
+   SPA 页面加载
 ========================= */
 async function loadPage(url) {
   try {
@@ -65,117 +96,52 @@ async function loadPage(url) {
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
 
-      // 退场
-      currentContent.classList.add('fade-out');
-      if (currentLogo) currentLogo.classList.add('fade-out');
-      if (currentHeaderContainer) currentHeaderContainer.classList.add('fade-out');
-      if (currentHeader) currentHeader.classList.add('fade-out');
-      if (currentArticleCard) currentArticleCard.classList.add('fade-out');
+      // 1. 全局元素退场 (添加 fade-out，触发 0.2s 消失动画)
+      const outElements = [currentContent, currentLogo, currentHeaderContainer, currentHeader, currentArticleCard].filter(Boolean);
+      outElements.forEach(el => el.classList.add('fade-out'));
 
+      // 2. 等待 0.2s 退场结束后，进行 DOM 替换
       setTimeout(() => {
-        // 1. 头图容器
+        // 让页面瞬间回到顶部，避免在新内容下方渲染
+        window.scrollTo({ top: 0, behavior: 'auto' });
+
+        // 头图容器替换
         if (newHeaderContainer) {
-          if (currentHeaderContainer) {
-            currentHeaderContainer.replaceWith(newHeaderContainer);
-          } else {
-            document.body.insertBefore(newHeaderContainer, currentContent);
-          }
-          newHeaderContainer.classList.add('fade-out');
-          requestAnimationFrame(() => {
-            newHeaderContainer.classList.remove('fade-out');
-            newHeaderContainer.classList.add('fade-in');
-          });
-        } else {
-          if (currentHeaderContainer) currentHeaderContainer.remove();
-        }
+          if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
+          else document.body.insertBefore(newHeaderContainer, currentContent);
+        } else if (currentHeaderContainer) currentHeaderContainer.remove();
 
-        // 2. 文章头图
+        // 文章头图替换
         if (newHeader) {
-          newHeader.classList.add('fade-out');
-          if (currentHeader) {
-            currentHeader.replaceWith(newHeader);
-          } else {
-            document.body.insertBefore(newHeader, currentContent);
-          }
-          requestAnimationFrame(() => {
-            newHeader.classList.remove('fade-out');
-            newHeader.classList.add('fade-in');
-          });
-        } else {
-          if (currentHeader) currentHeader.remove();
-        }
+          if (currentHeader) currentHeader.replaceWith(newHeader);
+          else document.body.insertBefore(newHeader, currentContent);
+        } else if (currentHeader) currentHeader.remove();
 
-        // ============ 3. 主内容区（修复核心：先隐藏、替换、再动画） ============
-        // 瞬间隐藏，防止类名变更导致布局跳动被用户看到
-        currentContent.style.opacity = '0';
-        // 替换内容并切换类名
+        // 主内容替换
         currentContent.innerHTML = newContent.innerHTML;
-        currentContent.className = newContentClasses;   // 干净的 .content 或 .home-content
+        currentContent.className = newContentClasses;
 
-        // 强制重排，让新布局立即生效（用户看不见）
-        void currentContent.offsetWidth;
-
-        // 设置动画起始状态
-        currentContent.classList.add('fade-out');
-
-        // 下一帧移除隐藏样式并启动动画
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            currentContent.style.opacity = '';          // 移除内联隐藏
-            currentContent.classList.remove('fade-out');
-            currentContent.classList.add('fade-in');
-          });
-        });
-        // ================================================================
-
-        // 4. Logo
+        // Logo 替换
         if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
 
-        // 5. 文章卡片
+        // 文章卡片替换
         if (newArticleCard) {
-          newArticleCard.classList.add('fade-out');
-          if (currentArticleCard) {
-            currentArticleCard.replaceWith(newArticleCard);
-          } else {
-            document.body.insertBefore(newArticleCard, currentContent);
-          }
-          requestAnimationFrame(() => {
-            newArticleCard.classList.remove('fade-out');
-            newArticleCard.classList.add('fade-in');
-            initCodeBoxes();
-          });
-        } else {
-          if (currentArticleCard) currentArticleCard.remove();
-        }
+          if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
+          else document.body.insertBefore(newArticleCard, currentContent);
+        } else if (currentArticleCard) currentArticleCard.remove();
 
-        // 6. Logo 淡入
-        if (currentLogo) {
-          currentLogo.classList.remove('fade-out');
-          currentLogo.classList.add('fade-in');
-        }
+        // 初始化新页面的代码框
+        initCodeBoxes();
 
-        // 7. 清理动画
-        setTimeout(() => {
-          currentContent.classList.remove('fade-in');
-          currentContent.className = newContentClasses;   // 确保最终类名正确
-          if (currentLogo) currentLogo.classList.remove('fade-in');
-          if (newHeaderContainer) newHeaderContainer.classList.remove('fade-in');
-          if (newHeader) newHeader.classList.remove('fade-in');
-          if (newArticleCard) newArticleCard.classList.remove('fade-in');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 400);
+        // 3. 统一触发入场动画 (将容器与卡片同时纳入上浮动画)
+        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo');
 
-        // 8. 一言
+        // 4. 重置新页面组件状态
         initHitokoto(true);
-
-        // 9. 重新绑定
         bindLinks();
         addRippleEffect();
-        animateAboutCard();
-        animateProfileCard();
-        animateArticleCard();
         bindSettingsTrigger();
-      }, 200);
+      }, 200); 
     }
 
     history.pushState(null, '', url);
@@ -188,7 +154,6 @@ async function loadPage(url) {
     console.error('加载失败:', err);
   }
 }
-
 
 /* =========================
    链接绑定
@@ -281,7 +246,6 @@ function fallbackCopyText(text, copyBtn) {
   document.body.removeChild(textArea);
 }
 
-
 /* =========================
    涟漪效果
 ========================= */
@@ -325,30 +289,6 @@ function addRippleEffect() {
 }
 
 /* =========================
-   入场动画
-========================= */
-function animateAboutCard() {
-  const el = document.querySelector('.about-card');
-  if (!el) return;
-  el.classList.remove('fade-in');
-  setTimeout(() => el.classList.add('fade-in'), 50);
-}
-
-function animateProfileCard() {
-  const el = document.querySelector('.profile-card');
-  if (!el) return;
-  el.classList.remove('fade-in');
-  setTimeout(() => el.classList.add('fade-in'), 50);
-}
-
-function animateArticleCard() {
-  document.querySelectorAll('.article-card').forEach(el => {
-    el.classList.remove('fade-in');
-    setTimeout(() => el.classList.add('fade-in'), 50);
-  });
-}
-
-/* =========================
    一言 API
 ========================= */
 let hitokotoCache = null;
@@ -376,11 +316,8 @@ function applyHitokoto(data) {
 function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
-
   const fallback = '愿你的每一天都独特而美好';
-
   if (mainText.dataset.current === fallback) return;
-
   mainText.dataset.current = fallback;
   mainText.textContent = fallback;
 }
@@ -568,11 +505,12 @@ function bindSettingsTrigger() {
 function initAll() {
   bindLinks();
   addRippleEffect();
-  animateAboutCard();
-  animateProfileCard();
-  animateArticleCard();
   initHitokoto();
   bindSettingsTrigger();
+  
+  // 初次加载时，触发页面内所有核心组件和卡片的入场动画
+  playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header');
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCodeBoxes);
   } else {
