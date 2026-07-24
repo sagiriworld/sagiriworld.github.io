@@ -19,6 +19,35 @@ const CONFIG = {
 ========================= */
 var pageLoadStart = Date.now();
 
+const LOADER_TIPS = [
+  ' 你知道吗？这个网站没有使用任何框架',
+  ' 这个网站使用纯 HTML CSS JS 打造！',
+  ' 页面加载中，请稍候喵...',
+  ' 加载速度取决于neko的心情',
+  ' ♪ 世界でいちばんおひめさま ♪',
+  ' ♪ 笑える時まで今日もscience! ♪',
+  ' ♪ 群青色の空，自由なんてものは ♪',
+  ' ♪ i cant wait no mistake ♪',
+  ' 试试切换深色模式？',
+  ' 试试切换蓝色主题？',
+  ' 服务器正在翻滚，请稍候',
+  ' 加载这么慢一定是网络的问题',
+  ' ｡ﾟ･ (>﹏<) ･ﾟ｡ 快好了',
+  ' 右下角有音乐播放器哦',
+  ' 若加载时间过长请打开梯子喵~',
+  ' 加载慢主要是因为这个字体太大了::>_<::',
+];
+
+(function injectLoaderTips() {
+  const inner = document.querySelector('.loader-inner');
+  if (!inner) return;
+  const tip = LOADER_TIPS[Math.floor(Math.random() * LOADER_TIPS.length)];
+  const el = document.createElement('p');
+  el.className = 'loader-tips';
+  el.textContent = tip;
+  inner.appendChild(el);
+})();
+
 /* =========================
    全局变量与初始化
 ========================= */
@@ -93,7 +122,6 @@ const ColorThemeManager = {
         '--thoughts-border': '#f8bbd0',
         '--nav-time-bg': 'rgba(255,216,231,0.8)',
         '--settings-panel-bg': '#FFFBFF',
-        // [新增]
         lyPop: {
           '--lyric-bg': 'rgba(253, 217, 231, 0.7)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.1)',
@@ -141,7 +169,6 @@ const ColorThemeManager = {
         '--thoughts-border': '#f06292',
         '--nav-time-bg': 'rgba(255,179,207,0.2)',
         '--settings-panel-bg': '#1F1A1C',
-        // [新增]
         lyPop: {
           '--lyric-bg': 'rgba(65, 42, 52, 0.9)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
@@ -192,7 +219,6 @@ const ColorThemeManager = {
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
         '--settings-panel-bg': '#FBFCFE',
-        // [新增]
         lyPop: {
           '--lyric-bg': 'rgba(195, 232, 255, 0.7)',
           '--lyric-shadow': '0 -2px 10px rgba(91, 155, 213, 0.15)',
@@ -240,7 +266,6 @@ const ColorThemeManager = {
         '--thoughts-border': '#4a7ca5',
         '--nav-time-bg': 'rgba(145,192,240,0.2)',
         '--settings-panel-bg': '#17212b',
-        // [新增]
         lyPop: {
           '--lyric-bg': 'rgba(46, 67, 88, 0.9)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
@@ -377,7 +402,7 @@ function playEnterAnimation(selectors) {
     el.style.opacity = '0';
     if (el.matches('.logo')) {
       el.style.transform = 'translateX(-20px)';
-    } else if (el.matches('.settings-button-m')) {
+    } else if (el.matches('.settings-button')) {
       el.style.transform = 'translateX(20px)';
     } else if (el.matches('.article-card, .comment-content')) {
       el.style.transform = isMobile
@@ -437,7 +462,7 @@ async function loadPage(url, addToHistory = true) {
 
     const currentLogo = document.querySelector('.logo');
     let currentContent = document.querySelector('.home-content') || document.querySelector('.content');
-    const currentSettingsBtn = document.querySelector('.settings-button-m');
+    const currentSettingsBtn = document.querySelector('.settings-button');
     let currentHeaderContainer = document.querySelector('.header-container');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
@@ -577,7 +602,7 @@ async function loadPage(url, addToHistory = true) {
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
       '.profile-card, .article-card, .header-container, .article-header, ' +
-      '.logo, .settings-button-m, .footer, .comment-content'
+      '.logo, .settings-button, .footer, .comment-content'
     );
     initHitokoto(true);
     initImageViewer();
@@ -899,7 +924,7 @@ function addRippleEffect() {
     .li-a,
     .card,
     .home-link-card,
-    .settings-button-m,
+    .settings-button,
     .close-button,
     .md3-button,
     .md3-list-item,
@@ -1317,7 +1342,7 @@ function initAll() {
         playEnterAnimation(
           '.content, .home-content, .card, .home-link-card, .about-card, ' +
           '.profile-card, .article-card, .header-container, .article-header, ' +
-          '.logo, .settings-button-m, .footer, .comment-content'
+          '.logo, .settings-button, .footer, .comment-content'
         );
         initImageViewer();
       }, 400);

@@ -86,7 +86,7 @@
   --calendar-bg: var(--sidebar-bg);
 
   /* 一言出处 */
-  --hitokoto-from-color: #666;
+  --hitokoto-from-color: #555555;
 
   /* 下拉选择框 */
   --select-border: rgba(0, 0, 0, 0.2);
@@ -381,7 +381,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
   --close-btn-hover-bg: rgba(0, 0, 0, 0.05);
   --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
 
-  --hitokoto-from-color: #666;
+  --hitokoto-from-color: #555555;
   --select-border: rgba(0, 0, 0, 0.2);
 }
 
@@ -418,20 +418,37 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
 }
 
 /* 闪烁动画 */
-.loader-inner p {
-  animation: blink 1.0s step-end infinite;
+.blink {
+  animation: blink 1.0s ease-in-out infinite;
 }
 
 @keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
-  0%,
-  100% {
-    opacity: 1;
-  }
 
-  50% {
-    opacity: 0.6;
-  }
+.loader-tips {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  line-height: 1.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.loader-tips::before {
+  content: "Tip";
+  padding: 3px 5px;
+  border-radius: 10px;
+  background: var(--color-pink-soft);
 }
 
 .loader-ring {
@@ -453,6 +470,27 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
   }
 }
 
+@media (max-width: 768px) {
+  .loader-tips {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .loader-tips::before {
+    content: "Tip";
+    padding: 1px 8px;
+    border-radius: 16px;
+    background: var(--color-pink-soft);
+    display: block;
+  }
+}
+
+html:has(#preloader:not(.hidden)) {
+  overflow: hidden !important;
+}
+
 /* =========================
    基础布局
 ========================= */
@@ -467,7 +505,7 @@ body {
 button,
 .sidebar,
 .navbar,
-.settings-button-m,
+.settings-button,
 .nav-time,
 .md3-list-item,
 .calendar-nav button {
@@ -681,13 +719,13 @@ button,
   transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
-.settings-button-m.fade-in {
+.settings-button.fade-in {
   transform: translateX(0) !important;
   opacity: 1 !important;
   transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease !important;
 }
 
-.settings-button-m.fade-out {
+.settings-button.fade-out {
   transform: translateX(20px) !important;
   opacity: 0 !important;
   transition: opacity 0.2s ease, transform 0.2s ease, background 0.3s ease !important;
@@ -1103,7 +1141,7 @@ button,
   filter: brightness(1.1);
 }
 
-.settings-button-m {
+.settings-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1121,7 +1159,7 @@ button,
   border: none;
 }
 
-.settings-button-m:hover {
+.settings-button:hover {
   background: var(--sidebar-a);
 }
 
@@ -1687,7 +1725,6 @@ code-box {
   margin: 20px 0;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: var(--code-box-shadow);
   background-color: var(--code-box-bg);
   border: 1px solid var(--code-box-border);
 }
@@ -2401,6 +2438,7 @@ code-box {
   .sidebar a {
     flex: none;
     height: 20px;
+    width: 57px;
     transition: transform 0.3s ease;
     position: relative;
     z-index: 1;
@@ -2704,7 +2742,7 @@ code-box {
   .md3-list-item:hover,
   .md3-button:hover,
   .copy-btn:hover,
-  .settings-button-m:hover,
+  .settings-button:hover,
   .calendar-day:hover,
   .card:hover,
   .theme-picker-item:hover {

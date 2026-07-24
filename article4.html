@@ -25,7 +25,7 @@
 
   <div class="navbar">
     <div class="logo">更新日志3<span class="nav-time">2026-03-29</span></div>
-    <button id="settings-nav" class="settings-button-m" aria-label="设置">
+    <button id="settings-nav" class="settings-button" aria-label="设置">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path
           d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.33-.02-.64-.06-.94l2.02-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.45 3.5c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.3 2.52c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.02 1.58c-.04.3-.06.61-.06.94 0 .33.02.64.06.94l-2.02 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.3 2.52c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.3-2.52c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.02-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
@@ -111,19 +111,22 @@
     <p>啊啊啊写了两天的代码高亮还是有一堆bug</p>
     <p>就干脆直接拿别人现成的来改了</p>
     <p><a href="https://github.com/kvetc/" class="a">原作者</a>是个狠人，自己写每种语言的关键词映射来高亮，何必呢，引用外部js和css不也行吗</p>
-    <code-box data-lang="java">
-      public class HelloWorld {
-      public static void main(String[] args) {
-      System.out.println("Hello, World!");
-      }
-      }
+    <code-box data-lang="javascript">
+      alert("Hello World!");
+document.write("Hello World!");
+console.log("Hello World!");
     </code-box>
 
-    <code-box data-lang="c++">
-      #include <iostream>
-        using namespace std;
-        int main() {
-        cout << "hello world" ; return 0; }</code-box>
+    <code-box data-lang="css">
+    code-box {
+    display: block;
+    margin: 20px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: var(--code-box-bg);
+    border: 1px solid var(--code-box-border);
+}
+    </code-box>
   </div>
   <div class="comment-content">
     <div class="giscus"></div>
