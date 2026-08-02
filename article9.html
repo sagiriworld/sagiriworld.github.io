@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <link rel="preload" as="font" href="./styles/font.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/article-typography.css">
   <link rel="stylesheet" href="styles/viewer.css">
 </head>
-
 
 <body>
 
@@ -25,8 +24,9 @@
     </div>
   </div>
 
+  <!-- navbar -->
   <div class="navbar">
-    <div class="logo">Connect the World...</div>
+    <div class="logo">文章系统更新</div>
     <button id="settings-nav" class="settings-button" aria-label="设置">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path
@@ -34,6 +34,9 @@
       </svg>
     </button>
   </div>
+
+  <!-- 头图 -->
+  <img src="https://bee-reg-ab.imagency.cn/p/3f34db1cfd0b7c7bfa4df2613d162d7e.jpg" alt="头图" class="article-header">
 
   <!-- sidebar -->
   <div class="sidebar">
@@ -104,22 +107,165 @@
       </li>
     </ul>
   </div>
-  <div class="content">
-    <div class="responsive-iframe">
-      <iframe src="https://player.bilibili.com/player.html?bvid=BV1S9vWBTEpK" frameborder="0" allowfullscreen></iframe>
+
+
+  <div class="article-card">
+
+    <!-- 1. 文章头部 -->
+    <h1 class="article-title">文章标题</h1>
+    <div class="article-meta">
+      <time datetime="2026-08-02">2026-08-02</time>
+      <span>·</span>
+      <span>约 5 分钟阅读</span>
+      <span>·</span>
+      <a href="#" class="article-tag"># 更新日志</a>
+      <a href="#" class="article-tag"># 博客</a>
+      <a href="#" class="article-tag"># CSS</a>
     </div>
+    <hr class="article-divider">
+
+    <!-- 2. 文章正文 -->
+    <div class="article-body">
+
+      <h2 id="section-1">二级标题<a class="heading-anchor" href="#section-1">#</a></h2>
+      <p>正文段落。行高 1.8，段落间距 1.15em。段落之间留出空间。</p>
+      <p>第二段。支持<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>、<a href="#">链接</a>、<kbd>Ctrl</kbd>+<kbd>S</kbd> 键盘标记、<mark>高亮文本</mark> 等行内元素。</p>
+
+      <h3 id="section-1-1">三级标题<a class="heading-anchor" href="#section-1-1">#</a></h3>
+      <p>这里是三级标题下的内容。</p>
+
+      <h2 id="section-2">列表与引用<a class="heading-anchor" href="#section-2">#</a></h2>
+
+      <h3>无序列表</h3>
+      <ul>
+        <li>第一项</li>
+        <li>第二项
+          <ul>
+            <li>嵌套项 A</li>
+            <li>嵌套项 B</li>
+          </ul>
+        </li>
+        <li>第三项</li>
+      </ul>
+
+      <h3>有序列表</h3>
+      <ol>
+        <li>步骤一</li>
+        <li>步骤二</li>
+        <li>步骤三</li>
+      </ol>
+
+      <h3>引用块</h3>
+      <blockquote>
+        <p>这是一段引用。引用块用于摘录他人的文字或强调某段重要的话。</p>
+        <p>——nekooa</p>
+      </blockquote>
+
+      <h2 id="section-3">代码块<a class="heading-anchor" href="#section-3">#</a></h2>
+      <p>行内代码用 <code>backtick</code> 包裹，块级代码用自定义的 <code>&lt;code-box&gt;</code> 组件：</p>
+
+      <code-box data-lang="javascript">
+const greeting = "Hello, World!";
+console.log(greeting);
+      </code-box>
+
+      <h2 id="section-4">图片与 Figure<a class="heading-anchor" href="#section-4">#</a></h2>
+
+      <!-- 简单图片 -->
+      <img src="https://bee-reg-ab.imagency.cn/p/bec210d32eaae0f67316e7b0057de78f.jpg" alt="示例图片">
+
+      <!-- 带说明的图片 -->
+      <figure>
+        <img src="https://bee-reg-ab.imagency.cn/p/67f29d708c73c6dc06846630d406632e.png" alt="带说明的图片">
+        <figcaption>图 1：这是一张带说明文字的图片示例</figcaption>
+      </figure>
+
+      <h2 id="section-5">表格<a class="heading-anchor" href="#section-5">#</a></h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>功能</th>
+            <th>状态</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>暗色模式</td>
+            <td>已完成</td>
+            <td>支持跟随系统 / 手动切换</td>
+          </tr>
+          <tr>
+            <td>主题色</td>
+            <td>已完成</td>
+            <td>粉色 / 蓝色两套方案</td>
+          </tr>
+          <tr>
+            <td>文章分类</td>
+            <td>施工中</td>
+            <td>按照标签给文章分类</td>
+          </tr>
+          <tr>
+            <td>文章目录</td>
+            <td>计划中</td>
+            <td>侧边 TOC 导航</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="section-6">装饰组件<a class="heading-anchor" href="#section-6">#</a></h2>
+
+      <div class="slogan">♪ 笑える時まで今日もscience! ♪</div>
+
+      <div class="thoughts">
+        这是一个「想法」组件，用于记录随笔或补充说明。 斜体 + 柔和背景。
+      </div>
+
+      <div class="announcement">
+        这是一个告示组件，用于重要提示。
+      </div>
+
+      <hr class="dot">
+
+      <div class="to-be-continued">To be continued...</div>
+
+    </div>
+
+
+    <!-- 3. 上/下篇导航 -->
+    <nav class="article-nav">
+      <a href="article0721.html" class="spa-link">
+        <span class="nav-label">← 上一篇</span>
+        <span class="nav-title">no title</span>
+      </a>
+      <a>
+        <span class="nav-label">没有下一篇</span>
+        <span class="nav-title">这是最新一篇！</span>
+      </a>
+    </nav>
+
   </div>
+
+  <!-- 评论区 -->
   <div class="comment-content">
     <div class="giscus"></div>
   </div>
-  <footer class="footer"><a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a></footer>
-  <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="5em"
+
+  <footer class="footer">
+    <a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a>
+  </footer>
+
+  <!-- 音乐播放器 -->
+  <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="7em"
     data-songList="18004217713">
   </div>
 
-  <script src="./xf-MusicPlayer.js"></script>
-  <!-- SPA 脚本 -->
+  <!-- JS 脚本 -->
   <script src="js/script.js"></script>
+  <script src="js/viewer.js"></script>
+  <script src="./xf-MusicPlayer.js"></script>
+
 </body>
 
 </html>

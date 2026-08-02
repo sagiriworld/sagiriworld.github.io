@@ -1,0 +1,909 @@
+/* =========================
+   CSS 变量扩展（文章专用）
+   —— 追加到 :root，不覆盖原有变量
+========================= */
+:root {
+  /* 文章排版 */
+  --article-max-width: 720px;
+  --article-font-size: 1rem;           /* 16px */
+  --article-line-height: 1.8;
+  --article-heading-line-height: 1.35;
+  --article-letter-spacing: 0.02em;
+  --article-paragraph-spacing: 1.15em;
+
+  /* 文章颜色 */
+  --article-link-color: var(--color-pink);
+  --article-link-hover: var(--color-pink);
+  --article-blockquote-border: var(--color-pink);
+  --article-blockquote-bg: var(--card-bg);
+  --article-hr-color: var(--color-pink-soft);
+  --article-table-border: rgba(0, 0, 0, 0.1);
+  --article-table-header-bg: var(--card-bg);
+  --article-inline-code-bg: var(--color-pink-soft);
+  --article-inline-code-color: var(--color-text);
+  --article-kbd-bg: #fafafa;
+  --article-kbd-border: #ccc;
+  --article-kbd-shadow: #bbb;
+  --article-kbd-color: inherit;
+  --article-mark-bg: #fff3b0;
+  --article-mark-color: inherit;
+  --article-figcaption-color: rgba(0, 0, 0, 0.5);
+  --article-selection-bg: var(--color-pink-soft);
+
+  /* 文章卡片 */
+  --article-card-padding: 40px 48px;
+  --article-card-padding-mobile: 24px 20px;
+
+  /* 分割线 */
+  --divider-line-bg: rgba(0, 0, 0, 0.2);
+  --divider-text-color: var(--color-text);
+  --divider-text-opacity: 0.6;
+
+  /* 文章装饰 */
+  --slogan-color: #e91e63;
+  --slogan-text-shadow: 0 2px 8px rgba(233, 30, 99, 0.25);
+  --thoughts-color: #b06a8c;
+  --thoughts-bg: rgba(255, 235, 245, 0.5);
+  --thoughts-border: #f8bbd0;
+  --announcement-color: #5d6d7e;
+  --announcement-bg: #f0f3f5;
+  --announcement-border: #b0bec5;
+  --to-be-continued-color: #b2b2b2;
+  --dot-hr-opacity: 0.8;
+
+  /* 代码框 */
+  --code-box-bg: #f6f8fa;
+  --code-box-border: rgba(0, 0, 0, 0.08);
+  --code-box-header-color: #222;
+  --code-box-code-color: #1f2328;
+  --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 深色模式覆盖 */
+[data-theme="dark"] {
+  --article-table-border: rgba(255, 255, 255, 0.1);
+  --article-table-header-bg: rgba(255, 255, 255, 0.06);
+  --article-figcaption-color: rgba(255, 255, 255, 0.45);
+  --article-kbd-bg: #e0d6d9;
+  --article-kbd-border: #9e9e9e;
+  --article-kbd-shadow: #5a5a5a;
+  --article-kbd-color: #1a1517;
+  --article-mark-bg: rgba(253, 199, 92, 0.899);
+  --article-mark-color: #1a1517;
+
+  /* 分割线 */
+  --divider-line-bg: var(--color-pink-soft);
+  --divider-text-opacity: 0.8;
+
+  /* 文章装饰 */
+  --slogan-color: #f48fb1;
+  --slogan-text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35);
+  --thoughts-color: #f8bbd0;
+  --thoughts-bg: rgba(255, 210, 225, 0.08);
+  --thoughts-border: #f06292;
+  --announcement-color: #b0bec5;
+  --announcement-bg: #1c2529;
+  --announcement-border: #455a64;
+  --to-be-continued-color: #b2b2b2;
+  --dot-hr-opacity: 0.6;
+
+  /* 代码框 */
+  --code-box-bg: #2d2d2d;
+  --code-box-border: rgba(225, 225, 225, 0.3);
+  --code-box-header-color: #fff;
+  --code-box-code-color: #f5f5f5;
+  --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --article-table-border: rgba(255, 255, 255, 0.1);
+    --article-table-header-bg: rgba(255, 255, 255, 0.06);
+    --article-figcaption-color: rgba(255, 255, 255, 0.45);
+    --article-kbd-bg: #e0d6d9;
+    --article-kbd-border: #9e9e9e;
+    --article-kbd-shadow: #5a5a5a;
+    --article-kbd-color: #1a1517;
+    --article-mark-bg: rgba(253, 199, 92, 0.899);
+    --article-mark-color: #1a1517;
+
+    /* 分割线 */
+    --divider-line-bg: var(--color-pink-soft);
+    --divider-text-opacity: 0.8;
+
+    /* 文章装饰 */
+    --slogan-color: #f48fb1;
+    --slogan-text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35);
+    --thoughts-color: #f8bbd0;
+    --thoughts-bg: rgba(255, 210, 225, 0.08);
+    --thoughts-border: #f06292;
+    --announcement-color: #b0bec5;
+    --announcement-bg: #1c2529;
+    --announcement-border: #455a64;
+    --to-be-continued-color: #b2b2b2;
+    --dot-hr-opacity: 0.6;
+
+    /* 代码框 */
+    --code-box-bg: #2d2d2d;
+    --code-box-border: rgba(225, 225, 225, 0.3);
+    --code-box-header-color: #fff;
+    --code-box-code-color: #f5f5f5;
+    --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 强制深色模式下 kbd/mark 文字为深色（覆盖父级 color 继承） */
+[data-theme="dark"] .article-body kbd,
+[data-theme="dark"] .article-body mark {
+  color: #1a1517;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .article-body kbd,
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .article-body mark {
+    color: #1a1517;
+  }
+}
+
+
+/* ============================================================
+   0. 文章头图
+   ============================================================ */
+
+.article-header {
+  width: calc(100% - var(--sidebar-width));
+  margin: 0 0 0 var(--sidebar-width);
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  position: relative;
+  will-change: transform;
+  z-index: 0;
+  filter: brightness(0.9);
+  mask-image: linear-gradient(to bottom, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+  height: 80vh;
+}
+
+@media (max-width: 768px) {
+  .article-header {
+    height: 70vh;
+    width: 100%;
+    margin: 46px 0 0 0px;
+  }
+}
+
+
+/* ============================================================
+   0.5 分割线
+   ============================================================ */
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--divider-line-bg);
+}
+
+.divider span {
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--divider-text-color);
+  opacity: var(--divider-text-opacity);
+}
+
+
+/* ============================================================
+   0.6 代码框组件
+   ============================================================ */
+
+code-box {
+  display: block;
+  margin: 20px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: var(--code-box-bg);
+  border: 1px solid var(--code-box-border);
+}
+
+.code-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px 2px 14px;
+  color: var(--code-box-header-color);
+  font-size: 14px;
+}
+
+.code-lang {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--code-box-header-color);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.copy-btn:hover {
+  background: var(--sidebar-a);
+}
+
+.code-box-content {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.code-box-content pre {
+  margin: 0;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: pre;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150, 150, 150, 0.5) transparent;
+}
+
+.code-box-content pre code {
+  color: var(--code-box-code-color);
+}
+
+.hljs {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.code-box-content pre {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 12px !important;
+}
+
+
+/* ============================================================
+   1. 文章卡片容器
+   ============================================================ */
+
+.article-card {
+  /* 定位：覆盖原实现 */
+  position: relative;
+  left: calc(var(--sidebar-width) + (100% - var(--sidebar-width)) / 2);
+  transform: translateX(-50%);
+  margin-top: -120px;
+  margin-bottom: 40px;
+  width: calc(100% - 40px);
+  max-width: 900px;
+  padding: var(--article-card-padding);
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-sizing: border-box;
+  color: var(--color-text);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 移动端覆盖 */
+@media (max-width: 768px) {
+  .article-card {
+    transform: none;
+    width: calc(100% - 12px);
+    margin-top: -80px;
+    left: 6px;
+    padding: var(--article-card-padding-mobile);
+    max-width: none;
+  }
+  .article-card.fade-in {
+    transform: translateY(0) !important;
+  }
+  .article-card.fade-out {
+    transform: translateY(15px) !important;
+  }
+}
+
+/* 文本选区颜色 */
+.article-card ::selection {
+  background: var(--article-selection-bg);
+}
+
+
+/* ============================================================
+   2. 文章头部（标题 + 元信息）
+   ============================================================ */
+
+.article-card .article-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: var(--article-heading-line-height);
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.article-card .article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  opacity: 0.6;
+  margin-bottom: 1.5em;
+  line-height: 1.6;
+}
+
+.article-card .article-meta time {
+  white-space: nowrap;
+}
+
+/* 分隔线：标题区与正文之间 */
+.article-card .article-divider {
+  border: none;
+  height: 1px;
+  background: var(--article-hr-color);
+  margin: 0 0 2em;
+  max-width: 100%;
+}
+
+
+/* ============================================================
+   3. 正文基础排版
+   ============================================================ */
+
+.article-card .article-body {
+  font-size: var(--article-font-size);
+  line-height: var(--article-line-height);
+  letter-spacing: var(--article-letter-spacing);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  /* 中英文混排：在 CJK 和 Latin 之间插入半角空格宽度 */
+  font-feature-settings: "kern" 1;
+}
+
+/* 段落间距 */
+.article-body p {
+  margin: 0 0 var(--article-paragraph-spacing);
+}
+
+
+/* ============================================================
+   4. 标题层级
+   ============================================================ */
+
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4,
+.article-body h5,
+.article-body h6 {
+  font-weight: 700;
+  line-height: var(--article-heading-line-height);
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+/* 第一个标题不需要上间距 */
+.article-body > h1:first-child,
+.article-body > h2:first-child,
+.article-body > h3:first-child,
+.article-body > h4:first-child {
+  margin-top: 0;
+}
+
+.article-body h1 {
+  font-size: 1.875rem;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--article-hr-color);
+}
+
+.article-body h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--article-hr-color);
+}
+
+.article-body h3 {
+  font-size: 1.25rem;
+}
+
+.article-body h4 {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.article-body h5 {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.article-body h6 {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* 锚点链接（hover 显示 #） */
+.article-body h1 .heading-anchor,
+.article-body h2 .heading-anchor,
+.article-body h3 .heading-anchor,
+.article-body h4 .heading-anchor,
+.article-body h5 .heading-anchor,
+.article-body h6 .heading-anchor {
+  display: inline-block;
+  margin-left: 0.3em;
+  opacity: 0;
+  color: var(--color-pink);
+  text-decoration: none;
+  font-weight: 400;
+  transition: opacity 0.2s ease;
+}
+
+.article-body h1:hover .heading-anchor,
+.article-body h2:hover .heading-anchor,
+.article-body h3:hover .heading-anchor,
+.article-body h4:hover .heading-anchor,
+.article-body h5:hover .heading-anchor,
+.article-body h6:hover .heading-anchor {
+  opacity: 0.6;
+}
+
+.article-body h1 .heading-anchor:hover,
+.article-body h2 .heading-anchor:hover,
+.article-body h3 .heading-anchor:hover,
+.article-body h4 .heading-anchor:hover,
+.article-body h5 .heading-anchor:hover,
+.article-body h6 .heading-anchor:hover {
+  opacity: 1;
+}
+
+
+
+/* ============================================================
+   5. 行内代码
+   ============================================================ */
+
+.article-body code:not([class*="language-"]) {
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono",
+    Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  background: var(--article-inline-code-bg);
+  color: var(--article-inline-code-color);
+  word-break: break-word;
+  /* 防止行内代码撑开容器 */
+  overflow-wrap: break-word;
+}
+
+/* 去掉 code-box 内部 code 的多余覆盖（保持原 code-box 样式） */
+.article-body code-box code {
+  font-size: inherit;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+
+/* ============================================================
+   6. 引用块
+   ============================================================ */
+
+.article-body blockquote {
+  margin: 1.5em 0;
+  padding: 0.8em 1.2em;
+  border-left: 4px solid var(--article-blockquote-border);
+  border-radius: 0 10px 10px 0;
+  background: var(--article-blockquote-bg);
+  color: var(--color-text);
+  opacity: 0.9;
+}
+
+.article-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 嵌套引用 */
+.article-body blockquote blockquote {
+  margin: 0.8em 0;
+}
+
+
+/* ============================================================
+   7. 列表
+   ============================================================ */
+
+.article-body ul,
+.article-body ol {
+  margin: 0 0 var(--article-paragraph-spacing);
+  padding-left: 1.8em;
+}
+
+.article-body li {
+  margin-bottom: 0.3em;
+  line-height: var(--article-line-height);
+}
+
+.article-body li > ul,
+.article-body li > ol {
+  margin-top: 0.3em;
+  margin-bottom: 0;
+}
+
+/* 无序列表标记颜色 */
+.article-body ul {
+  list-style-type: disc;
+}
+.article-body ul ul {
+  list-style-type: circle;
+}
+.article-body ul ul ul {
+  list-style-type: square;
+}
+
+/* 有序列表 */
+.article-body ol {
+  list-style-type: decimal;
+}
+.article-body ol ol {
+  list-style-type: lower-alpha;
+}
+
+/* 任务列表（如果用 HTML checkbox 模拟） */
+.article-body .task-list-item {
+  list-style: none;
+  margin-left: -1.4em;
+}
+.article-body .task-list-item input[type="checkbox"] {
+  margin-right: 0.5em;
+  accent-color: var(--color-pink);
+}
+
+
+/* ============================================================
+   8. 图片与 Figure
+   ============================================================ */
+
+.article-body img {
+  display: block;
+  margin: 1.5em auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background-color: var(--img-placeholder-bg);
+  /* 移除 max-height 限制，让长图完整展示 */
+}
+
+/* 可点击放大的图片（配合 Viewer.js） */
+.article-body img[data-viewer] {
+  cursor: zoom-in;
+}
+
+.article-body figure {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.article-body figure img {
+  margin: 0 auto;
+}
+
+.article-body figcaption {
+  margin-top: 0.6em;
+  font-size: 0.875rem;
+  color: var(--article-figcaption-color);
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   9. 表格
+   ============================================================ */
+
+.article-body table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  display: block;
+  /* 移动端允许水平滚动 */
+}
+
+.article-body thead {
+  background: var(--article-table-header-bg);
+}
+
+.article-body th,
+.article-body td {
+  padding: 0.65em 1em;
+  border: 1px solid var(--article-table-border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.article-body th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.article-body tbody tr:hover {
+  background: var(--color-pink-soft);
+}
+
+/* 奇偶行交替（可选，取消注释启用） */
+/*
+.article-body tbody tr:nth-child(even) {
+  background: var(--color-pink-soft);
+  opacity: 0.3;
+}
+*/
+
+
+/* ============================================================
+   10. 水平分割线
+   ============================================================ */
+
+.article-body hr {
+  border: none;
+  height: 1px;
+  background: var(--article-hr-color);
+  margin: 2.5em auto;
+  max-width: 500px;
+}
+
+/* 点状分割线（保留原 .hr.dot 兼容） */
+.article-body hr.dot {
+  border-top: 3px dotted var(--color-pink);
+  background: none;
+  opacity: var(--dot-hr-opacity, 0.8);
+}
+
+
+/* ============================================================
+   11. 装饰组件（保留原有，增加细节）
+   ============================================================ */
+
+/* 标语 / 金句 */
+.article-body .slogan {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--slogan-color);
+  text-shadow: var(--slogan-text-shadow);
+  margin: 1.5em 0;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+/* 想法 / 注释 */
+.article-body .thoughts {
+  display: block;
+  font-style: italic;
+  text-align: center;
+  color: var(--thoughts-color);
+  background: var(--thoughts-bg);
+  padding: 0.6em 1em;
+  margin: 1.2em 0;
+  border-radius: 8px;
+  line-height: 1.8;
+}
+
+/* 公告 */
+.article-body .announcement {
+  display: block;
+  font-size: 0.9375rem;
+  color: var(--announcement-color);
+  background: var(--announcement-bg);
+  border: 1px dashed var(--announcement-border);
+  padding: 0.7em 1.2em;
+  margin: 1.5em 0;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* 未完待续 */
+.article-body .to-be-continued {
+  text-align: center;
+  font-style: italic;
+  color: var(--to-be-continued-color);
+  font-size: 0.9375rem;
+  margin-top: 2.5em;
+  letter-spacing: 0.1em;
+}
+
+
+/* ============================================================
+   12. KBD 键盘标记 & Mark 高亮
+   ============================================================ */
+
+.article-body kbd {
+  display: inline-block;
+  font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.8em;
+  padding: 0.15em 0.5em;
+  border: 1px solid var(--article-kbd-border);
+  border-radius: 5px;
+  background: var(--article-kbd-bg);
+  box-shadow: 0 2px 0 var(--article-kbd-shadow);
+  color: var(--article-kbd-color);
+  white-space: nowrap;
+}
+
+.article-body mark {
+  background: var(--article-mark-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  color: var(--article-mark-color);
+}
+
+
+/* ============================================================
+   13. 脚注 / 注释标记
+   ============================================================ */
+
+.article-body sup {
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: super;
+  color: var(--color-pink);
+}
+
+.article-body .footnotes {
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--article-hr-color);
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.article-body .footnotes ol {
+  padding-left: 1.4em;
+}
+
+
+/* ============================================================
+   14. 文章尾部：上/下篇导航
+   ============================================================ */
+
+.article-card .article-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--article-hr-color);
+}
+
+.article-card .article-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: background 0.2s ease;
+  min-width: 0;
+}
+
+.article-card .article-nav a:hover {
+  background: var(--sidebar-a);
+}
+
+.article-card .article-nav .nav-label {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.article-card .article-nav .nav-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 只有下一篇时，让它靠右 */
+.article-card .article-nav a:only-child {
+  margin-left: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+
+/* ============================================================
+   15. 文章标签
+   ============================================================ */
+
+.article-card .article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2em;
+}
+
+.article-card .article-tag {
+  display: inline-block;
+  font-size: 0.8125rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--profile-list-bg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.article-card .article-tag:hover {
+  background: var(--li-a-hover-bg);
+}
+
+
+/* ============================================================
+   17. 移动端适配
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .article-card .article-title {
+    font-size: 1.625rem;
+  }
+
+  .article-body h1 { font-size: 1.5rem; }
+  .article-body h2 { font-size: 1.3rem; }
+  .article-body h3 { font-size: 1.125rem; }
+  .article-body h4 { font-size: 1rem; }
+
+  .article-body .slogan {
+    font-size: 1.4rem;
+  }
+
+  .article-body blockquote {
+    margin: 1.2em 0;
+    padding: 0.6em 1em;
+  }
+
+  .article-body img {
+    border-radius: 8px;
+  }
+
+  .article-card .article-nav {
+    flex-direction: column;
+  }
+
+  .article-card .article-nav a {
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  /* 表格移动端：保持可滚动，字号略小 */
+  .article-body table {
+    font-size: 0.875rem;
+  }
+
+  .article-body th,
+  .article-body td {
+    padding: 0.5em 0.75em;
+  }
+}
