@@ -929,7 +929,8 @@ function addRippleEffect() {
     .md3-button,
     .md3-list-item,
     .spa-link-home,
-    .project
+    .project,
+    .article-nav a
   `);
 
   rippleElements.forEach(element => {

@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <link rel="preload" as="font" href="styles/font.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="./styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/article-typography.css">
   <link rel="stylesheet" href="styles/viewer.css">
 </head>
-
 
 <body>
 
@@ -26,7 +25,7 @@
   </div>
 
   <div class="navbar">
-    <div class="logo">更新 & more<span class="nav-time">2026-05-01</span></div>
+    <div class="logo">EdgeTunnel<span class="nav-time">2026-06-09</span></div>
     <button id="settings-nav" class="settings-button" aria-label="设置">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path
@@ -34,7 +33,8 @@
       </svg>
     </button>
   </div>
-  <img src="https://bee-reg-ab.imagency.cn/p/bec210d32eaae0f67316e7b0057de78f.jpg" alt="头图" class="article-header">
+
+  <img src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg" alt="EdgeTunnel 教程封面" class="article-header">
 
   <!-- sidebar -->
   <div class="sidebar">
@@ -106,48 +106,225 @@
     </ul>
   </div>
 
-
-
   <div class="article-card">
-    <h2>许多更新 & 以后的计划</h2>
-    <hr>
-    <h3>近一个月的时间里，陆陆续续写了好些新功能，有：</h3>
-    <p><strong>设置窗口</strong>，能在里边手动切换深浅色模式和开关动画（目前只做了个开关），清除缓存</p>
-    <p><strong>关于页面</strong>，有一些我常用平台的链接</p>
-    <br>
-    <h3>还有一些改动</h3>
-    <p><strong>首页</strong>，界面大改，卡片不再显示在主页。顶部增加头图（头图动画改了好久！！）</p>
-    <p><strong>一言</strong>，不再分 .hitokoto 和 .nav-hitokoto，移动端和桌面端统一在首页头图上显示一言</p>
-    <p><strong>备案</strong>，搞了个<a href="https://icp.gov.moe/" class="a" target="_blank">萌国ICP备案</a>，放在页面最下面，点击跳转查看备案信息
-    </p>
-    <br>
-    <h3>后续计划</h3>
-    <p>想写点网页小游戏，把主页填满一点（现在的主页空荡荡的！）</p>
+
+    <!-- 1. 文章头部 -->
+    <h1 class="article-title">用 EdgeTunnel 给自己搞个梯子！</h1>
+    <div class="article-meta">
+      <time datetime="2026-06-09">2026-06-09</time>
+      <span>·</span>
+      <span>约 10 分钟阅读</span>
+      <span>·</span>
+      <a href="#" class="article-tag"># 教程</a>
+      <a href="#" class="article-tag"># CloudFlare</a>
+      <a href="#" class="article-tag"># 梯子</a>
+    </div>
+    <hr class="article-divider">
+
+    <!-- 2. 文章正文 -->
+    <div class="article-body">
+
+      <h2 id="intro">前言：EdgeTunnel 是什么？<a class="heading-anchor" href="#intro">#</a></h2>
+      <blockquote>
+        <a href="https://github.com/cmliu/edgetunnel" class="a">GitHub 项目主页</a>：edgetunnel 是一个基于 CF Workers/Pages 平台的边缘计算隧道解密方案。它能够高效地处理网络流量，并提供强大的管理面板和灵活的节点配置能力。
+      </blockquote>
+      <p>说人话就是一个白嫖 CloudFlare 的边缘计算来搭建梯子订阅的项目，支持 VLESS、Trojan、Shadowsocks 三种协议。</p>
+
+      <h2 id="prepare">一、准备工作<a class="heading-anchor" href="#prepare">#</a></h2>
+
+      <h3 id="prepare-1">1. 注册并登录 CloudFlare 账号<a class="heading-anchor" href="#prepare-1">#</a></h3>
+      <p>就算没有听说过 CloudFlare，你也肯定见过下面这个东西：</p>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea72fc76.jpg" alt="CloudFlare 人机验证界面">
+        <figcaption>CloudFlare 提供的人机验证服务</figcaption>
+      </figure>
+      <p>这就是 CloudFlare 提供的人机验证服务，但 CloudFlare 提供的服务可远不止于此，CF 还提供 CDN、安全防护等服务。我们今天便要用到其中的 <strong>CloudFlare Pages</strong> 和 <strong>CloudFlare Workers</strong>。</p>
+      <p>打开 <a href="https://dash.cloudflare.com">CloudFlare 官网</a>，注册并登录。</p>
+
+      <h3 id="prepare-2">2. 注册并登录 ClouDNS 账号<a class="heading-anchor" href="#prepare-2">#</a></h3>
+      <p>ClouDNS 是一家专业 DNS 托管服务提供商，它的核心业务就是管理域名系统（DNS），我们等会需要用它免费注册一个 <strong>CNAME 域名</strong>来用。</p>
+      <p>打开 <a href="https://www.cloudns.net/">ClouDNS 官网</a>，注册并登录。</p>
+
+      <h2 id="deploy">二、开始部署！<a class="heading-anchor" href="#deploy">#</a></h2>
+
+      <h3 id="deploy-1">1. 创建 Pages 应用程序<a class="heading-anchor" href="#deploy-1">#</a></h3>
+      <ol>
+        <li>点击 <a href="https://pages.cloudflare.com/direct-upload-demo.zip">direct-upload-demo.zip</a> 下载 Cloudflare Pages 演示项目压缩包备用；</li>
+        <li>进入 <a href="https://dash.cloudflare.com">CloudFlare 官网</a>，点击侧边栏中 <strong>计算</strong> &gt; <strong>Workers 和 Pages</strong> &gt; <strong>创建应用程序</strong>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/03/6a707e9d23f38.png" alt="CloudFlare 创建应用程序界面">
+      </figure>
+      <div class="announcement"><strong>注意！</strong>不是上面的所有选项，而是下面的 <strong>想要部署 Pages？开始使用</strong>！</div>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/03/6a707ea026bc0.png" alt="选择 Pages 开始使用">
+      </figure>
+      <ol start="3">
+        <li>点击 <strong>拖放文件</strong> &gt; <strong>开始使用</strong>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea73ed68.png" alt="拖放文件界面">
+      </figure>
+      <ol start="4">
+        <li>项目名称<strong>随便填一个就好，但必须是全新的名字，避免出现错误</strong>，推荐末尾补上任意数字，如 <code>neko800767</code>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea74ae75.png" alt="填写项目名称">
+      </figure>
+      <p>这一步填写名称后，CloudFlare 将会生成一个 <strong>你填写的名字</strong>.pages.dev 的网址，记住它，后面有用。</p>
+      <ol start="5">
+        <li>点击 <strong>内容</strong>，选择第一步下载的 <strong>direct-upload-demo.zip</strong> 压缩包，等待上传完成；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea73b12e.png" alt="上传压缩包">
+      </figure>
+      <ol start="6">
+        <li>点击 <strong>部署站点</strong>，等待部署完成；</li>
+        <li>提示成功，代表初始化部署完成！</li>
+      </ol>
+
+      <h3 id="deploy-2">2. 设置管理员变量<a class="heading-anchor" href="#deploy-2">#</a></h3>
+      <ol>
+        <li>进入项目设置页面，点击 <strong>设置</strong> 选项卡，添加变量和密钥：</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a7173785136c.png" alt="项目设置页面">
+      </figure>
+      <ol start="2">
+        <li>点击 <strong>+ 添加</strong>，类型选择 <strong>文本</strong>，变量名称填写 <code>ADMIN</code>，变量值是<strong>管理员密码</strong>，建议设置复杂密码，避免被暴力破解；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a71737885d43.png" alt="添加 ADMIN 变量">
+      </figure>
+      <ol start="3">
+        <li>变量即可设置完成，如忘记密码可返回此页面查看。</li>
+      </ol>
+
+      <h3 id="deploy-3">3. 绑定 KV 命名空间<a class="heading-anchor" href="#deploy-3">#</a></h3>
+      <ol>
+        <li>点击侧边栏中 <strong>存储和数据库</strong> &gt; <strong>Workers KV</strong> &gt; <strong>+Create Instance</strong> 创建一个命名空间；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a7173792945a.png" alt="创建 KV 命名空间">
+      </figure>
+      <ol start="2">
+        <li>命名空间名称可自定义，建议命名为 <code>EDT2</code> 以便区分，点击 <strong>创建</strong> 完成创建；</li>
+        <li>返回 Pages 设置页面，点击 <strong>设置</strong> &gt; <strong>绑定</strong> &gt; <strong>+ 添加</strong> &gt; <strong>KV 命名空间</strong>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a71737c753ca.png" alt="绑定 KV 命名空间">
+      </figure>
+      <ol start="4">
+        <li>变量名称必须填写大写 <code>KV</code>，命名空间选择刚刚创建的 <strong>EDT2</strong>，点击 <strong>保存</strong> 完成绑定；</li>
+        <li>返回项目设置页面，确认绑定成功。</li>
+      </ol>
+
+      <h3 id="deploy-4">4. 重新部署，使其变量生效！<a class="heading-anchor" href="#deploy-4">#</a></h3>
+      <ol>
+        <li>点击 <a href="https://github.com/cmliu/edgetunnel/archive/refs/heads/main.zip">edgetunnel-main.zip</a> 下载最新版本项目压缩包备用；</li>
+        <li>点击右上角 <strong>创建部署</strong>，上传上一步刚刚下载的 <strong>edgetunnel-main.zip</strong> 压缩包；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a71737cca946.png" alt="创建部署">
+      </figure>
+      <ol start="3">
+        <li>部署环境选择 <strong>生产</strong>，点击 <strong>内容</strong>，选择 <strong>edgetunnel-main.zip</strong> 压缩包，等待上传完成；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea745ba8.png" alt="选择生产环境并上传">
+      </figure>
+      <ol start="4">
+        <li>点击 <strong>保存并部署</strong>，等待部署完成。</li>
+      </ol>
+      <div class="announcement"><strong>注意！</strong>如需修改管理员密码，修改完变量之后必须重新上传部署，否则变量无法生效！</div>
+
+      <h3 id="deploy-5">5. 注册自定义域名<a class="heading-anchor" href="#deploy-5">#</a></h3>
+      <ol>
+        <li>我们在「准备工作」中已经登录好了 ClouDNS 账号，现在进入 <a href="https://www.cloudns.net/">ClouDNS 官网</a>；</li>
+        <li>选择 <strong>创建区域</strong> &gt; <strong>免费区域</strong>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/03/6a707e9da71c2.png" alt="创建免费区域">
+      </figure>
+      <p>会看到可选的免费二级域名，比如：</p>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea74156b.png" alt="可选的免费二级域名列表">
+      </figure>
+      <ol start="3">
+        <li>随便选一个就好，然后输入你想要的前缀，例如 <code>neneneko.abrdns.com</code>；</li>
+        <li>点击刚刚创建好的域名，进入域名解析设置；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/03/6a707e9f190a6.png" alt="域名解析设置入口">
+      </figure>
+      <ol start="5">
+        <li>点击 <strong>添加新记录</strong>，<strong>类型</strong>选择 <strong>CNAME</strong>，主机随便填写，但一定要记得住，这里填写 <code>edt2</code>；</li>
+        <li><strong>指向到</strong>填写你在步骤 1 中 CloudFlare 生成的 <strong>你填写的名字</strong>.pages.dev 的网址；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/03/6a707e9f1a7d8.png" alt="添加 CNAME 记录">
+      </figure>
+      <ol start="7">
+        <li>点击 <strong>更新</strong>，几分钟后，解析就会自动生效！</li>
+      </ol>
+
+      <h3 id="deploy-6">6. 绑定自定义域名<a class="heading-anchor" href="#deploy-6">#</a></h3>
+      <ol>
+        <li>进入 Pages 应用程序，点击 <strong>自定义域</strong> 选项卡，点击 <strong>设置自定义域</strong>；</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a7173f16737c.png" alt="设置自定义域">
+      </figure>
+      <ol start="2">
+        <li>添加自定义域，输入你的自定义域名，点击 <strong>继续</strong>；</li>
+        <li>选择 <strong>开始 CNAME 设置</strong> &gt; 右下角 <strong>稍后完成 DNS 设置</strong>；</li>
+        <li>等待几分钟，显示 <strong>活动</strong> 说明自定义域已生效。</li>
+      </ol>
+      <figure>
+        <img src="https://a1.boltp.com/2026/08/04/6a717ea897bc0.png" alt="自定义域已生效">
+      </figure>
+
+      <div class="slogan">恭喜！你已经成功部署好了 EdgeTunnel！</div>
+
+      <h2 id="usage">三、使用<a class="heading-anchor" href="#usage">#</a></h2>
+      <p>访问 <code>/admin</code> 即可登录管理页面。例如我绑定的自定义域名 <code>edt2.neneneko.abrdns.com</code>，则需要访问 <code>edt2.neneneko.abrdns.com/admin</code>。</p>
+      <p>输入管理员密码即可进入管理页面，直接复制自适应订阅链接导入你的客户端即可使用！</p>
+      <div class="thoughts">管理页面的其他东西如果看不懂就别动了喵~</div>
+
+    </div>
+
     <nav class="article-nav">
       <a href="article5.html" class="spa-link">
         <span class="nav-label">← 上一篇</span>
-        <span class="nav-title">更新日志4</span>
+        <span class="nav-title">许多更新 & 以后的计划</span>
       </a>
-      <a href="article7.html" class="spa-link">
+      <a href="article0721.html" class="spa-link">
         <span class="nav-label">下一篇 →</span>
-        <span class="nav-title">EdgeTunnel</span>
+        <span class="nav-title">no title</span>
       </a>
     </nav>
+
   </div>
 
-
+  <!-- 评论区 -->
   <div class="comment-content">
     <div class="giscus"></div>
   </div>
-  <footer class="footer"><a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a></footer>
-  <!-- SPA 脚本 -->
-  <script src="js/script.js"></script>
 
+  <footer class="footer">
+    <a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a>
+  </footer>
+
+  <!-- 音乐播放器 -->
   <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="7em"
     data-songList="18004217713">
   </div>
 
+  <!-- JS 脚本 -->
+  <script src="js/script.js"></script>
+  <script src="js/viewer.js"></script>
   <script src="./xf-MusicPlayer.js"></script>
+
 </body>
 
 </html>

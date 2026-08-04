@@ -492,7 +492,7 @@ code-box {
   overflow-wrap: break-word;
 }
 
-/* 去掉 code-box 内部 code 的多余覆盖（保持原 code-box 样式） */
+/* 去掉 code-box 内部 code 的多余覆盖 */
 .article-body code-box code {
   font-size: inherit;
   padding: 0;
@@ -645,16 +645,9 @@ code-box {
 }
 
 .article-body tbody tr:hover {
-  background: var(--color-pink-soft);
+  background: var(--sidebar-a);
 }
 
-/* 奇偶行交替（可选，取消注释启用） */
-/*
-.article-body tbody tr:nth-child(even) {
-  background: var(--color-pink-soft);
-  opacity: 0.3;
-}
-*/
 
 
 /* ============================================================
@@ -669,7 +662,7 @@ code-box {
   max-width: 500px;
 }
 
-/* 点状分割线（保留原 .hr.dot 兼容） */
+/* 点状分割线 */
 .article-body hr.dot {
   border-top: 3px dotted var(--color-pink);
   background: none;
@@ -800,6 +793,7 @@ code-box {
   gap: 4px;
   padding: 12px 16px;
   border-radius: 12px;
+  border: 1px solid var(--sidebar-a);
   background: var(--card-bg);
   text-decoration: none;
   color: var(--color-text);
@@ -819,19 +813,14 @@ code-box {
 }
 
 .article-card .article-nav .nav-title {
-  font-size: 0.9375rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  line-height: 1.6;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* 只有下一篇时，让它靠右 */
-.article-card .article-nav a:only-child {
-  margin-left: auto;
-  text-align: right;
-  align-items: flex-end;
-}
 
 
 /* ============================================================
@@ -890,11 +879,17 @@ code-box {
 
   .article-card .article-nav {
     flex-direction: column;
+    align-items: center;
   }
 
   .article-card .article-nav a {
     align-items: flex-start !important;
     text-align: left !important;
+    width: 85%;
+  }
+
+  .article-card .article-nav a:hover {
+    background: none;
   }
 
   /* 表格移动端：保持可滚动，字号略小 */

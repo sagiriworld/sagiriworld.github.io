@@ -122,7 +122,7 @@ window.addEventListener('DOMContentLoaded', function () {
             '  </div>',
             '  <div class="xf-insideSong">',
             '    <div class="xf-songPicture">',
-            '      <img src="https://bee-reg-ab.imagency.cn/p/1be79e796be9828654575b90990497d9.jpg" alt="加载中..." class="xf-musicPicture">',
+            '      <img src="https://a1.boltp.com/2026/08/04/6a717cac1618a.jpg" alt="加载中..." class="xf-musicPicture">',
             '    </div>',
             '    <div class="xf-musicControl">',
             '      <div class="xf-topControl">',
@@ -327,7 +327,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 let lis = [
                     `<li class="xf-songsItem" data-index="${index}" data-mp3url="${music}">`,
                     '  <div class="xf-songListSongPictures">',
-                    `    <img data-musicLjz-src="${picture + '?param=200x200'}" src="https://bee-reg-ab.imagency.cn/p/1be79e796be9828654575b90990497d9.jpg" alt="songPicture" class="xf-playlistImg">`,
+                    `    <img data-musicLjz-src="${picture + '?param=200x200'}" src="https://a1.boltp.com/2026/08/04/6a717cac1618a.jpg" alt="songPicture" class="xf-playlistImg">`,
                     '  </div>',
                     '  <div class="xf-playlistSongInformation">',
                     '    <div class="xf-songTitle">',
