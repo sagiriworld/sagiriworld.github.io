@@ -11,8 +11,10 @@ const CONFIG = {
   GISCUS_BLUE_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-dark.css',
   GISCUS_BLUE_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-light.css',
   HITOKOTO_CACHE_DURATION: 5 * 1000,
-  MIN_LOAD_TIME: 3000,
+  MIN_LOAD_TIME: 1000,
 };
+
+const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
 
 /* =========================
    加载屏
@@ -61,7 +63,7 @@ const ThemeManager = {
     localStorage.setItem(this.STORAGE_KEY, theme);
     this.updateMetaThemeColor();
     if (document.querySelector('.giscus')) {
-      updateGiscusTheme();
+      updateGiscusContext();
     }
     // 安全调用：若 ColorThemeManager 已定义，则重新应用颜色
     if (typeof ColorThemeManager !== 'undefined') {
@@ -75,7 +77,7 @@ const ThemeManager = {
       meta.name = 'theme-color';
       document.head.appendChild(meta);
     }
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = prefersDarkMQ.matches;
     const theme = this.getTheme();
     if (theme === 'dark' || (theme === 'auto' && isDark)) {
       meta.content = '#201418';
@@ -86,7 +88,7 @@ const ThemeManager = {
   init() {
     const saved = localStorage.getItem(this.STORAGE_KEY) || 'auto';
     this.setTheme(saved);
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    prefersDarkMQ.addEventListener('change', () => {
       if (this.getTheme() === 'auto') {
         this.updateMetaThemeColor();
       }
@@ -304,20 +306,21 @@ const ColorThemeManager = {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
     if (theme === 'light') return false;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDarkMQ.matches;
   },
 
   applyColor(name) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
 
-    // 应用全局页面变量
-    Object.entries(vars).forEach(([prop, value]) => {
-      // 跳过 lyPop
-      if (prop !== 'player' && prop !== 'lyPop') {
-        document.documentElement.style.setProperty(prop, value);
-      }
-    });
+    // 应用全局页面变量 - 批量设置减少重排
+    const cssText = Object.entries(vars)
+      .filter(([prop]) => prop !== 'player' && prop !== 'lyPop')
+      .map(([prop, value]) => `${prop}:${value}`)
+      .join(';');
+    if (cssText) {
+      document.documentElement.style.cssText += cssText;
+    }
 
     // 应用播放器变量
     const playerEl = document.querySelector('#xf-MusicPlayer .xf-girlPink');
@@ -363,7 +366,7 @@ const ColorThemeManager = {
     localStorage.setItem(this.STORAGE_KEY, name);
     this.applyColor(name);
     if (document.querySelector('.giscus')) {
-      updateGiscusTheme();
+      updateGiscusContext();
     }
   },
 
@@ -378,7 +381,7 @@ const ColorThemeManager = {
     const saved = this.getColor();
     this.applyColor(saved);
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    prefersDarkMQ.addEventListener('change', () => {
       if (ThemeManager.getTheme() === 'auto') {
         this.applyColor(this.getColor());
       }
@@ -432,6 +435,7 @@ function playEnterAnimation(selectors) {
    页面加载
 ========================= */
 let isLoadingPage = false;
+let giscusInitialized = false;
 
 async function loadPage(url, addToHistory = true) {
   if (isLoadingPage) return;
@@ -606,11 +610,15 @@ async function loadPage(url, addToHistory = true) {
     );
     initHitokoto(true);
     initImageViewer();
-    bindLinks();
-    addRippleEffect();
     bindSettingsTrigger();
     Calendar.init();
-    initGiscus();
+    if (document.querySelector('.giscus')) {
+      if (giscusInitialized) {
+        updateGiscusContext(location.pathname);
+      } else {
+        initGiscus();
+      }
+    }
     ColorThemeManager.applyColor(ColorThemeManager.getColor());
 
     if (addToHistory) {
@@ -645,16 +653,18 @@ async function loadPage(url, addToHistory = true) {
 /* =========================
    链接绑定
 ========================= */
-function bindLinks() {
-  let activeTimer = null;
+let linkActiveTimer = null;
 
-  const isSamePage = (url1, url2) => {
-    const normalize = (path) => {
-      if (path === '/' || path === '/index.html') return 'index.html';
-      return path.replace(/^\//, '');
-    };
-    return normalize(url1) === normalize(url2);
+function bindLinks() {
+  if (document.body.dataset.spaLinksBound === 'true') return;
+  document.body.dataset.spaLinksBound = 'true';
+
+  const normalizePath = (path) => {
+    if (path === '/' || path === '/index.html') return 'index.html';
+    return path.replace(/^\//, '');
   };
+
+  const isSamePage = (url1, url2) => normalizePath(url1) === normalizePath(url2);
 
   const isInternalLink = (url) => {
     if (!url) return false;
@@ -664,33 +674,30 @@ function bindLinks() {
     return true;
   };
 
-  document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home, .content a[href$=".html"], .home-content a[href$=".html"]').forEach(link => {
-    if (link.dataset.spaBound === 'true') return;
-    link.dataset.spaBound = 'true';
+  document.body.addEventListener('click', (e) => {
+    const link = e.target.closest(
+      '.sidebar a, .spa-link, .spa-link-home, .content a[href$=".html"], .home-content a[href$=".html"]'
+    );
+    if (!link) return;
 
-    link.onclick = e => {
-      const url = link.getAttribute('href');
+    const url = link.getAttribute('href');
+    if (!isInternalLink(url)) return;
 
-      if (!isInternalLink(url)) return;
+    e.preventDefault();
 
-      e.preventDefault();
+    if (isSamePage(url, location.pathname)) return;
 
-      if (isSamePage(url, location.pathname)) {
-        return;
-      }
+    clearTimeout(linkActiveTimer);
+    linkActiveTimer = setTimeout(() => {
+      document.querySelectorAll('.sidebar a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === url) {
+          a.classList.add('active');
+        }
+      });
+    }, 300);
 
-      clearTimeout(activeTimer);
-      activeTimer = setTimeout(() => {
-        document.querySelectorAll('.sidebar a').forEach(a => {
-          a.classList.remove('active');
-          if (a.getAttribute('href') === url) {
-            a.classList.add('active');
-          }
-        });
-      }, 300);
-
-      loadPage(url);
-    };
+    loadPage(url);
   });
 }
 
@@ -785,7 +792,7 @@ function getGiscusThemeUrl() {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
     if (theme === 'light') return false;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDarkMQ.matches;
   })();
 
   if (color === 'blue') {
@@ -799,6 +806,20 @@ function updateGiscusTheme() {
   if (!iframe) return;
   iframe.contentWindow.postMessage({
     giscus: { setConfig: { theme: getGiscusThemeUrl() } }
+  }, 'https://giscus.app');
+}
+
+function updateGiscusContext(newPath) {
+  const iframe = document.querySelector('iframe.giscus-frame');
+  if (!iframe) return;
+  const term = newPath || location.pathname;
+  iframe.contentWindow.postMessage({
+    giscus: {
+      setConfig: {
+        theme: getGiscusThemeUrl(),
+        term: term
+      }
+    }
   }, 'https://giscus.app');
 }
 
@@ -918,7 +939,10 @@ function initGiscus() {
    涟漪效果
 ========================= */
 function addRippleEffect() {
-  const rippleElements = document.querySelectorAll(`
+  if (document.body.dataset.rippleGlobalBound === 'true') return;
+  document.body.dataset.rippleGlobalBound = 'true';
+
+  const rippleSelector = `
     .sidebar a,
     .footer a,
     .li-a,
@@ -931,33 +955,44 @@ function addRippleEffect() {
     .spa-link-home,
     .project,
     .article-nav a
-  `);
+  `;
 
-  rippleElements.forEach(element => {
-    if (element.dataset.rippleBound === "true") return;
-    element.dataset.rippleBound = "true";
+  // 为当前所有匹配元素设置必要的样式
+  document.querySelectorAll(rippleSelector).forEach(el => {
+    if (el.dataset.rippleStyled === 'true') return;
+    el.dataset.rippleStyled = 'true';
+    const pos = window.getComputedStyle(el).position;
+    if (pos === 'static') el.style.position = 'relative';
+    if (window.getComputedStyle(el).overflow !== 'hidden') el.style.overflow = 'hidden';
+  });
 
-    const position = window.getComputedStyle(element).position;
-    if (position === 'static') element.style.position = 'relative';
-    if (window.getComputedStyle(element).overflow !== 'hidden') element.style.overflow = 'hidden';
+  document.body.addEventListener('pointerdown', (e) => {
+    const target = e.target.closest(rippleSelector);
+    if (!target) return;
 
-    element.addEventListener('pointerdown', function (e) {
-      const rect = element.getBoundingClientRect();
-      const circle = document.createElement('span');
-      const diameter = Math.max(rect.width, rect.height);
-      const radius = diameter / 2;
+    // 确保样式已设置（可能为新插入元素）
+    if (target.dataset.rippleStyled !== 'true') {
+      target.dataset.rippleStyled = 'true';
+      const pos = window.getComputedStyle(target).position;
+      if (pos === 'static') target.style.position = 'relative';
+      if (window.getComputedStyle(target).overflow !== 'hidden') target.style.overflow = 'hidden';
+    }
 
-      circle.classList.add('ripple');
-      circle.style.width = circle.style.height = `${diameter}px`;
-      circle.style.left = `${e.clientX - rect.left - radius}px`;
-      circle.style.top = `${e.clientY - rect.top - radius}px`;
+    const rect = target.getBoundingClientRect();
+    const circle = document.createElement('span');
+    const diameter = Math.max(rect.width, rect.height);
+    const radius = diameter / 2;
 
-      const old = element.querySelector('.ripple');
-      if (old) old.remove();
+    circle.classList.add('ripple');
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${e.clientX - rect.left - radius}px`;
+    circle.style.top = `${e.clientY - rect.top - radius}px`;
 
-      element.appendChild(circle);
-      setTimeout(() => circle.remove(), 600);
-    });
+    const old = target.querySelector('.ripple');
+    if (old) old.remove();
+
+    target.appendChild(circle);
+    setTimeout(() => circle.remove(), 600);
   });
 }
 
