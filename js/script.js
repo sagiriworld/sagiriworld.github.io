@@ -17,9 +17,17 @@ const CONFIG = {
 const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
 const mobileMQ = window.matchMedia('(max-width: 768px)');
 
-// 立即应用动画开关设置（默认开启；关闭时给 <html> 添加 animations-off 类，
-// 由 CSS 全局禁用所有动画与过渡，加载屏阶段即生效）
-applyAnimationsSetting(localStorage.getItem('animations-enabled') !== 'false');
+// 低性能模式（默认关闭）：开启时去除所有动画与模糊效果
+// 迁移旧版动画开关设置：旧 animations-enabled=false → 低性能模式开启
+let lowPerfMode = localStorage.getItem('low-performance-mode');
+if (lowPerfMode === null && localStorage.getItem('animations-enabled') !== null) {
+  lowPerfMode = localStorage.getItem('animations-enabled') === 'false' ? 'true' : 'false';
+  localStorage.setItem('low-performance-mode', lowPerfMode);
+}
+localStorage.removeItem('animations-enabled');
+applyPerformanceMode(lowPerfMode === 'true');
+// 隐藏歌词（默认关闭 = 显示歌词）：html 添加 hide-lyric 类后由 CSS 强制隐藏 #xf-lyric
+applyLyricVisibility(localStorage.getItem('hide-lyric') === 'true');
 
 /* =========================
    加载屏
@@ -1147,11 +1155,21 @@ function createSettingsDialog() {
           </div>
           <label class="md3-list-item">
             <span>
-              <div class="item-label">动画效果（beta）</div>
-              <div class="item-supporting">全局动画开关</div>
+              <div class="item-label">低性能模式</div>
+              <div class="item-supporting">关闭所有动画与模糊效果</div>
             </span>
             <span class="md3-switch">
-              <input type="checkbox" id="animationToggle" checked>
+              <input type="checkbox" id="animationToggle">
+              <span class="slider"></span>
+            </span>
+          </label>
+          <label class="md3-list-item">
+            <span>
+              <div class="item-label">隐藏歌词</div>
+              <div class="item-supporting">隐藏播放器歌词条</div>
+            </span>
+            <span class="md3-switch">
+              <input type="checkbox" id="hideLyricToggle">
               <span class="slider"></span>
             </span>
           </label>
@@ -1184,19 +1202,28 @@ function createSettingsDialog() {
   const saveBtn = document.getElementById('saveSettingsBtn');
   const themeSelect = document.getElementById('themeSelect');
   const animationToggle = document.getElementById('animationToggle');
+  const hideLyricToggle = document.getElementById('hideLyricToggle');
   const resetBtn = document.getElementById('resetSettingsBtn');
 
   themeSelect.addEventListener('click', (e) => e.stopPropagation());
 
   themeSelect.value = ThemeManager.getTheme();
-  const animEnabled = localStorage.getItem('animations-enabled') !== 'false';
-  animationToggle.checked = animEnabled;
+  // 低性能模式开关：默认关闭
+  animationToggle.checked = localStorage.getItem('low-performance-mode') === 'true';
 
-  // 动画开关：点击立即全局生效并保存
+  // 低性能模式：点击立即全局生效并保存（去除动画与模糊）
   animationToggle.addEventListener('change', () => {
     const enabled = animationToggle.checked;
-    applyAnimationsSetting(enabled);
-    localStorage.setItem('animations-enabled', enabled);
+    applyPerformanceMode(enabled);
+    localStorage.setItem('low-performance-mode', enabled);
+  });
+
+  // 隐藏歌词开关：默认关闭（显示歌词）
+  hideLyricToggle.checked = localStorage.getItem('hide-lyric') === 'true';
+  hideLyricToggle.addEventListener('change', () => {
+    const hidden = hideLyricToggle.checked;
+    applyLyricVisibility(hidden);
+    localStorage.setItem('hide-lyric', hidden);
   });
 
   const closeDialog = () => {
@@ -1209,14 +1236,16 @@ function createSettingsDialog() {
 
   saveBtn.addEventListener('click', () => {
     ThemeManager.setTheme(themeSelect.value);
-    localStorage.setItem('animations-enabled', animationToggle.checked);
+    localStorage.setItem('low-performance-mode', animationToggle.checked);
     closeDialog();
   });
 
   resetBtn.addEventListener('click', () => {
     themeSelect.value = 'auto';
-    animationToggle.checked = true;
-    applyAnimationsSetting(true);
+    animationToggle.checked = false;
+    applyPerformanceMode(false);
+    hideLyricToggle.checked = false;
+    applyLyricVisibility(false);
   });
 
   dialog.querySelector('.settings-panel').addEventListener('click', (e) => e.stopPropagation());
@@ -1232,8 +1261,10 @@ function createSettingsDialog() {
       localStorage.clear();
       ThemeManager.setTheme('auto');
       themeSelect.value = 'auto';
-      animationToggle.checked = true;
-      applyAnimationsSetting(true);
+      animationToggle.checked = false;
+      applyPerformanceMode(false);
+      hideLyricToggle.checked = false;
+      applyLyricVisibility(false);
       alert('缓存已清除');
     }
   });
@@ -1256,21 +1287,30 @@ function createSettingsDialog() {
 }
 
 /* =========================
-   全局动画开关
+   低性能模式
 ========================= */
-function applyAnimationsSetting(enabled) {
-  document.documentElement.classList.toggle('animations-off', !enabled);
+function applyPerformanceMode(enabled) {
+  // enabled = true（低性能模式开启）→ 去除动画与模糊
+  document.documentElement.classList.toggle('animations-off', enabled);
+  document.documentElement.classList.toggle('no-blur', enabled);
   // 同步更新图片查看器：Viewer 依赖 transitionend 回调，
-  // 动画关闭时必须将 transition 设为 false，否则图片无法渲染/无法关闭
+  // 低性能模式下必须将 transition 设为 false，否则图片无法渲染/无法关闭
   if (window.__viewerInstances) {
     window.__viewerInstances.forEach(v => {
-      v.options.transition = enabled;
+      v.options.transition = !enabled;
     });
   }
-  if (!enabled) {
-    // 清理页面上残留的水波纹元素（含播放器 .xf-ripple，动画中途关闭时立即移除）
+  if (enabled) {
+    // 清理页面上残留的水波纹元素（含播放器 .xf-ripple）
     document.querySelectorAll('.ripple, .xf-ripple').forEach(el => el.remove());
   }
+}
+
+/* =========================
+   隐藏歌词
+========================= */
+function applyLyricVisibility(hidden) {
+  document.documentElement.classList.toggle('hide-lyric', hidden);
 }
 
 function openSettingsDialog() {

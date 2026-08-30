@@ -2501,3 +2501,37 @@ html.animations-off.animations-off *::after {
   transition-duration: 0s !important;
   transition-delay: 0s !important;
 }
+
+/* =========================
+   低性能模式：禁用所有模糊/滤镜效果
+   当 <html> 带有 no-blur 类时，去除 backdrop-filter 与 filter
+   （含 ::before/::after 伪元素）
+========================= */
+html.no-blur *,
+html.no-blur *::before,
+html.no-blur *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* =========================
+   低性能模式：提高 sidebar/navbar 不透明度
+   禁用 backdrop-filter 后，半透明背景会直接透出内容，
+   需将背景提升为不透明以保证可读性
+========================= */
+html.no-blur .sidebar {
+  background: var(--sidebar-bg) !important;
+}
+
+html.no-blur .navbar {
+  background: var(--color-bg) !important;
+}
+
+/* =========================
+   隐藏歌词开关
+   当 <html> 带有 hide-lyric 类时，强制隐藏播放器歌词条 #xf-lyric
+========================= */
+html.hide-lyric #xf-lyric {
+  display: none !important;
+}
