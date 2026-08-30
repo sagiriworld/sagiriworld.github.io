@@ -42,7 +42,9 @@ window.addEventListener('DOMContentLoaded', function () {
     const xfSongList = MusicPlayer.getAttribute('data-songList');
     let musicApi = `${location.protocol}//${MusicPlayer.getAttribute('data-musicApi')}`.trim();
     if (musicApi.slice(-4) === 'null') {
-        musicApi = `${location.protocol}//api.xfyun.club`;
+        // 直接使用 HTTPS：http://api.xfyun.club 会 301 重定向到 https，
+        // 但重定向响应没有 CORS 头，浏览器跨域 fetch 会被拦截，导致播放器无法加载
+        musicApi = 'https://api.xfyun.club';
     }
     if (musicApi === '' && interfaceAndLocal === null && xfSongList === null) {
         this.alert('请输入音乐API域名');
@@ -514,21 +516,25 @@ window.addEventListener('DOMContentLoaded', function () {
                             })
                         );
 
-                        // 轮询等待 DOM 渲染完成（带 10 秒超时保护）
+                        // 用 MutationObserver 等待 DOM 渲染完成（替代轮询，带 10 秒超时保护）
                         const checkSongsItemLength = () => {
-                            return new Promise((resolve, reject) => {
+                            return new Promise((resolve) => {
                                 const startTime = Date.now();
-                                const intervalId = setInterval(() => {
+                                let observer = null;
+                                const check = () => {
                                     const lisNum = MusicPlayer.querySelectorAll('.xf-songsItem').length;
-                                    if (lisNum === expectedSongCount) {
-                                        clearInterval(intervalId);
+                                    if (lisNum === expectedSongCount || Date.now() - startTime > 10000) {
+                                        if (lisNum !== expectedSongCount) console.warn('歌曲列表渲染超时，继续执行');
+                                        if (observer) observer.disconnect();
                                         resolve(Date.now() - startTime);
-                                    } else if (Date.now() - startTime > 10000) {
-                                        clearInterval(intervalId);
-                                        console.warn('歌曲列表渲染超时，继续执行');
-                                        resolve(Date.now() - startTime);
+                                        return true;
                                     }
-                                }, 30);
+                                    return false;
+                                };
+                                if (!check()) {
+                                    observer = new MutationObserver(check);
+                                    observer.observe(MusicPlayer, { childList: true, subtree: true });
+                                }
                             });
                         };
 
@@ -1125,6 +1131,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
             // 播放器 Ripple 效果（事件委托，自动覆盖动态创建的 .xf-songsItem）
             MusicPlayerMain.addEventListener('pointerdown', function(e) {
+                // 动画关闭时禁用水波纹（与站点全局动画开关保持一致）
+                if (document.documentElement.classList.contains('animations-off')) return;
                 const target = e.target.closest(
                     '.xf-switchPlayer, .xf-previousSong, .xf-playbackControl, .xf-nextSong, .xf-playlistBtn, .xf-songsItem'
                 );

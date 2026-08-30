@@ -7,8 +7,8 @@
   <title>ねねねこ</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
   <link rel="preload" as="font" href="./styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/article-typography.css">
@@ -34,7 +34,7 @@
     </button>
   </div>
 
-  <img src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg" alt="EdgeTunnel 教程封面" class="article-header">
+  <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg" alt="EdgeTunnel 教程封面" class="article-header">
 
   <!-- sidebar -->
   <div class="sidebar">
@@ -135,7 +135,7 @@
       <h3 id="prepare-1">1. 注册并登录 CloudFlare 账号<a class="heading-anchor" href="#prepare-1">#</a></h3>
       <p>就算没有听说过 CloudFlare，你也肯定见过下面这个东西：</p>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea72fc76.jpg" alt="CloudFlare 人机验证界面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea72fc76.jpg" alt="CloudFlare 人机验证界面">
         <figcaption>CloudFlare 提供的人机验证服务</figcaption>
       </figure>
       <p>这就是 CloudFlare 提供的人机验证服务，但 CloudFlare 提供的服务可远不止于此，CF 还提供 CDN、安全防护等服务。我们今天便要用到其中的 <strong>CloudFlare Pages</strong> 和 <strong>CloudFlare Workers</strong>。</p>
@@ -153,30 +153,30 @@
         <li>进入 <a href="https://dash.cloudflare.com" class="a">CloudFlare 官网</a>，点击侧边栏中 <strong>计算</strong> &gt; <strong>Workers 和 Pages</strong> &gt; <strong>创建应用程序</strong>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/03/6a707e9d23f38.png" alt="CloudFlare 创建应用程序界面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9d23f38.png" alt="CloudFlare 创建应用程序界面">
       </figure>
       <div class="announcement"><strong>注意！</strong>不是上面的所有选项，而是下面的 <strong>想要部署 Pages？开始使用</strong>！</div>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/03/6a707ea026bc0.png" alt="选择 Pages 开始使用">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707ea026bc0.png" alt="选择 Pages 开始使用">
       </figure>
       <ol start="3">
         <li>点击 <strong>拖放文件</strong> &gt; <strong>开始使用</strong>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea73ed68.png" alt="拖放文件界面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea73ed68.png" alt="拖放文件界面">
       </figure>
       <ol start="4">
         <li>项目名称<strong>随便填一个就好，但必须是全新的名字，避免出现错误</strong>，推荐末尾补上任意数字，如 <code>neko800767</code>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea74ae75.png" alt="填写项目名称">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea74ae75.png" alt="填写项目名称">
       </figure>
       <p>这一步填写名称后，CloudFlare 将会生成一个 <strong>你填写的名字</strong>.pages.dev 的网址，记住它，后面有用。</p>
       <ol start="5">
         <li>点击 <strong>内容</strong>，选择第一步下载的 <strong>direct-upload-demo.zip</strong> 压缩包，等待上传完成；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea73b12e.png" alt="上传压缩包">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea73b12e.png" alt="上传压缩包">
       </figure>
       <ol start="6">
         <li>点击 <strong>部署站点</strong>，等待部署完成；</li>
@@ -188,13 +188,13 @@
         <li>进入项目设置页面，点击 <strong>设置</strong> 选项卡，添加变量和密钥：</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a7173785136c.png" alt="项目设置页面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7173785136c.png" alt="项目设置页面">
       </figure>
       <ol start="2">
         <li>点击 <strong>+ 添加</strong>，类型选择 <strong>文本</strong>，变量名称填写 <code>ADMIN</code>，变量值是<strong>管理员密码</strong>，建议设置复杂密码，避免被暴力破解；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a71737885d43.png" alt="添加 ADMIN 变量">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71737885d43.png" alt="添加 ADMIN 变量">
       </figure>
       <ol start="3">
         <li>变量即可设置完成，如忘记密码可返回此页面查看。</li>
@@ -205,14 +205,14 @@
         <li>点击侧边栏中 <strong>存储和数据库</strong> &gt; <strong>Workers KV</strong> &gt; <strong>+Create Instance</strong> 创建一个命名空间；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a7173792945a.png" alt="创建 KV 命名空间">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7173792945a.png" alt="创建 KV 命名空间">
       </figure>
       <ol start="2">
         <li>命名空间名称可自定义，建议命名为 <code>EDT2</code> 以便区分，点击 <strong>创建</strong> 完成创建；</li>
         <li>返回 Pages 设置页面，点击 <strong>设置</strong> &gt; <strong>绑定</strong> &gt; <strong>+ 添加</strong> &gt; <strong>KV 命名空间</strong>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a71737c753ca.png" alt="绑定 KV 命名空间">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71737c753ca.png" alt="绑定 KV 命名空间">
       </figure>
       <ol start="4">
         <li>变量名称必须填写大写 <code>KV</code>，命名空间选择刚刚创建的 <strong>EDT2</strong>，点击 <strong>保存</strong> 完成绑定；</li>
@@ -225,13 +225,13 @@
         <li>点击右上角 <strong>创建部署</strong>，上传上一步刚刚下载的 <strong>edgetunnel-main.zip</strong> 压缩包；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a71737cca946.png" alt="创建部署">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71737cca946.png" alt="创建部署">
       </figure>
       <ol start="3">
         <li>部署环境选择 <strong>生产</strong>，点击 <strong>内容</strong>，选择 <strong>edgetunnel-main.zip</strong> 压缩包，等待上传完成；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea745ba8.png" alt="选择生产环境并上传">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea745ba8.png" alt="选择生产环境并上传">
       </figure>
       <ol start="4">
         <li>点击 <strong>保存并部署</strong>，等待部署完成。</li>
@@ -244,25 +244,25 @@
         <li>选择 <strong>创建区域</strong> &gt; <strong>免费区域</strong>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/03/6a707e9da71c2.png" alt="创建免费区域">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9da71c2.png" alt="创建免费区域">
       </figure>
       <p>会看到可选的免费二级域名，比如：</p>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea74156b.png" alt="可选的免费二级域名列表">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea74156b.png" alt="可选的免费二级域名列表">
       </figure>
       <ol start="3">
         <li>随便选一个就好，然后输入你想要的前缀，例如 <code>neneneko.abrdns.com</code>；</li>
         <li>点击刚刚创建好的域名，进入域名解析设置；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/03/6a707e9f190a6.png" alt="域名解析设置入口">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9f190a6.png" alt="域名解析设置入口">
       </figure>
       <ol start="5">
         <li>点击 <strong>添加新记录</strong>，<strong>类型</strong>选择 <strong>CNAME</strong>，主机随便填写，但一定要记得住，这里填写 <code>edt2</code>；</li>
         <li><strong>指向到</strong>填写你在步骤 1 中 CloudFlare 生成的 <strong>你填写的名字</strong>.pages.dev 的网址；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/03/6a707e9f1a7d8.png" alt="添加 CNAME 记录">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9f1a7d8.png" alt="添加 CNAME 记录">
       </figure>
       <ol start="7">
         <li>点击 <strong>更新</strong>，几分钟后，解析就会自动生效！</li>
@@ -273,7 +273,7 @@
         <li>进入 Pages 应用程序，点击 <strong>自定义域</strong> 选项卡，点击 <strong>设置自定义域</strong>；</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a7173f16737c.png" alt="设置自定义域">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7173f16737c.png" alt="设置自定义域">
       </figure>
       <ol start="2">
         <li>添加自定义域，输入你的自定义域名，点击 <strong>继续</strong>；</li>
@@ -281,7 +281,7 @@
         <li>等待几分钟，显示 <strong>活动</strong> 说明自定义域已生效。</li>
       </ol>
       <figure>
-        <img src="https://a1.boltp.com/2026/08/04/6a717ea897bc0.png" alt="自定义域已生效">
+        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717ea897bc0.png" alt="自定义域已生效">
       </figure>
 
       <div class="slogan">恭喜！你已经成功部署好了 EdgeTunnel！</div>
@@ -321,9 +321,9 @@
   </div>
 
   <!-- JS 脚本 -->
-  <script src="js/script.js"></script>
+  <script src="js/script.min.js"></script>
   <script src="js/viewer.js"></script>
-  <script src="./xf-MusicPlayer.js"></script>
+  <script src="./xf-MusicPlayer.min.js"></script>
 
 </body>
 

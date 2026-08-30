@@ -1152,6 +1152,37 @@ button,
 }
 
 /* =========================
+   文章排版：about 页 content-card
+   通过 .article-body 类应用 article-typography.css 的排版体系
+   （标题下划线、段落间距、thoughts/announcement/to-be-continued 装饰等）
+========================= */
+.content-card.article-body {
+  font-size: var(--article-font-size);
+  line-height: var(--article-line-height);
+  letter-spacing: var(--article-letter-spacing);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  font-feature-settings: "kern" 1;
+  text-align: left;
+}
+
+/* 标题带文章式下划线（article-typography.css 的 .article-body h2 规则） */
+.content-card.article-body h2 {
+  font-weight: 700;
+  line-height: var(--article-heading-line-height);
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  font-size: 1.5rem;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--article-hr-color);
+}
+
+/* 卡片内第一个标题不需要上间距 */
+.content-card.article-body > h2:first-child {
+  margin-top: 0;
+}
+
+/* =========================
    个人卡片
 ========================= */
 .profile-card {
@@ -2080,11 +2111,16 @@ button,
   background: var(--sidebar-a);
 }
 
-.project img {
+.project img,
+.article-body .project img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  /* 覆盖 article-typography.css 的 .article-body img 规则 */
+  display: inline-block;
+  margin: 0;
+  background: none;
 }
 
 /* =========================
@@ -2450,4 +2486,18 @@ button,
     transform: translateY(-50%);
     opacity: 0.6;
   }
+}
+/* =========================
+   全局动画开关（高特异性覆盖版）
+   html.animations-off.animations-off 重复类名将特异性提升至 (0,2,1)，
+   足以覆盖 .logo.fade-in / .settings-button.fade-in 等 (0,2,0) 的 !important 过渡规则
+========================= */
+html.animations-off.animations-off *,
+html.animations-off.animations-off *::before,
+html.animations-off.animations-off *::after {
+  animation: none !important;
+  animation-duration: 0s !important;
+  transition: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
 }

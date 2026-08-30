@@ -15,6 +15,11 @@ const CONFIG = {
 };
 
 const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
+const mobileMQ = window.matchMedia('(max-width: 768px)');
+
+// 立即应用动画开关设置（默认开启；关闭时给 <html> 添加 animations-off 类，
+// 由 CSS 全局禁用所有动画与过渡，加载屏阶段即生效）
+applyAnimationsSetting(localStorage.getItem('animations-enabled') !== 'false');
 
 /* =========================
    加载屏
@@ -396,7 +401,16 @@ function playEnterAnimation(selectors) {
   const elements = document.querySelectorAll(selectors);
   if (!elements.length) return;
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  // 动画关闭时：直接呈现最终状态（fade-in），不设置初始帧、不播放过渡
+  if (document.documentElement.classList.contains('animations-off')) {
+    elements.forEach(el => {
+      el.classList.remove('fade-out');
+      el.classList.add('fade-in');
+    });
+    return;
+  }
+
+  const isMobile = mobileMQ.matches;
 
   // 一：清除旧类，设置内联初始状态
   elements.forEach(el => {
@@ -833,7 +847,6 @@ function initGiscus() {
   container.querySelectorAll('.giscus-error').forEach(e => e.remove());
 
   // 清除上一轮的定时器
-  if (window.__giscusWatchTimer) { clearInterval(window.__giscusWatchTimer); }
   if (window.__giscusTimeoutTimer) { clearTimeout(window.__giscusTimeoutTimer); }
 
   const script = document.createElement('script');
@@ -862,7 +875,7 @@ function initGiscus() {
   function showError() {
     if (handled) return;
     handled = true;
-    clearInterval(window.__giscusWatchTimer);
+    if (giscusObserver) giscusObserver.disconnect();
     clearTimeout(window.__giscusTimeoutTimer);
 
     // 移除已有的 iframe 和加载中状态
@@ -888,26 +901,30 @@ function initGiscus() {
   function onSuccess() {
     if (handled) return;
     handled = true;
-    clearInterval(window.__giscusWatchTimer);
+    if (giscusObserver) giscusObserver.disconnect();
     clearTimeout(window.__giscusTimeoutTimer);
     container.classList.remove('giscus-loading');
   }
 
   container.classList.add('giscus-loading');
 
-  // 轮询等待 iframe 出现，绑定 load/error 事件
-  window.__giscusWatchTimer = setInterval(() => {
-    const iframe = container.querySelector('iframe.giscus-frame');
-    if (!iframe) return;
+  // 用 MutationObserver 监听 iframe 插入（替代 setInterval 轮询）
+  let giscusObserver = null;
 
-    clearInterval(window.__giscusWatchTimer);
+  const bindIframe = () => {
+    const iframe = container.querySelector('iframe.giscus-frame');
+    if (!iframe) return false;
+
+    if (giscusObserver) {
+      giscusObserver.disconnect();
+      giscusObserver = null;
+    }
 
     // 检查 iframe 是否已加载完成（异步插入时可能已经 loaded）
     try {
-      // 如果能读到 contentWindow 且已 load，直接成功
       if (iframe.contentWindow && iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
         onSuccess();
-        return;
+        return true;
       }
     } catch (e) { /* 跨域正常 */ }
 
@@ -918,7 +935,15 @@ function initGiscus() {
     iframe.addEventListener('error', () => {
       showError();
     });
-  }, 100);
+    return true;
+  };
+
+  if (!bindIframe()) {
+    giscusObserver = new MutationObserver(() => {
+      bindIframe();
+    });
+    giscusObserver.observe(container, { childList: true, subtree: true });
+  }
 
   // 10 秒超时兜底：如果 iframe 始终未出现或未触发 load，判定失败
   window.__giscusTimeoutTimer = setTimeout(() => {
@@ -967,6 +992,8 @@ function addRippleEffect() {
   });
 
   document.body.addEventListener('pointerdown', (e) => {
+    // 动画关闭时禁用水波纹（普通 hover 效果保留，由 CSS hover 规则提供）
+    if (document.documentElement.classList.contains('animations-off')) return;
     const target = e.target.closest(rippleSelector);
     if (!target) return;
 
@@ -1121,7 +1148,7 @@ function createSettingsDialog() {
           <label class="md3-list-item">
             <span>
               <div class="item-label">动画效果（beta）</div>
-              <div class="item-supporting">启用页面切换动画</div>
+              <div class="item-supporting">全局动画开关</div>
             </span>
             <span class="md3-switch">
               <input type="checkbox" id="animationToggle" checked>
@@ -1165,6 +1192,13 @@ function createSettingsDialog() {
   const animEnabled = localStorage.getItem('animations-enabled') !== 'false';
   animationToggle.checked = animEnabled;
 
+  // 动画开关：点击立即全局生效并保存
+  animationToggle.addEventListener('change', () => {
+    const enabled = animationToggle.checked;
+    applyAnimationsSetting(enabled);
+    localStorage.setItem('animations-enabled', enabled);
+  });
+
   const closeDialog = () => {
     dialog.classList.remove('open');
     dialog.setAttribute('aria-hidden', 'true');
@@ -1182,6 +1216,7 @@ function createSettingsDialog() {
   resetBtn.addEventListener('click', () => {
     themeSelect.value = 'auto';
     animationToggle.checked = true;
+    applyAnimationsSetting(true);
   });
 
   dialog.querySelector('.settings-panel').addEventListener('click', (e) => e.stopPropagation());
@@ -1198,6 +1233,7 @@ function createSettingsDialog() {
       ThemeManager.setTheme('auto');
       themeSelect.value = 'auto';
       animationToggle.checked = true;
+      applyAnimationsSetting(true);
       alert('缓存已清除');
     }
   });
@@ -1219,9 +1255,31 @@ function createSettingsDialog() {
   addRippleEffect();
 }
 
+/* =========================
+   全局动画开关
+========================= */
+function applyAnimationsSetting(enabled) {
+  document.documentElement.classList.toggle('animations-off', !enabled);
+  // 同步更新图片查看器：Viewer 依赖 transitionend 回调，
+  // 动画关闭时必须将 transition 设为 false，否则图片无法渲染/无法关闭
+  if (window.__viewerInstances) {
+    window.__viewerInstances.forEach(v => {
+      v.options.transition = enabled;
+    });
+  }
+  if (!enabled) {
+    // 清理页面上残留的水波纹元素（含播放器 .xf-ripple，动画中途关闭时立即移除）
+    document.querySelectorAll('.ripple, .xf-ripple').forEach(el => el.remove());
+  }
+}
+
 function openSettingsDialog() {
   createSettingsDialog();
   const dialog = document.getElementById('settingsDialog');
+  // 强制浏览器先渲染弹窗的初始状态（scale(0.9)/opacity(0)/hidden），
+  // 否则首次点击时 add('open') 与 DOM 注入发生在同一帧，
+  // transition 没有初始帧可过渡，打开动画会丢失
+  void dialog.offsetWidth;
   dialog.classList.add('open');
   dialog.setAttribute('aria-hidden', 'false');
   const themeSelect = document.getElementById('themeSelect');
@@ -1250,7 +1308,7 @@ function initImageViewer() {
   containers.forEach(container => {
     if (container.dataset.viewer === 'true') return;
     container.dataset.viewer = 'true';
-    new Viewer(container, {
+    const viewer = new Viewer(container, {
       toolbar: {
         zoomIn: false,
         zoomOut: false,
@@ -1272,9 +1330,13 @@ function initImageViewer() {
       zoomable: true,
       rotatable: true,
       scalable: true,
-      transition: true,
+      // 动画关闭时禁用过渡：Viewer 依赖 transitionend 事件回调，
+      // 若 CSS 强制 transition:none 则事件永不触发，会导致图片无法显示/无法关闭
+      transition: !document.documentElement.classList.contains('animations-off'),
       fullscreen: true,
     });
+    // 保存实例引用，供动画开关切换时动态更新
+    (window.__viewerInstances = window.__viewerInstances || []).push(viewer);
   });
 }
 
